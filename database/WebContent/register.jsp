@@ -28,9 +28,16 @@
 					</td>
 				</tr>
 				<tr>
-					<th>Birthday: </th>
+					<th>Credit Card: </th>
 					<td align="center" colspan="3">
-						<input type="text" name="birthday" size="45" value="YYYY-MM-DD" onfocus="this.value=''">
+						<input type="text" name="creditCard" size="16" value="xxxxxxxxxxxxxxxx" onfocus="this.value=''">
+					</td>
+	
+				</tr>
+				<tr>
+					<th>Phone Number: </th>
+					<td align="center" colspan="3">
+						<input type="text" name="phoneNumber" size="11" value="xxxxxxxxxx" onfocus="this.value=''">
 					</td>
 	
 				</tr>

@@ -1,3 +1,5 @@
+import java.math.*;
+
 public class user 
 {
 		protected String password;
@@ -6,7 +8,7 @@ public class user
 	    protected String lastName;
 	    protected String creditCard;
 	    protected String phoneNumber;
-	    protected static int clientID;
+	    protected int clientID;
 	 
 	    //constructors
 	    public user() {
