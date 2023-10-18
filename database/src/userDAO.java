@@ -266,7 +266,8 @@ public class userDAO
 					            "PRIMARY KEY (email) "+"); ")
         					};
         String[] TUPLES = {("insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID)"+
-        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '1233216547', '2222'),"+
+        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '1233216547', '3333'),"+
+        			"('davidSmith@gmail.com', 'David', 'Smith', 'ds1234', '23452342342', '2142552', '1111')," +
 			    			"('root', 'default', 'default','pass1234', '87654321', '0000000000', '0000');")
 			    			};
         
