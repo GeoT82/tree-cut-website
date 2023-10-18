@@ -36,7 +36,7 @@
                     <td><c:out value="${users.firstName}" /></td>
                     <td><c:out value="${users.lastName}" /></td>
                     <td><c:out value="${users.password}" /></td>
-                    <td><c:out value="${users.CreditCard}" /></td>
+                    <td><c:out value="${users.creditCard}" /></td>
                     <td><c:out value="${users.phoneNumber}" /></td>
                     <td><c:out value="${users.clientID}" /></td>
             </c:forEach>

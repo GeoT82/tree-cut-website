@@ -19,16 +19,23 @@ public class user
 	        this.email = email;
 	    }
 	    
+	    public user(String email,String firstName, String lastName, String password, String creditCard, String phoneNumber) 
+	    {
+	    	this(firstName,lastName,password,creditCard,phoneNumber);
+	    	this.email = email;
+	    	setClientID( (int) (Math.random() * 100 + 1) );
+	    }
+	    
 	    public user(String email,String firstName, String lastName, String password, String creditCard, String phoneNumber, int clientID) 
 	    {
-	    	this(email,firstName,lastName,password,creditCard,phoneNumber);
+	    	this(firstName,lastName,password,creditCard,phoneNumber);
+	    	this.email = email;
 	    	this.clientID = clientID;
 	    }
 	 
 	
-	    public user(String email, String firstName, String lastName, String password, String creditCard, String phoneNumber) 
+	    public user(String firstName, String lastName, String password, String creditCard, String phoneNumber) 
 	    {
-	    	this.email = email;
 	    	this.firstName = firstName;
 	    	this.lastName = lastName;
 	    	this.password = password;

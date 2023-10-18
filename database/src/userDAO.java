@@ -75,7 +75,7 @@ public class userDAO
                 throw new SQLException(e);
             }
             connect = (Connection) DriverManager
-  			      .getConnection("jdbc:mysql://127.0.0.1:3306/userdb?"
+  			      .getConnection("jdbc:mysql://127.0.0.1:3306/testdb?allowPublicKeyRetrieval=true&"
   			          + "useSSL=false&user=" + username + "&password=" + password);
             System.out.println(connect);
         }
@@ -115,7 +115,7 @@ public class userDAO
     
     public void insert(user users) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into User(email, firstName, lastName, password, firstName, lastName, password, creditCard, phoneNumber, clientID) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID) values (?, ?, ?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, users.getEmail());
 			preparedStatement.setString(2, users.getFirstName());
@@ -142,7 +142,7 @@ public class userDAO
     }
      
     public boolean update(user users) throws SQLException {
-        String sql = "update User set firstName=?, lastName =?,password = ?,creditCard = ?, phoneNumber = ?, clientID = ? where email = ?";
+        String sql = "update User set firstName=?, lastName =?,password = ?,creditCard = ?, phoneNumber = ? where email = ?";
         connect_func();
         
         preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
@@ -151,8 +151,7 @@ public class userDAO
 		preparedStatement.setString(3, users.getLastName());
 		preparedStatement.setString(4, users.getPassword());
 		preparedStatement.setString(5, users.getCreditCard());
-		preparedStatement.setString(6, users.getPhoneNumber());			
-		preparedStatement.setInt(7, users.getClientID());
+		preparedStatement.setString(6, users.getPhoneNumber());
          
         boolean rowUpdated = preparedStatement.executeUpdate() > 0;
         preparedStatement.close();
@@ -267,8 +266,8 @@ public class userDAO
 					            "PRIMARY KEY (email) "+"); ")
         					};
         String[] TUPLES = {("insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID)"+
-        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '123-321-6547', '2222'),"+
-			    			"('root', 'default', 'default','pass1234', '87654321', '000-000-0000', '0000');")
+        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '1233216547', '2222'),"+
+			    			"('root', 'default', 'default','pass1234', '87654321', '0000000000', '0000');")
 			    			};
         
         //for loop to put these in database
