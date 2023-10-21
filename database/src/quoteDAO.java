@@ -25,8 +25,8 @@ import java.util.List;
 /**
  * Servlet implementation class Connect
  */
-@WebServlet("/requestDAO")
-public class requestDAO 
+@WebServlet("/quoteDAO")
+public class quoteDAO 
 {
 	private static final long serialVersionUID = 1L;
 	private Connection connect = null;
@@ -34,7 +34,7 @@ public class requestDAO
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 	
-	public requestDAO(){}
+	public quoteDAO(){}
 	
 	/** 
 	 * @see HttpServlet#HttpServlet()
@@ -81,27 +81,28 @@ public class requestDAO
         }
     }
     
-    public List<request> listAllRequests() throws SQLException {
-        List<request> listRequest = new ArrayList<request>();        
-        String sql = "SELECT * FROM Request";      
+    public List<quote> listAllQuotes() throws SQLException {
+        List<quote> listQuote = new ArrayList<quote>();        
+        String sql = "SELECT * FROM Quote";      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         System.out.println("LISTING");
          
         while (resultSet.next()) {
+            String time = resultSet.getString("times");
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote");
-            int treeCount = resultSet.getInt("treeCount");
-            int requestID = resultSet.getInt("requestID");
+            double price = resultSet.getDouble("price");
+            int quoteID = resultSet.getInt("quoteID"); 
 
              
-            request requests = new request(smithNote, clientNote, treeCount, requestID);
-            listRequest.add(requests);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID);
+            listQuote.add(quotes);
         }        
         resultSet.close();
         disconnect();        
-        return listRequest;
+        return listQuote;
     }
     
     protected void disconnect() throws SQLException {
@@ -110,71 +111,61 @@ public class requestDAO
         }
     }
     
-    public void insert(request requests) throws SQLException {
+    public void insert(quote quotes) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into User(smithNote, clientNote, treeCount, requestID) values (?, ?, ?, ?)";
+		String sql = "insert into Quote(time, smithNote, clientNote, price, quoteID) values (?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-		preparedStatement.setString(1, requests.getSmithNote());
-		preparedStatement.setString(2, requests.getClientNote());
-		preparedStatement.setInt(3, requests.getTreeCount());	
-		preparedStatement.setInt(4, requests.getRequestID());	
+			preparedStatement.setString(1, quotes.getTime());
+			preparedStatement.setString(2, quotes.getSmithNote());
+			preparedStatement.setString(3, quotes.getClientNote());
+			preparedStatement.setDouble(4, quotes.getPrice());		
+			preparedStatement.setInt(5, quotes.getQuoteID());	
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
     }
     
-    public boolean delete(String requestID) throws SQLException {
-        String sql = "DELETE FROM Request WHERE requestID = ?";        
-        connect_func();
-         
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, requestID);
-         
-        boolean rowDeleted = preparedStatement.executeUpdate() > 0;
-        preparedStatement.close();
-        return rowDeleted;     
-    }
      
-    public boolean update(request requests) throws SQLException {
-        String sql = "update Request set smithNote=?, clientNote =?, treeCount = ? where requestID = ?";
+    public boolean update(quote quotes) throws SQLException {
+        String sql = "update Quote set time=?, smithNote =?, clientNote = ?, price = ? where quoteID = ?";
         connect_func();
         
         preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setInt(1, requests.getRequestID());
-        preparedStatement.setString(2, requests.getSmithNote());
-		preparedStatement.setString(3, requests.getClientNote());
-		preparedStatement.setInt(4, requests.getTreeCount());
+        preparedStatement.setInt(1, quotes.getQuoteID());
+        preparedStatement.setString(2, quotes.getTime());
+        preparedStatement.setString(3, quotes.getSmithNote());
+		preparedStatement.setString(4, quotes.getClientNote());
+		preparedStatement.setDouble(5, quotes.getPrice());
          
         boolean rowUpdated = preparedStatement.executeUpdate() > 0;
         preparedStatement.close();
         return rowUpdated;     
     }
     
-    public request getRequest(int requestID) throws SQLException {
-    	request request = null;
-        String sql = "SELECT * FROM Request WHERE requestID = ?";
+    public quote getQuote(int quoteID) throws SQLException {
+    	quote quote = null;
+        String sql = "SELECT * FROM User WHERE email = ?";
          
         connect_func();
          
         preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setInt(1, requestID);
+        preparedStatement.setInt(1, quoteID);
          
         ResultSet resultSet = preparedStatement.executeQuery();
          
         if (resultSet.next()) {
+            String time = resultSet.getString("time");
             String smithNote = resultSet.getString("smithNote");
-            String clientNote = resultSet.getString("clientNote"); 
-            int treeCount = resultSet.getInt("treeCount"); 
-            
-            request = new request(smithNote, clientNote, treeCount);
+            String clientNote = resultSet.getString("clientNote");
+            double price = resultSet.getDouble("price");
+            quote = new quote(time, smithNote, clientNote, price, quoteID);
         }
          
         resultSet.close();
         statement.close();
          
-        return request;
+        return quote;
     }
-    
     
     
     public void init() throws SQLException, FileNotFoundException, IOException{
@@ -184,18 +175,21 @@ public class requestDAO
         String[] INITIAL = {"drop database if exists testdb; ",
 					        "create database testdb; ",
 					        "use testdb; ",
-					        "drop table if exists Request; ",
+					        "drop table if exists User; ",
 					        ("CREATE TABLE if not exists User( " +
-					            "smithNote VARCHAR(500) NOT NULL, " + 
-					            "clientNote VARCHAR(500) NOT NULL, " +
-					            "treeCount INT(10) NOT NULL, " +
-					            "requestID INT(20) NOT NULL, " +
-					            "PRIMARY KEY (requestID) "+"); ")
+					            "email VARCHAR(50) NOT NULL, " + 
+					            "firstName VARCHAR(10) NOT NULL, " +
+					            "lastName VARCHAR(10) NOT NULL, " +
+					            "password VARCHAR(20) NOT NULL, " +
+					            "creditCard CHAR(16) NOT NULL," +
+					            "phoneNumber CHAR(10) NOT NULL," +
+					            "clientID INT NOT NULL," +
+					            "PRIMARY KEY (email) "+"); ")
         					};
-        String[] TUPLES = {("insert into User(smithNote, clientNote, treeCount, requestID)"+
-        			"values ('n/a', 'n/a', '3', '1234')" +
-        			"('n/a', 'n/a', '4', '6243')," +
-			    	"('n/a', 'n/a', '6', '8934'');")
+        String[] TUPLES = {("insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID)"+
+        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '1233216547', '3333'),"+
+        			"('davidSmith@gmail.com', 'David', 'Smith', 'ds1234', '23452342342', '2142552', '1111')," +
+			    			"('root', 'default', 'default','pass1234', '87654321', '0000000000', '0000');")
 			    			};
         
         //for loop to put these in database

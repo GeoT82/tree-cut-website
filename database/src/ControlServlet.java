@@ -24,6 +24,7 @@ public class ControlServlet extends HttpServlet {
 	    private static final long serialVersionUID = 1L;
 	    private userDAO userDAO = new userDAO();
 	    private requestDAO requestDAO = new requestDAO();
+	    private quoteDAO quoteDAO = new quoteDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -36,6 +37,7 @@ public class ControlServlet extends HttpServlet {
 	    {
 	    	userDAO = new userDAO();
 	    	requestDAO = new requestDAO();
+	    	quoteDAO = new quoteDAO();
 	    	currentUser= "";
 	    }
 	    
@@ -98,13 +100,13 @@ public class ControlServlet extends HttpServlet {
 	    }
 	    
 	    private void smithPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("root view");
-			request.setAttribute("listUser", userDAO.listAllUsers());
+	    	System.out.println("Smith view");
+			request.setAttribute("listQuote", quoteDAO.listAllQuotes());
 	    	request.getRequestDispatcher("davidSmithView.jsp").forward(request, response);
 	    }
 	    
 	    private void clientPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
-	    	System.out.println("root view");
+	    	System.out.println("Client view");
 			request.setAttribute("listRequest", requestDAO.listAllRequests());
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
