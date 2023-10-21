@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 public class ControlServlet extends HttpServlet {
 	    private static final long serialVersionUID = 1L;
 	    private userDAO userDAO = new userDAO();
+	    private requestDAO requestDAO = new requestDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -34,6 +35,7 @@ public class ControlServlet extends HttpServlet {
 	    public void init()
 	    {
 	    	userDAO = new userDAO();
+	    	requestDAO = new requestDAO();
 	    	currentUser= "";
 	    }
 	    
@@ -55,6 +57,7 @@ public class ControlServlet extends HttpServlet {
         		break;
         	case "/initialize":
         		userDAO.init();
+        		requestDAO.init();
         		System.out.println("Database successfully initialized!");
         		rootPage(request,response,"");
         		break;
@@ -64,8 +67,8 @@ public class ControlServlet extends HttpServlet {
         	case "/logout":
         		logout(request,response);
         		break;
-        	 case "/list": 
-                 System.out.println("The action is: list");
+        	 case "/listUser": 
+                 System.out.println("The action is: listUser");
                  listUser(request, response);           	
                  break;
 	    	}
@@ -100,6 +103,12 @@ public class ControlServlet extends HttpServlet {
 	    	request.getRequestDispatcher("davidSmithView.jsp").forward(request, response);
 	    }
 	    
+	    private void clientPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
+	    	System.out.println("root view");
+			request.setAttribute("listRequest", requestDAO.listAllRequests());
+	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
+	    }
+	    
 	    
 	    protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	    	 String email = request.getParameter("email");
@@ -121,8 +130,9 @@ public class ControlServlet extends HttpServlet {
 	    	 {
 			 	 
 			 	 currentUser = email;
-				 System.out.println("Login Successful! Redirecting");
-				 request.getRequestDispatcher("activitypage.jsp").forward(request, response);
+			 	session = request.getSession();
+				session.setAttribute("username", email);
+				clientPage(request, response, "");
 			 			 			 			 
 	    	 }
 	    	 else {
