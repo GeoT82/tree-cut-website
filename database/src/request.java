@@ -1,7 +1,8 @@
 import java.math.*;
 
-public class request 
+public class request extends tree
 {
+		protected tree[] treeArr;
 	 	protected String smithNote;
 	    protected String clientNote;
 	    protected int treeCount;
@@ -16,6 +17,10 @@ public class request
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
 	        setTreeCount(treeCount);
+	        treeArr = new tree[getTreeCount()];
+	        for (int i = 0; i < getTreeCount(); i++) {
+	        	treeArr[i] = new tree();
+	        }
 	        setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	    

@@ -17,6 +17,11 @@
 		 <a href="login.jsp"target ="_self" > logout</a><br><br> 
 		 <p> You can show all the orders and personal information here.</p>
 	</center>
+	
+	<form action = "request">
+		<input type = "submit" value = "Request Tree Cuts"/>
+	</form>
+	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 		 
     <div align="center">
         <table border="1" cellpadding="6">
