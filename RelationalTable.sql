@@ -26,24 +26,24 @@ Create TABLE Quote(
 
 Create TABLE Request(
   RequestID int, 
-  treeID int, 
   SmithNote varchar(30), 
   ClientNote varchar(30), 
   Price int, 
   Time time,
-  PRIMARY KEY (RequestID),
-  FOREIGN KEY (treeID) REFERENCES Tree(treeID)
+  PRIMARY KEY (RequestID)
 );
 
 Create TABLE Tree(
   treeID int, 
+  RequestID int,
   distancefromhome int, 
   size int, height int, 
   location varchar(30), 
   image1 varchar(30), 
   image2 varchar(30), 
   image3 varchar(30),
-  PRIMARY KEY (treeID)
+  PRIMARY KEY (treeID),
+  FOREIGN KEY (RequestID) REFERENCES Request(RequestID)
 );
 
 INSERT INTO User (UserID, phoneNumber, Email, creditCard, firstName, lastName)
