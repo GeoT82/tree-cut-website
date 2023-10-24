@@ -95,9 +95,10 @@ public class quoteDAO
             String clientNote = resultSet.getString("clientNote");
             double price = resultSet.getDouble("price");
             int quoteID = resultSet.getInt("quoteID"); 
+            int requestID = resultSet.getInt("requestID"); 
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -158,7 +159,8 @@ public class quoteDAO
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote");
             double price = resultSet.getDouble("price");
-            quote = new quote(time, smithNote, clientNote, price, quoteID);
+            int requestID = resultSet.getInt("requestID");
+            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID);
         }
          
         resultSet.close();

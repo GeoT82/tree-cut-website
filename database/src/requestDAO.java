@@ -110,6 +110,30 @@ public class requestDAO
         }
     }
     
+    public List<request> listRequests(int id) throws SQLException {
+        List<request> listRequest = new ArrayList<request>();        
+        String sql = "SELECT * FROM Request Where Request.requestID = " + id;      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING REQUESTS");
+         
+        while (resultSet.next()) {
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote");
+            int treeCount = resultSet.getInt("treeCount");
+            int requestID = resultSet.getInt("requestID");
+
+             
+            request requests = new request(smithNote, clientNote, treeCount, requestID);
+            listRequest.add(requests);
+        }        
+        resultSet.close();
+        disconnect();        
+        return listRequest;
+    }
+    
+    
     public void insert(request requests) throws SQLException {
     	connect_func("root","pass1234");         
 		String sql = "insert into User(smithNote, clientNote, treeCount, requestID) values (?, ?, ?, ?)";

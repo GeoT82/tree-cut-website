@@ -7,6 +7,7 @@ public class quote
 	    protected String clientNote;
 	    protected double price;
 	    protected int quoteID;
+	    protected int requestID;
 	 
 	    //constructors
 	    public quote() {
@@ -19,15 +20,17 @@ public class quote
 	        setClientNote(clientNote);
 	        setPrice(price);
 	        setQuoteID( (int) (Math.random() * 100 + 1) );
+	        setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	    
-	    public quote(String time, String smithNote, String clientNote, double price, int quoteID) 
+	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID) 
 	    {
 	    	setTime(time);
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
 	        setPrice(price);
 	        setQuoteID(quoteID);
+	        setRequestID(requestID);
 	    }
 	 
 	    
@@ -61,6 +64,14 @@ public class quote
 	    }
 	    public void setQuoteID(int quoteID) {
 	        this.quoteID = quoteID;
+	    }
+	    
+	    
+	    public int getRequestID() {
+	        return requestID;
+	    }
+	    public void setRequestID(int requestID) {
+	        this.requestID = requestID;
 	    }
 	  
 	  

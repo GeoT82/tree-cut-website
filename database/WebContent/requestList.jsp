@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Client page</title>
+<title>Activity page</title>
 </head>
 
 <center><h1>Welcome! You have been successfully logged in</h1> </center>
@@ -15,12 +15,7 @@
 	<body>
 	 <center>
 		 <a href="login.jsp"target ="_self" > logout</a><br><br> 
-		 <p> You can show all the orders and personal information here.</p>
 	</center>
-	
-	<form action = "request" align="center">
-		<input type = "submit" value = "Request Tree Cuts"/>
-	</form>
 		 
     <div align="center">
         <table border="1" cellpadding="6">

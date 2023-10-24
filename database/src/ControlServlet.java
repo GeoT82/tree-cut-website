@@ -79,6 +79,10 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: treeView");
                  showTrees(request, response);           	
                  break;
+        	 case "/requestView":
+        		 System.out.println("The action is: requestView");
+                 showRequest(request, response);           	
+                 break;
 	    	}
 	    }
 	    catch(Exception ex) {
@@ -102,12 +106,27 @@ public class ControlServlet extends HttpServlet {
 	        System.out.println("showTrees started: 000000000000000000000000000");
 	        int id = Integer.parseInt(request.getParameter("id"));
 	        System.out.println("showTrees started: 222222222222222222222222222");
+	        System.out.println(id);
 	        List<tree> listTree = treeDAO.listTrees(id);
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("treeList.jsp");
 	        request.setAttribute("listTree", listTree);
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
 	        System.out.println("Now you see the Tree List page in your browser.");
-	        System.out.println("showEditForm finished: 1111111111111111111111111111");
+	        System.out.println("showTrees finished: 1111111111111111111111111111");
+	    }
+	    
+	    private void showRequest(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("showRequest started: 000000000000000000000000000");
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println("showRequest started: 222222222222222222222222222");
+	        System.out.println(id);
+	        List<request> listRequest = requestDAO.listRequests(id);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("requestList.jsp");
+	        request.setAttribute("listRequest", listRequest);
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the Request List page in your browser.");
+	        System.out.println("showRequest finished: 1111111111111111111111111111");
 	    }
 	    	        
 	    private void rootPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{

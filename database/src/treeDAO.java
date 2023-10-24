@@ -111,7 +111,7 @@ public class treeDAO
     
     public List<tree> listTrees(int id) throws SQLException {
         List<tree> listTree = new ArrayList<tree>();        
-        String sql = "SELECT * FROM Tree Where Tree.requestID = 'id'";      
+        String sql = "SELECT * FROM Tree Where Tree.requestID = " + id;      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
