@@ -99,10 +99,10 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void showTrees(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, ServletException, IOException {
-	        System.out.println("showEditForm started: 000000000000000000000000000");
-	     
-	        int rID = Integer.parseInt(request.getParameter("id"));
-	        List<tree> listTree = treeDAO.listTrees(rID);
+	        System.out.println("showTrees started: 000000000000000000000000000");
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println("showTrees started: 222222222222222222222222222");
+	        List<tree> listTree = treeDAO.listTrees(id);
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("treeList.jsp");
 	        request.setAttribute("listTree", listTree);
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.

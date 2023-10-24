@@ -38,7 +38,9 @@
                     <td><c:out value="${requests.clientNote}" /></td>
                     <td><c:out value="${requests.treeCount}" /></td>
                     <td><c:out value="${requests.requestID}" /></td>
-                    <td><a href="treeView?id=<c:out value='${request.requestID}' />">View Trees</a></td>
+                    <td>
+                    	<a href="treeView?id=<c:out value='${request.requestID}' />">View Trees</a>
+                    </td>
             </c:forEach>
         </table>
 	</div>
