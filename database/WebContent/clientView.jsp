@@ -18,10 +18,9 @@
 		 <p> You can show all the orders and personal information here.</p>
 	</center>
 	
-	<form action = "request">
+	<form action = "request" align="center">
 		<input type = "submit" value = "Request Tree Cuts"/>
 	</form>
-	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 		 
     <div align="center">
         <table border="1" cellpadding="6">
@@ -39,7 +38,7 @@
                     <td><c:out value="${requests.treeCount}" /></td>
                     <td><c:out value="${requests.requestID}" /></td>
                     <td>
-                    	<a href="treeView?id=<c:out value='${request.requestID}' />">View Trees</a>
+                    	<a href="treeView?id=<c:out value='${requests.requestID}' />">View Trees</a>
                     </td>
             </c:forEach>
         </table>
