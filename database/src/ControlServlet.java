@@ -25,6 +25,7 @@ public class ControlServlet extends HttpServlet {
 	    private userDAO userDAO = new userDAO();
 	    private requestDAO requestDAO = new requestDAO();
 	    private quoteDAO quoteDAO = new quoteDAO();
+	    private treeDAO treeDAO = new treeDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -38,6 +39,7 @@ public class ControlServlet extends HttpServlet {
 	    	userDAO = new userDAO();
 	    	requestDAO = new requestDAO();
 	    	quoteDAO = new quoteDAO();
+	    	treeDAO = new treeDAO();
 	    	currentUser= "";
 	    }
 	    
@@ -73,6 +75,10 @@ public class ControlServlet extends HttpServlet {
                  System.out.println("The action is: listUser");
                  listUser(request, response);           	
                  break;
+        	 case "/treeView":
+        		 System.out.println("The action is: treeView");
+                 showTrees(request, response);           	
+                 break;
 	    	}
 	    }
 	    catch(Exception ex) {
@@ -83,14 +89,25 @@ public class ControlServlet extends HttpServlet {
 	    private void listUser(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, IOException, ServletException {
 	        System.out.println("listUser started: 00000000000000000000000000000000000");
-
-	     
 	        List<user> listUser = userDAO.listAllUsers();
 	        request.setAttribute("listUser", listUser);       
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("UserList.jsp");       
 	        dispatcher.forward(request, response);
 	     
 	        System.out.println("listPeople finished: 111111111111111111111111111111111111");
+	    }
+	    
+	    private void showTrees(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("showEditForm started: 000000000000000000000000000");
+	     
+	        int rID = Integer.parseInt(request.getParameter("id"));
+	        List<tree> listTree = treeDAO.listTrees(rID);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("treeList.jsp");
+	        request.setAttribute("listTree", listTree);
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the Tree List page in your browser.");
+	        System.out.println("showEditForm finished: 1111111111111111111111111111");
 	    }
 	    	        
 	    private void rootPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
@@ -108,6 +125,8 @@ public class ControlServlet extends HttpServlet {
 	    private void clientPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("Client view");
 			request.setAttribute("listRequest", requestDAO.listAllRequests());
+	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
+	    	request.setAttribute("listUser", requestDAO.listAllRequests());
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    

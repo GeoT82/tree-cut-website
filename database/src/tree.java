@@ -10,6 +10,7 @@ public class tree
 	    protected double width;
 	    protected double height;
 	    protected int treeID;
+	    protected int requestID;
 	 
 	    //constructors
 	    public tree() {
@@ -25,10 +26,11 @@ public class tree
 	    	setWidth(width);
 	    	setHeight(height);
 	    	setTreeID( (int) (Math.random() * 100 + 1) );
+	    	setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	 
 	    
-	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height, int treeID) 
+	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height, int treeID, int requestID) 
 	    {
 	    	setImage1(image1);
 	    	setImage2(image2);
@@ -38,6 +40,7 @@ public class tree
 	    	setWidth(width);
 	    	setHeight(height);
 	    	setTreeID(treeID);
+	    	setRequestID(requestID);
 	    }
 	 
 	    
@@ -105,5 +108,12 @@ public class tree
 	        this.treeID = treeID;
 	    }
 	  
+	    
+	    public int getRequestID() {
+	        return requestID;
+	    }
+	    public void setRequestID(int requestID) {
+	        this.requestID = requestID;
+	    }
 	   
 	}
