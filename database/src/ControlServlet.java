@@ -213,7 +213,9 @@ public class ControlServlet extends HttpServlet {
 	    	currentUser = "";
         		response.sendRedirect("login.jsp");
         	}
-	
+	    
+	    
+	    
 	    
 
 	     

@@ -2,8 +2,8 @@ import java.math.*;
 
 public class user 
 {
+		protected String email;
 		protected String password;
-	 	protected String email;
 	    protected String firstName;
 	    protected String lastName;
 	    protected String creditCard;

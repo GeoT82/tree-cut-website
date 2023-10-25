@@ -17,11 +17,11 @@
 	</form>
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 
-<h1>List all users</h1>
+<h1>THIS IS DAVID SMITHS VIEW</h1>
     <div align="center">
     	<h1>THIS IS DAVID SMITHS VIEW</h1>
         <table border="1" cellpadding="6">
-            <caption><h2>List of Users</h2></caption>
+            <caption><h2>List of Quotes</h2></caption>
             <tr>
                 <th>time</th>
                 <th>Smith Note</th>
