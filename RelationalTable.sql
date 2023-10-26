@@ -1,7 +1,7 @@
 drop database if exists testdb;
 create database testdb;
 use testdb;
-Create TABLE User(
+Create TABLE if not exists User(
   clientID int, 
   phoneNumber varchar(13), 
   email varchar(50), 
@@ -13,9 +13,9 @@ Create TABLE User(
 );
 
 SET FOREIGN_KEY_CHECKS = 0;
-Create TABLE Bill(
+Create TABLE if not exists Bill(
   billID int, 
-  Note varchar(30), 
+  clientNote varchar(30), 
   SmithNote varchar(30),
   quoteID int,
   PRIMARY KEY (billID),
@@ -24,7 +24,7 @@ Create TABLE Bill(
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
-Create TABLE Quote(
+Create TABLE if not exists Quote(
   quoteID int, 
   clientNote varchar(30), 
   smithNote varchar(30), 
@@ -36,7 +36,7 @@ Create TABLE Quote(
 );
 SET FOREIGN_KEY_CHECKS = 1;
 
-Create TABLE Request(
+Create TABLE if not exists Request(
   requestID int,
   clientNote varchar(30),  
   smithNote varchar(30), 
@@ -44,7 +44,7 @@ Create TABLE Request(
   PRIMARY KEY (requestID)
 );
 
-Create TABLE Tree(
+Create TABLE if not exists Tree(
   treeID int, 
   requestID int,
   distance double (12,2), 
@@ -73,19 +73,20 @@ VALUES
 (011, 23452342342, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234'),
 (012, 7777888899, 'root', 00000000, 'default', 'default','pass1234');
 
-INSERT INTO Bill(billID, Note, SmithNote)
+SET FOREIGN_KEY_CHECKS = 0;
+INSERT INTO Bill(billID, clientNote, SmithNote, quoteID)
 VALUES 
-(0001, "Sold!", ""),
-(0002, "Sold!", ""),
-(0003, "Sold!", ""),
-(0004, "Sold!", ""),
-(0005, "Sold!", ""),
-(0006, "Sold!", ""),
-(0007, "Sold!", ""),
-(0008, "Sold!", ""),
-(0009, "Sold!", ""),
-(0010, "Sold!", "");
-
+(0001, "Sold!", "", 2),
+(0002, "Sold!", "", 4),
+(0003, "Sold!", "",3),
+(0004, "Sold!", "",4),
+(0005, "Sold!", "",1),
+(0006, "Sold!", "",2),
+(0007, "Sold!", "",5),
+(0008, "Sold!", "",6),
+(0009, "Sold!", "",6),
+(0010, "Sold!", "",1);
+SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 INSERT INTO Quote(quoteID, clientNote , smithNote, times, price, requestID)
@@ -115,19 +116,20 @@ VALUES
 (9, "Sold!", "", 12500),
 (10, "Sold!", "", 13500);
 
+SET FOREIGN_KEY_CHECKS = 0;
 INSERT INTO Tree(treeID, distance, width, height, address, image1, image2, image3, requestID)
 VALUES 
-(111, 5, 123, 123, "Detroit", "a", "b", "c",1),
-(222, 10, 232, 123, "Detroit", "a", "d", "e",1),
-(333, 15, 121, 123, "Detroit", "h", "g", "f",1),
-(444, 20, 180, 123, "Detroit", "i", "j", "k",2),
-(555, 25, 280, 123, "Detroit", "n", "m", "l",4),
-(666, 30, 321, 123, "Detroit", "o", "p", "q",6),
-(777, 35, 213, 123, "Detroit", "t", "s", "r",3),
-(888, 40, 91, 123, "Detroit", "u", "b", "c",3),
-(999, 45, 145, 123, "Detroit", "v", "y", "s",3),
-(000, 50, 156, 123, "Detroit", "w", "x", "z",3);
-
+(111, 5, 123, 123, 'Detroit', 'a', 'b', 'c',1),
+(222, 10, 232, 123, 'Detroit', 'a', 'd', 'e',1),
+(333, 15, 121, 123, 'Detroit', 'h', 'g', 'f',1),
+(444, 20, 180, 123, 'Detroit', 'i', 'j', 'k',2),
+(555, 25, 280, 123, 'Detroit', 'n', 'm', 'l',4),
+(666, 30, 321, 123, 'Detroit', 'o', 'p', 'q',6),
+(777, 35, 213, 123, 'Detroit', 't', 's', 'r',3),
+(888, 40, 91, 123, 'Detroit', 'u', 'b', 't',3),
+(999, 45, 145, 123, 'Detroit', 'v','"y', 's',3),
+(000, 50, 156, 123, 'Detroit', 'w','x', 'z',3);
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 select * from User;

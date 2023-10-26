@@ -174,24 +174,31 @@ public class quoteDAO
     	connect_func();
         statement =  (Statement) connect.createStatement();
         
-        String[] INITIAL = {"drop database if exists testdb; ",
-					        "create database testdb; ",
-					        "use testdb; ",
-					        "drop table if exists User; ",
-					        ("CREATE TABLE if not exists User( " +
-					            "email VARCHAR(50) NOT NULL, " + 
-					            "firstName VARCHAR(10) NOT NULL, " +
-					            "lastName VARCHAR(10) NOT NULL, " +
-					            "password VARCHAR(20) NOT NULL, " +
-					            "creditCard CHAR(16) NOT NULL," +
-					            "phoneNumber CHAR(10) NOT NULL," +
-					            "clientID INT NOT NULL," +
-					            "PRIMARY KEY (email) "+"); ")
+        String[] INITIAL = {"use testdb",
+        					"drop table if exists Quote;",
+					        ("CREATE TABLE if not exists Quote( " +
+					            "quoteID int, "+
+					            "clientNote varchar(30),"+ 
+					            "smithNote varchar(30),"+ 
+					            "times time,"+ 
+					            "price int,"+
+					            "requestID int,"+
+					            "PRIMARY KEY (QuoteID),"+
+					            "Foreign key (requestID) references Request(requestID));")
         					};
-        String[] TUPLES = {("insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID)"+
-        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '1233216547', '3333'),"+
-        			"('davidSmith@gmail.com', 'David', 'Smith', 'ds1234', '23452342342', '2142552', '1111')," +
-			    			"('root', 'default', 'default','pass1234', '87654321', '0000000000', '0000');")
+        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        					("INSERT INTO Quote(quoteID, clientNote , smithNote, times, price, requestID)"+
+        					"VALUES (00001, 'Sold!', '', '1:00:00', 4500, 1),"+
+        					"(00002, 'Sold!', '', '2:00:00', 5500, 2),"+
+        					"(00003, 'Sold!', '', '3:00:00', 6500, 3),"+
+        					"(00004, 'Sold!', '', '4:00:00', 7500, 2),"+
+        					"(00005, 'Sold!', '', '5:00:00', 8500, 3),"+
+        					"(00006, 'Sold!', '', '6:00:00', 9500, 4),"+
+        					"(00007, 'Sold!', '', '7:00:00', 10500, 3),"+
+        					"(00008, 'Sold!', '', '8:00:00', 11500, 2),"+
+        					"(00009, 'Sold!', '', '9:00:00', 12500, 4),"+
+        					"(00010, 'Sold!', '', '10:00:00', 13500, 2);"),
+        					"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         
         //for loop to put these in database
