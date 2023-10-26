@@ -46,11 +46,11 @@ Create TABLE Request(
 
 Create TABLE Tree(
   treeID int, 
-  RequestID int,
-  distancefromhome double (12,2), 
+  requestID int,
+  distance double (12,2), 
   width double (12,2),
   height double (12,2), 
-  location varchar(30), 
+  address varchar(30), 
   image1 varchar(30), 
   image2 varchar(30), 
   image3 varchar(30),
@@ -115,18 +115,18 @@ VALUES
 (9, "Sold!", "", 12500),
 (10, "Sold!", "", 13500);
 
-INSERT INTO Tree(treeID, distancefromhome, width, height, location, image1, image2, image3)
+INSERT INTO Tree(treeID, distance, width, height, address, image1, image2, image3, requestID)
 VALUES 
-(111, 5, 123, 123, "Detroit", "a", "b", "c"),
-(222, 10, 232, 123, "Detroit", "a", "d", "e"),
-(333, 15, 121, 123, "Detroit", "h", "g", "f"),
-(444, 20, 180, 123, "Detroit", "i", "j", "k"),
-(555, 25, 280, 123, "Detroit", "n", "m", "l"),
-(666, 30, 321, 123, "Detroit", "o", "p", "q"),
-(777, 35, 213, 123, "Detroit", "t", "s", "r"),
-(888, 40, 91, 123, "Detroit", "u", "b", "c"),
-(999, 45, 145, 123, "Detroit", "v", "y", "s"),
-(000, 50, 156, 123, "Detroit", "w", "x", "z");
+(111, 5, 123, 123, "Detroit", "a", "b", "c",1),
+(222, 10, 232, 123, "Detroit", "a", "d", "e",1),
+(333, 15, 121, 123, "Detroit", "h", "g", "f",1),
+(444, 20, 180, 123, "Detroit", "i", "j", "k",2),
+(555, 25, 280, 123, "Detroit", "n", "m", "l",4),
+(666, 30, 321, 123, "Detroit", "o", "p", "q",6),
+(777, 35, 213, 123, "Detroit", "t", "s", "r",3),
+(888, 40, 91, 123, "Detroit", "u", "b", "c",3),
+(999, 45, 145, 123, "Detroit", "v", "y", "s",3),
+(000, 50, 156, 123, "Detroit", "w", "x", "z",3);
 
 
 

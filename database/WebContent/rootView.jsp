@@ -39,9 +39,6 @@
                     <td><c:out value="${users.creditCard}" /></td>
                     <td><c:out value="${users.phoneNumber}" /></td>
                     <td><c:out value="${users.clientID}" /></td>
-                    <td>
-                    	<a href="treeView?id=<c:out value='${requests.requestID}' />">View Trees</a>
-                    </td>
             </c:forEach>
         </table>
 	</div>

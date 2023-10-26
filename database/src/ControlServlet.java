@@ -26,6 +26,7 @@ public class ControlServlet extends HttpServlet {
 	    private requestDAO requestDAO = new requestDAO();
 	    private quoteDAO quoteDAO = new quoteDAO();
 	    private treeDAO treeDAO = new treeDAO();
+	    private billDAO billDAO = new billDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -40,6 +41,7 @@ public class ControlServlet extends HttpServlet {
 	    	requestDAO = new requestDAO();
 	    	quoteDAO = new quoteDAO();
 	    	treeDAO = new treeDAO();
+	    	billDAO = new billDAO();
 	    	currentUser= "";
 	    }
 	    
@@ -62,6 +64,9 @@ public class ControlServlet extends HttpServlet {
         	case "/initialize":
         		userDAO.init();
         		requestDAO.init();
+        		quoteDAO.init();
+        		treeDAO.init();
+        		billDAO.init();
         		System.out.println("Database successfully initialized!");
         		rootPage(request,response,"");
         		break;
@@ -145,8 +150,6 @@ public class ControlServlet extends HttpServlet {
 	    	System.out.println("Client view");
 			request.setAttribute("listRequest", requestDAO.listAllRequests());
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
-	    	request.setAttribute("listUser", requestDAO.listAllRequests());
-	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    
 	    
@@ -213,13 +216,6 @@ public class ControlServlet extends HttpServlet {
 	    	currentUser = "";
         		response.sendRedirect("login.jsp");
         	}
-	    
-	    
-	    
-	    
-
-	     
-        
 	    
 	    
 	    
