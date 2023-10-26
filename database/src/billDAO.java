@@ -205,21 +205,31 @@ public class billDAO
     	connect_func();
         statement =  (Statement) connect.createStatement();
         
-        String[] INITIAL = {"drop database if exists testdb; ",
-					        "create database testdb; ",
-					        "use testdb; ",
-					        "drop table if exists Request; ",
-					        ("CREATE TABLE if not exists User( " +
-					            "smithNote VARCHAR(500) NOT NULL, " + 
-					            "clientNote VARCHAR(500) NOT NULL, " +
-					            "treeCount INT(10) NOT NULL, " +
-					            "requestID INT(20) NOT NULL, " +
-					            "PRIMARY KEY (requestID) "+"); ")
+        String[] INITIAL = {"use testdb; ",
+					        "drop table if exists Bill; ",
+					        "SET FOREIGN_KEY_CHECKS = 0;",
+					        ("CREATE TABLE if not exists Bill( " +
+					        	"billID int, "+
+					        	"clientNote varchar(30),"+ 
+					        	"SmithNote varchar(30),"+
+					        	"quoteID int,"+
+					        	"PRIMARY KEY (billID),"+
+					        	"Foreign key (quoteID) references Quote(quoteID)"+"); "),
+					        "SET FOREIGN_KEY_CHECKS = 1;"
         					};
-        String[] TUPLES = {("insert into User(smithNote, clientNote, treeCount, requestID)"+
-        			"values ('n/a', 'n/a', '3', '1234')" +
-        			"('n/a', 'n/a', '4', '6243')," +
-			    	"('n/a', 'n/a', '6', '8934'');")
+        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        			("INSERT INTO Bill(billID, clientNote, SmithNote, quoteID)"+
+        			"values (0001, 'Sold!', '', 2),"
+        			+ "(0002, 'Sold!', '',3),"
+        			+ "(0003, 'Sold!', '',1),"
+        			+ "(0004, 'Sold!', '',5),"
+        			+ "(0005, 'Sold!', '',8),"
+        			+ "(0006, 'Sold!', '',3),"
+        			+ "(0007, 'Sold!', '',2),"
+        			+ "(0008, 'Sold!', '',1),"
+        			+ "(0009, 'Sold!', '',7),"
+        			+ "(0010, 'Sold!', '',2);"),
+        			"SET FOREIGN_KEY_CHECKS = 0;"
 			    			};
         
         //for loop to put these in database

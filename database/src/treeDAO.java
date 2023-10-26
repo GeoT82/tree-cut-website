@@ -222,24 +222,36 @@ public class treeDAO
     	connect_func();
         statement =  (Statement) connect.createStatement();
         
-        String[] INITIAL = {"drop database if exists testdb; ",
-					        "create database testdb; ",
-					        "use testdb; ",
-					        "drop table if exists User; ",
-					        ("CREATE TABLE if not exists User( " +
-					            "email VARCHAR(50) NOT NULL, " + 
-					            "firstName VARCHAR(10) NOT NULL, " +
-					            "lastName VARCHAR(10) NOT NULL, " +
-					            "password VARCHAR(20) NOT NULL, " +
-					            "creditCard CHAR(16) NOT NULL," +
-					            "phoneNumber CHAR(10) NOT NULL," +
-					            "clientID INT NOT NULL," +
-					            "PRIMARY KEY (email) "+"); ")
+        String[] INITIAL = {"use testdb; ",
+					        "drop table if exists Tree; ",
+					        "SET FOREIGN_KEY_CHECKS = 1;",
+					        ("CREATE TABLE if not exists Tree( " +
+					        		"treeID int,"+ 
+					        		"requestID int,"+
+					        		"distance double (12,2),"+ 
+					        		"width double (12,2),"+
+					        		"height double (12,2), "+
+					        		"address varchar(30), "+
+					        		"image1 varchar(30), "+
+					        		"image2 varchar(30), "+
+					        		"image3 varchar(30),"+
+					        		"PRIMARY KEY (treeID),"+
+					        		"FOREIGN KEY (requestID) REFERENCES Request(requestID)"+"); "),
+					        "SET FOREIGN_KEY_CHECKS = 1;"
         					};
-        String[] TUPLES = {("insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID)"+
-        			"values ('susie@gmail.com', 'Susie ', 'Guzman', 'susie1234', '12345678', '1233216547', '3333'),"+
-        			"('davidSmith@gmail.com', 'David', 'Smith', 'ds1234', '23452342342', '2142552', '1111')," +
-			    			"('root', 'default', 'default','pass1234', '87654321', '0000000000', '0000');")
+        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        			("INSERT INTO Tree(treeID, distance, width, height, address, image1, image2, image3, requestID)"+
+        			"values (111, 5, 123, 123, 'Detroit', 'a', 'b', 'c',3),"
+        			+ "(222, 10, 232, 123, 'Detroit', 'a', 'd', 'e',2),"
+        			+ "(333, 15, 121, 123, 'Detroit', 'h', 'g', 'f',4),"
+        			+ "(444, 20, 180, 123, 'Detroit', 'i', 'j', 'k',4),"
+        			+ "(555, 25, 280, 123, 'Detroit', 'n', 'm', 'l',1),"
+        			+ "(666, 30, 321, 123, 'Detroit', 'o', 'p', 'q',4),"
+        			+ "(777, 35, 213, 123, 'Detroit', 't', 's', 'r',2),"
+        			+ "(888, 40, 91, 123, 'Detroit', 'u', 'b', 't',6),"
+        			+ "(999, 45, 145, 123, 'Detroit', 'v','\"y', 's',12),"
+        			+ "(000, 50, 156, 123, 'Detroit', 'w','x', 'z', 2);"),
+        			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         
         //for loop to put these in database

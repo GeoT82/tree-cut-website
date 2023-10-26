@@ -205,22 +205,27 @@ public class requestDAO
     	connect_func();
         statement =  (Statement) connect.createStatement();
         
-        String[] INITIAL = {"drop database if exists testdb; ",
-					        "create database testdb; ",
-					        "use testdb; ",
-					        "drop table if exists Request; ",
-					        ("CREATE TABLE if not exists User( " +
+        String[] INITIAL = {"use testdb;",
+					        "drop table if exists Request;",
+					        ("CREATE TABLE if not exists Request( " +
 					            "smithNote VARCHAR(500) NOT NULL, " + 
 					            "clientNote VARCHAR(500) NOT NULL, " +
 					            "treeCount INT(10) NOT NULL, " +
 					            "requestID INT(20) NOT NULL, " +
 					            "PRIMARY KEY (requestID) "+"); ")
         					};
-        String[] TUPLES = {("insert into User(smithNote, clientNote, treeCount, requestID)"+
-        			"values ('n/a', 'n/a', '3', '1234')" +
-        			"('n/a', 'n/a', '4', '6243')," +
-			    	"('n/a', 'n/a', '6', '8934'');")
-			    			};
+        String[] TUPLES = {("insert into Request(requestID, smithNote, clientNote, treeCount)"+
+        			"values  (1,'Sold!', '',  2)," +
+        			"(2, 'Sold!', '', 4)," +
+        			"(3, 'Sold!', '', 5)," +
+        			"(4, 'Sold!', '', 4)," +
+        			"(5, 'Sold!', '', 2)," +
+        			"(6, 'Sold!', '', 5)," +
+        			"(7, 'Sold!', '', 3)," +
+        			"(8, 'Sold!', '', 2)," +
+        			"(9, 'Sold!', '', 2)," +
+        			"(10, 'Sold!', '', 1); ")
+			    	};
         
         //for loop to put these in database
         for (int i = 0; i < INITIAL.length; i++)
