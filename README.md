@@ -20,6 +20,8 @@ Database Course Project
 
 ## Contributions:
 Geovanni: approx. 20 hrs, created: GitHub Repository, all java classes, all html pages, implemented all functions
+
 Abdullahi: Approx: Created SQL table and added Readme
+
 Time spent together: 2hrs
 
