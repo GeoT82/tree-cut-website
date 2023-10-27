@@ -6,6 +6,7 @@ Database Course Project
 * Windows 10 64-bit
 * Eclipse 2021
 * MySQL Workbench
+* Java 15
 
 ## Using our project
 1. Download zip file from https://github.com/GeoT82/tree-cut-website
@@ -14,8 +15,10 @@ Database Course Project
 4. Open Eclipse
 5. Go to FILE -> Import -> Import from Directory -> Select Directory -> project location in computer
 6. Click Finish
-7. Go to Servers->right click apache tomcat->add or remove->select imported project folder->add->Finish
-8. Within Project Explorer on eclipse -> open project folder -> src -> default package -> right-click control servlet -> Run as -> Run on server
+7. Right-click project folder -> properties -> java compiler -> deselect "use compliece from execution environment" -> select java version 15 -> apply
+8. within the same properties menu -> project facets -> select java -> select version 15 -> select dynamic web module -> select version 3.0 -> apply and close
+9. Go to Servers->right click apache tomcat->add or remove->select imported project folder->add->Finish
+10. Within Project Explorer on eclipse -> open project folder -> src -> default package -> right-click control servlet -> Run as -> Run on server
 
 
 ## Contributions:
