@@ -17,3 +17,11 @@ Database Course Project
 7. Go to Servers->right click apache tomcat->add or remove->select imported project folder->add->Finish
 8. Within Project Explorer on eclipse -> open project folder -> src -> default package -> right-click control servlet -> Run as -> Run on server
 
+
+## Contributions:
+Geovanni: approx. 20 hrs, created: GitHub Repository, all java classes, all html pages, implemented all functions
+
+Abdullahi: Approx: Created SQL table and added Readme
+
+Time spent together: 2hrs
+
