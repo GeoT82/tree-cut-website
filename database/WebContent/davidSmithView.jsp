@@ -12,12 +12,8 @@
 
 <div align = "center">
 	
-	<form action = "initialize">
-		<input type = "submit" value = "Initialize the Database"/>
-	</form>
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 
-<h1>THIS IS DAVID SMITHS VIEW</h1>
     <div align="center">
     	<h1>THIS IS DAVID SMITHS VIEW</h1>
         <table border="1" cellpadding="6">

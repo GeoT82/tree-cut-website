@@ -15,7 +15,7 @@
 	<body>
 	 <center>
 		 <a href="login.jsp"target ="_self" > logout</a><br><br> 
-		 <p> You can show all the orders and personal information here.</p>
+		 <p>all the orders.</p>
 	</center>
 	
 	<form action = "request" align="center">
