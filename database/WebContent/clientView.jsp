@@ -28,18 +28,22 @@
             <tr>
                 <th>Smith Note</th>
                 <th>Client Note</th>
-                <th>Tree Count</th>
                	<th>Request ID</th>
-               	<th>Trees</th>
+                <th>Quote ID</th>
+                <th>Trees</th>
+                <th>Post</th>
             </tr>
             <c:forEach var="requests" items="${listRequest}">
                 <tr style="text-align:center">
                     <td><c:out value="${requests.smithNote}" /></td>
                     <td><c:out value="${requests.clientNote}" /></td>
-                    <td><c:out value="${requests.treeCount}" /></td>
                     <td><c:out value="${requests.requestID}" /></td>
+                    <td><c:out value="${requests.quoteID}" /></td>
                     <td>
                     	<a href="treeView?id=<c:out value='${requests.requestID}' />">View Trees</a>
+                    </td>
+                    <td>
+                    	<a href="createRequestNote?id=<c:out value='${requests.requestID}' />">Post Note</a>
                     </td>
             </c:forEach>
         </table>

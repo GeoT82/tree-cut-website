@@ -13,14 +13,12 @@ public class quote
 	    public quote() {
 	    }
 	 
-	    public quote(String time, String smithNote, String clientNote, double price) 
+	    public quote(double price, String time, String smithNote, int requestID) 
 	    {
 	        setTime(time);
 	        setSmithNote(smithNote);
-	        setClientNote(clientNote);
 	        setPrice(price);
-	        setQuoteID( (int) (Math.random() * 100 + 1) );
-	        setRequestID( (int) (Math.random() * 100 + 1) );
+	        setRequestID(requestID);
 	    }
 	    
 	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID) 
@@ -36,7 +34,7 @@ public class quote
 	    
 	  //getter and setter methods
 	    public String getTime() {
-	        return smithNote;
+	        return time;
 	    }
 	    public void setTime(String time) {
 	        this.time = time;

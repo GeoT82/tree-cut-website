@@ -140,7 +140,6 @@ public class billDAO
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, requests.getSmithNote());
 		preparedStatement.setString(2, requests.getClientNote());
-		preparedStatement.setInt(3, requests.getTreeCount());	
 		preparedStatement.setInt(4, requests.getRequestID());	
 
 		preparedStatement.executeUpdate();
@@ -167,7 +166,6 @@ public class billDAO
         preparedStatement.setInt(1, requests.getRequestID());
         preparedStatement.setString(2, requests.getSmithNote());
 		preparedStatement.setString(3, requests.getClientNote());
-		preparedStatement.setInt(4, requests.getTreeCount());
          
         boolean rowUpdated = preparedStatement.executeUpdate() > 0;
         preparedStatement.close();
@@ -188,9 +186,8 @@ public class billDAO
         if (resultSet.next()) {
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote"); 
-            int treeCount = resultSet.getInt("treeCount"); 
             
-            request = new request(smithNote, clientNote, treeCount);
+            request = new request(smithNote, clientNote, requestID);
         }
          
         resultSet.close();

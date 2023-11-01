@@ -5,31 +5,27 @@ public class request extends tree
 		protected tree[] treeArr;
 	 	protected String smithNote;
 	    protected String clientNote;
-	    protected int treeCount;
 	    protected int requestID;
+	    protected int quoteID;
 	 
 	    //constructors
 	    public request() {
 	    }
 	 
-	    public request(String smithNote, String clientNote, int treeCount) 
+	    public request(String smithNote, String clientNote,  int quoteID) 
 	    {
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
-	        setTreeCount(treeCount);
-	        treeArr = new tree[getTreeCount()];
-	        for (int i = 0; i < getTreeCount(); i++) {
-	        	treeArr[i] = new tree();
-	        }
+	        setQuoteID(quoteID);
 	        setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	    
-	    public request(String smithNote, String clientNote, int treeCount, int requestID) 
+	    public request(String smithNote, String clientNote, int requestID, int quoteID) 
 	    {
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
-	        setTreeCount(treeCount);
 	        setRequestID(requestID);
+	        setQuoteID(quoteID);
 	    }
 	 
 	    
@@ -57,12 +53,12 @@ public class request extends tree
 	        this.requestID = requestID;
 	    }
 	  
-	  
-	    public int getTreeCount() {
-	        return treeCount;
+	    
+	    public int getQuoteID() {
+	        return quoteID;
 	    }
-	    public void setTreeCount(int treeCount) {
-	        this.treeCount = treeCount;
+	    public void setQuoteID(int quoteID) {
+	        this.quoteID = quoteID;
 	    }
 	   
 	}

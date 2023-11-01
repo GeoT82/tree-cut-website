@@ -92,11 +92,12 @@ public class requestDAO
         while (resultSet.next()) {
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote");
-            int treeCount = resultSet.getInt("treeCount");
             int requestID = resultSet.getInt("requestID");
+            int quoteID = resultSet.getInt("quoteID");
+            
 
              
-            request requests = new request(smithNote, clientNote, treeCount, requestID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -121,11 +122,34 @@ public class requestDAO
         while (resultSet.next()) {
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote");
-            int treeCount = resultSet.getInt("treeCount");
             int requestID = resultSet.getInt("requestID");
+            int quoteID = resultSet.getInt("quoteID");
 
              
-            request requests = new request(smithNote, clientNote, treeCount, requestID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID);
+            listRequest.add(requests);
+        }        
+        resultSet.close();
+        disconnect();        
+        return listRequest;
+    }
+    
+    
+    public List<request> listPendRequests() throws SQLException {
+        List<request> listRequest = new ArrayList<request>();        
+        String sql = "SELECT * FROM Request Where Request.quoteID = 0 ";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING REQUESTS");
+         
+        while (resultSet.next()) {
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote");
+            int requestID = resultSet.getInt("requestID");
+            int quoteID = resultSet.getInt("quoteID");
+             
+            request requests = new request(smithNote, clientNote, requestID, quoteID);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -140,7 +164,6 @@ public class requestDAO
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, requests.getSmithNote());
 		preparedStatement.setString(2, requests.getClientNote());
-		preparedStatement.setInt(3, requests.getTreeCount());	
 		preparedStatement.setInt(4, requests.getRequestID());	
 
 		preparedStatement.executeUpdate();
@@ -167,11 +190,34 @@ public class requestDAO
         preparedStatement.setInt(1, requests.getRequestID());
         preparedStatement.setString(2, requests.getSmithNote());
 		preparedStatement.setString(3, requests.getClientNote());
-		preparedStatement.setInt(4, requests.getTreeCount());
          
         boolean rowUpdated = preparedStatement.executeUpdate() > 0;
         preparedStatement.close();
         return rowUpdated;     
+    }
+    
+    public void update(int qID, int rID) throws SQLException {
+    	
+        String sql = "update Request set quoteID = " + qID + " where requestID = " + rID + ";";
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
+    }
+    
+    public void update(int rID, String note, String user) throws SQLException {
+		String sql = "";
+		System.out.println("UPDATE POST RUNNIUNG");
+		if(user.matches("davidSmith@gmail.com")) {
+			sql = "update Request set smithNote = '" + note + "' where requestID = " + rID + ";";
+		} else {
+			sql = "update Request set clientNote = '" + note + "' where requestID = " + rID + ";";
+		}
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
     }
     
     public request getRequest(int requestID) throws SQLException {
@@ -188,9 +234,10 @@ public class requestDAO
         if (resultSet.next()) {
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote"); 
-            int treeCount = resultSet.getInt("treeCount"); 
+            int treeCount = resultSet.getInt("treeCount");
+            int quoteID = resultSet.getInt("quoteID");
             
-            request = new request(smithNote, clientNote, treeCount);
+            request = new request(smithNote, clientNote, requestID, quoteID);
         }
          
         resultSet.close();

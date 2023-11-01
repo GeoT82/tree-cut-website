@@ -13,6 +13,10 @@
 <div align = "center">
 	
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
+	
+	<form action = "pendRequest">
+		<input type = "submit" value = "See Pending Requests"/>
+	</form>
 
     <div align="center">
     	<h1>THIS IS DAVID SMITHS VIEW</h1>
@@ -25,6 +29,8 @@
                 <th>Price</th>
                	<th>Quote ID</th>
                	<th>Request ID</th>
+               	<th>Attach Note</th>
+               	
             </tr>
             <c:forEach var="quotes" items="${listQuote}">
                 <tr style="text-align:center">
@@ -35,6 +41,9 @@
                     <td><c:out value="${quotes.quoteID}" /></td>
                     <td>
                     	<a href="requestView?id=<c:out value='${quotes.requestID}' />"><c:out value='${quotes.requestID}' /></a>
+                    </td>
+                    <td>
+                    	<a href="createQuoteNote?id=<c:out value='${quotes.quoteID}' />">Post Note</a>
                     </td>
             </c:forEach>
         </table>

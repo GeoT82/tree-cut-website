@@ -106,6 +106,22 @@ public class quoteDAO
         return listQuote;
     }
     
+    public int getQuoteID(int rID) throws SQLException {     
+    	int quoteID = 0;
+        String sql = "SELECT * FROM Quote where quote.requestID = " + rID;      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("getting Quote ID");
+         
+        while (resultSet.next()) {
+            quoteID = resultSet.getInt("quoteID"); 
+        }        
+        resultSet.close();
+        disconnect();        
+        return quoteID;
+    }
+    
     protected void disconnect() throws SQLException {
         if (connect != null && !connect.isClosed()) {
         	connect.close();
@@ -114,13 +130,12 @@ public class quoteDAO
     
     public void insert(quote quotes) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into Quote(times, smithNote, clientNote, price, quoteID) values (?, ?, ?, ?, ?)";
+		String sql = "insert into Quote(times, smithNote, price, requestID) values (?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, quotes.getTime());
 			preparedStatement.setString(2, quotes.getSmithNote());
-			preparedStatement.setString(3, quotes.getClientNote());
-			preparedStatement.setDouble(4, quotes.getPrice());		
-			preparedStatement.setInt(5, quotes.getQuoteID());	
+			preparedStatement.setDouble(3, quotes.getPrice());
+			preparedStatement.setInt(4, quotes.getRequestID());
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -141,6 +156,21 @@ public class quoteDAO
         boolean rowUpdated = preparedStatement.executeUpdate() > 0;
         preparedStatement.close();
         return rowUpdated;     
+    }
+    
+    public void update(int qID, String note, String user) throws SQLException {
+		String sql = "";
+		System.out.println("UPDATE POST RUNNIUNG");
+		if(user.matches("davidSmith@gmail.com")) {
+			sql = "update Quote set smithNote = '" + note + "' where quoteID = " + qID + ";";
+		} else {
+			sql = "update Quote set clientNote = '" + note + "' where quoteID = " + qID + ";";
+		}
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
     }
     
     public quote getQuote(int quoteID) throws SQLException {
