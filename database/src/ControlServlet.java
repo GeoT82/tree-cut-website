@@ -88,6 +88,35 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: requestView");
                  showRequest(request, response);           	
                  break;
+        	 case "/pendRequest":
+        		 System.out.println("The action is: pendRequest");
+                 pendRequest(request, response);           	
+                 break;
+        	 case "/createQuote":
+        		 System.out.println("The action is: pendRequest");
+                 createQuote(request, response);           	
+                 break;
+        	 case "/quoted":
+        		 System.out.println("The action is: quoted");
+                 quoted(request, response);           	
+                 break;
+        	 case "/createRequestNote":
+        		 System.out.println("The action is: createNote");
+        		 createRequestNote(request, response);           	
+                 break;
+        	 case "/createQuoteNote":
+        		 System.out.println("The action is: createNote");
+        		 createQuoteNote(request, response);           	
+                 break;
+        	 case "/postRequestNote":
+        		 System.out.println("The action is: postNote");
+        		 postRequestNote(request, response);           	
+                 break;
+        	 case "/postQuoteNote":
+        		 System.out.println("The action is: postNote");
+        		 postQuoteNote(request, response);           	
+                 break;
+                 
 	    	}
 	    }
 	    catch(Exception ex) {
@@ -133,6 +162,101 @@ public class ControlServlet extends HttpServlet {
 	        System.out.println("Now you see the Request List page in your browser.");
 	        System.out.println("showRequest finished: 1111111111111111111111111111");
 	    }
+	    
+	    private void pendRequest(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("pendRequest started: 000000000000000000000000000");
+	        List<request> listPendRequest = requestDAO.listPendRequests();
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("pendRequest.jsp");
+	        request.setAttribute("listPendRequest", listPendRequest);
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the pendRequest List page in your browser.");
+	        System.out.println("pendRequest finished: 1111111111111111111111111111");
+	    }
+	    
+	    private void createQuote(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("createQuote started: 000000000000000000000000000");
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println("createQuote started: 222222222222222222222222222");
+	        System.out.println(id);
+	        session.setAttribute("requestID", id);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("quoteMaker.jsp");
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the  quote maker page in your browser.");
+	        System.out.println("createQuote finished: 1111111111111111111111111111");
+	    }
+	    
+	    private void quoted(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	Double price = Double.parseDouble(request.getParameter("price"));
+	        System.out.println("createQuote started: Price");
+	   	 	String time = request.getParameter("time");
+	        System.out.println("createQuote started: Time");
+	   	 	String note = request.getParameter("note");
+	        System.out.println("createQuote started: note");
+	   	 	System.out.println((Integer)session.getAttribute("requestID"));
+	   	 	int rID = (Integer)session.getAttribute("requestID");
+	   	 	quote quote = new quote(price, time, note, rID);
+	   	 	quoteDAO.insert(quote);
+	   	 	int qID = quoteDAO.getQuoteID(rID);
+	   	 	System.out.println(qID + " " + rID);
+	   	 	requestDAO.update(qID, rID);
+	   		smithPage(request, response, "");
+	   	 	
+	    }
+	    
+	    
+	    private void createRequestNote(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("createRequestNote started: 000000000000000000000000000");
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println(id);
+	        session.setAttribute("requestID", id);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("requestNoteMaker.jsp");
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the note form in your browser.");
+	        System.out.println("createRequestNote finished: 1111111111111111111111111111");
+	    }
+	    
+	    private void postRequestNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	String note = (request.getParameter("note"));
+	   	 	int rID = (Integer)session.getAttribute("requestID");
+	   	 	currentUser = (String) session.getAttribute("username");
+	   	 	requestDAO.update(rID, note, currentUser);
+	   	 	if(currentUser.matches("davidSmith@gmail.com")) {
+	   	 		smithPage(request, response, "");
+	   	 	} else {
+	   	 		clientPage(request,response, "");
+	   	 	} 	 		   	 	
+	    }
+	    
+	    
+	    private void createQuoteNote(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("createQuoteNote started: 000000000000000000000000000");
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println(id);
+	        session.setAttribute("quoteID", id);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("quoteNoteMaker.jsp");
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the note form in your browser.");
+	        System.out.println("createQuoteNote finished: 1111111111111111111111111111");
+	    }
+	    
+	    private void postQuoteNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	String note = (request.getParameter("note"));
+	        System.out.println(note);
+	   	 	int qID = (Integer)session.getAttribute("quoteID");
+	   	 	currentUser = (String) session.getAttribute("username");
+	   	 	quoteDAO.update(qID, note, currentUser);
+	   	 	if(currentUser.matches("davidSmith@gmail.com")) {
+	   	 		smithPage(request, response, "");
+	   	 	} else {
+	   	 		clientPage(request,response, "");
+	   	 	} 	
+	   	 	
+	    }
+	    
 	    	        
 	    private void rootPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("root view");

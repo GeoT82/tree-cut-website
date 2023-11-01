@@ -16,24 +16,25 @@
 	</center>
 		 
     <div align="center">
+    
         <table border="1" cellpadding="6">
             <caption><h2>List of Requests</h2></caption>
             <tr>
                 <th>Smith Note</th>
                 <th>Client Note</th>
-                <th>Quote ID</th>
                	<th>Request ID</th>
-               	<th>Trees</th>
-               	<th>Post</th>
+               	<th>Quote ID</th>
+               	<th>Generate Quote</th>
+               	<th>Attach Note</th>
             </tr>
-            <c:forEach var="requests" items="${listRequest}">
+            <c:forEach var="requests" items="${listPendRequest}">
                 <tr style="text-align:center">
                     <td><c:out value="${requests.smithNote}" /></td>
                     <td><c:out value="${requests.clientNote}" /></td>
-                    <td><c:out value="${requests.quoteID}" /></td>
                     <td><c:out value="${requests.requestID}" /></td>
+                    <td><c:out value="${requests.quoteID}" /></td>
                     <td>
-                    	<a href="treeView?id=<c:out value='${requests.requestID}' />">View Trees</a>
+                    	<a href="createQuote?id=<c:out value='${requests.requestID}' />">Quote</a>
                     </td>
                     <td>
                     	<a href="createRequestNote?id=<c:out value='${requests.requestID}' />">Post Note</a>

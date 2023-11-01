@@ -24,7 +24,8 @@ VALUES
 ( 0902848747, 'noahlyles@gmail.com', 88888888, 'Noah', 'Lyles' , '1234'),
 ( 1235134356, 'victorabu@gmail.com', 99999999, 'Victor', 'Abu', '1234'),
 ( 6546534262, 'Lukmanace@gmail.com', 00000000, 'Lukman', 'Ace', '1234'),
-( 23452342342, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234'),
+( 2345234234, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234'),
+( 1234566757, 'susie@gmail.com', '1233216547', 'Susie ', 'Guzman', 'susie1234'),
 ( 7777888899, 'root', 00000000, 'default', 'default','pass1234');
 
 
@@ -78,11 +79,14 @@ VALUES
 ( 'Sold!', '', '10:00:00', 13500, 10);
 SET FOREIGN_KEY_CHECKS = 1;
 
+SET FOREIGN_KEY_CHECKS = 0;
 Create TABLE if not exists Request(
   requestID int not null auto_increment,
+  quoteID int not null default 0,
   clientNote varchar(30) default 'pending',  
   smithNote varchar(30) default 'pending',
-  PRIMARY KEY (requestID)
+  PRIMARY KEY (requestID),
+  foreign key (quoteID) references Quote(quoteID)
 );
 alter table Request auto_increment = 200;
 INSERT INTO Request(clientNote, smithNote)
@@ -96,7 +100,12 @@ VALUES
 ( 'Sold!', ''),
 ( 'Sold!', ''),
 ( 'Sold!', ''),
+( 'Sold!', ''),
 ( 'Sold!', '');
+INSERT INTO Request(clientNote, smithNote, quoteID)
+VALUES 
+( 'Sold!', '', 21);
+SET FOREIGN_KEY_CHECKS = 1;
 
 Create TABLE if not exists Tree(
   treeID int not null auto_increment, 
