@@ -8,20 +8,22 @@ public class quote
 	    protected double price;
 	    protected int quoteID;
 	    protected int requestID;
+	    protected int clientID;
 	 
 	    //constructors
 	    public quote() {
 	    }
 	 
-	    public quote(double price, String time, String smithNote, int requestID) 
+	    public quote(double price, String time, String smithNote, int requestID, int clientID) 
 	    {
 	        setTime(time);
 	        setSmithNote(smithNote);
 	        setPrice(price);
 	        setRequestID(requestID);
+	        setClientID(clientID);
 	    }
 	    
-	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID) 
+	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID, int clientID) 
 	    {
 	    	setTime(time);
 	        setSmithNote(smithNote);
@@ -29,6 +31,7 @@ public class quote
 	        setPrice(price);
 	        setQuoteID(quoteID);
 	        setRequestID(requestID);
+	        setClientID(clientID);
 	    }
 	 
 	    
@@ -70,6 +73,13 @@ public class quote
 	    }
 	    public void setRequestID(int requestID) {
 	        this.requestID = requestID;
+	    }
+	    
+	    public int getClientID() {
+	        return clientID;
+	    }
+	    public void setClientID(int clientID) {
+	        this.clientID = clientID;
 	    }
 	  
 	  

@@ -181,10 +181,33 @@ public class userDAO
         }
          
         resultSet.close();
-        statement.close();
+        preparedStatement.close();
          
         return user;
     }
+    
+    public int getUserID(String email) throws SQLException {
+    	int clientID = 0;
+        String sql = "SELECT * FROM User WHERE email = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setString(1, email);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            clientID = resultSet.getInt("clientID"); 
+        }
+         
+        resultSet.close();
+        preparedStatement.close();
+         
+        return clientID;
+    }
+    
+    
     
     public boolean checkEmail(String email) throws SQLException {
     	boolean checks = false;
@@ -260,26 +283,27 @@ public class userDAO
 					            "firstName VARCHAR(20) NOT NULL, " +
 					            "lastName VARCHAR(20) NOT NULL, " +
 					            "password VARCHAR(20) NOT NULL, " +
-					            "creditCard CHAR(16) NOT NULL," +
-					            "phoneNumber CHAR(10) NOT NULL," +
-					            "clientID INT NOT NULL," +
-					            "PRIMARY KEY (email) "+"); ")
+					            "creditCard int not null, " +
+					            "phoneNumber varchar(13) not null default '111-222-3333', " +
+					            "clientID int(4) auto_increment," +
+					            "PRIMARY KEY (clientID) "+"); ")
         					};
-        String[] TUPLES = {("insert into User(clientID, phoneNumber, email, creditCard, firstName, lastName, password)"+
-        			"values ('3333', '12345678', 'susie@gmail.com', '1233216547', 'Susie ', 'Guzman', 'susie1234')," +
-        			"('10', '1234567890', 'johnsmith@gmail.com', 11111111, 'John', 'Smith', '1234')," +
-        			"(20, 4353536377, 'joerey@gmail.com', 22222222, 'Joe', 'Rey', '1234')," +
-        			"(30, 6456478874, 'jameswhite@gmail.com', 33333333, 'James', 'White' , '1234')," +
-        			"(40, 1124435677, 'aaronrodgers@gmail.com', 44444444, 'Aaron', 'Rodgers' , '1234')," +
-        			"(50, 9898654463, 'johndoe@gmail.com', 55555555, 'John', 'Doe' , '1234')," +
-        			"(60, 8478976444, 'barbakew@gmail.com', 66666666, 'Barb', 'Akew' , '1234')," +
-        			"(70, 4645735282, 'oliveyew@gmail.com', 77777777, 'Olive', 'Yew' , '1234')," +
-        			"(80, 0902848747, 'noahlyles@gmail.com', 88888888, 'Noah', 'Lyles' , '1234')," +
-        			"(90, 1235134356, 'victorabu@gmail.com', 99999999, 'Victor', 'Abu', '1234')," +
-        			"(100, 6546534262, 'Lukmanace@gmail.com', 00000000, 'Lukman', 'Ace', '1234')," +
-        			"(110, 2345234234, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234')," +
-        			"(120, 7777888899, 'root', 00000000, 'default', 'default','pass1234');")
-			    			};
+        String[] TUPLES = {"alter table User auto_increment = 100;",
+        			("INSERT INTO User (phoneNumber, email, creditCard, firstName, lastName, password)"+
+        			"values ( 1234567890, 'johnsmith@gmail.com', 11111111, 'John', 'Smith', '1234')," +
+        			"( 4353536377, 'joerey@gmail.com', 22222222, 'Joe', 'Rey', '1234')," +
+        			"( 6456478874, 'jameswhite@gmail.com', 33333333, 'James', 'White' , '1234'), " +
+        			"( 1124435677, 'aaronrodgers@gmail.com', 44444444, 'Aaron', 'Rodgers' , '1234')," +
+        			"( 9898654463, 'johndoe@gmail.com', 55555555, 'John', 'Doe' , '1234')," +
+        			"( 8478976444, 'barbakew@gmail.com', 66666666, 'Barb', 'Akew' , '1234')," +
+        			"( 4645735282, 'oliveyew@gmail.com', 77777777, 'Olive', 'Yew' , '1234')," +
+        			"( 0902848747, 'noahlyles@gmail.com', 88888888, 'Noah', 'Lyles' , '1234')," +
+        			"( 1235134356, 'victorabu@gmail.com', 99999999, 'Victor', 'Abu', '1234')," +
+        			"( 6546534262, 'Lukmanace@gmail.com', 00000000, 'Lukman', 'Ace', '1234')," +
+        			"( 2345234234, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234')," +
+        			"( 1234566757, 'susie@gmail.com', '1233216547', 'Susie ', 'Guzman', 'susie1234')," +
+        			"( 7777888899, 'root', 00000000, 'default', 'default','pass1234');")
+			    	};
         
         //for loop to put these in database
         for (int i = 0; i < INITIAL.length; i++)

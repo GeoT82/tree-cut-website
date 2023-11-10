@@ -16,21 +16,7 @@ public class tree
 	    public tree() {
 	    }
 	    
-	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height) 
-	    {
-	    	setImage1(image1);
-	    	setImage2(image2);
-	    	setImage3(image3);
-	    	setAddress(address);
-	    	setDistance(distance);
-	    	setWidth(width);
-	    	setHeight(height);
-	    	setTreeID( (int) (Math.random() * 100 + 1) );
-	    	setRequestID( (int) (Math.random() * 100 + 1) );
-	    }
-	 
-	    
-	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height, int treeID, int requestID) 
+	    public tree(int treeID, String image1, String image2, String image3, String address, double distance, double width, double height, int requestID) 
 	    {
 	    	setImage1(image1);
 	    	setImage2(image2);
@@ -40,6 +26,20 @@ public class tree
 	    	setWidth(width);
 	    	setHeight(height);
 	    	setTreeID(treeID);
+	    	setRequestID(requestID);
+	    }
+	 
+	    
+	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height, int requestID) 
+	    {
+	    	setImage1(image1);
+	    	setImage2(image2);
+	    	setImage3(image3);
+	    	setAddress(address);
+	    	setDistance(distance);
+	    	setWidth(width);
+	    	setHeight(height);
+	    	setTreeID(0);
 	    	setRequestID(requestID);
 	    }
 	 

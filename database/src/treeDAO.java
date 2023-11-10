@@ -101,7 +101,7 @@ public class treeDAO
             int requestID = resultSet.getInt("requestID"); 
 
              
-            tree trees = new tree(image1, image2, image3, address, distance, width, height, treeID, requestID);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -129,7 +129,7 @@ public class treeDAO
             int requestID = resultSet.getInt("requestID"); 
 
              
-            tree trees = new tree(image1, image2, image3, address, distance, width, height, treeID, requestID);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -144,17 +144,18 @@ public class treeDAO
         }
     }
     
-    public void insert(user users) throws SQLException {
+    public void insert(tree tree) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into Tree(image1, image2, image3, address, distance, width, height, requestID) values (?, ?, ?, ?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-			preparedStatement.setString(1, users.getEmail());
-			preparedStatement.setString(2, users.getFirstName());
-			preparedStatement.setString(3, users.getLastName());
-			preparedStatement.setString(4, users.getPassword());
-			preparedStatement.setString(5, users.getCreditCard());
-			preparedStatement.setString(6, users.getPhoneNumber());			
-			preparedStatement.setInt(7, users.getClientID());	
+			preparedStatement.setString(1, tree.getImage1());
+			preparedStatement.setString(2, tree.getImage2());
+			preparedStatement.setString(3, tree.getImage3());
+			preparedStatement.setString(4, tree.getAddress());
+			preparedStatement.setDouble(5, tree.getDistance());
+			preparedStatement.setDouble(6, tree.getWidth());			
+			preparedStatement.setDouble(7, tree.getHeight());	
+			preparedStatement.setInt(8, tree.getRequestID());	
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -224,33 +225,34 @@ public class treeDAO
         
         String[] INITIAL = {"use testdb; ",
 					        "drop table if exists Tree; ",
-					        "SET FOREIGN_KEY_CHECKS = 1;",
+					        "SET FOREIGN_KEY_CHECKS = 0;",
 					        ("CREATE TABLE if not exists Tree( " +
-					        		"treeID int,"+ 
-					        		"requestID int,"+
-					        		"distance double (12,2),"+ 
-					        		"width double (12,2),"+
-					        		"height double (12,2), "+
-					        		"address varchar(30), "+
-					        		"image1 varchar(30), "+
-					        		"image2 varchar(30), "+
-					        		"image3 varchar(30),"+
+					        		"treeID int not null auto_increment,"+ 
+					        		"requestID int not null default 0,"+
+					        		"distance double (12,2) not null default '0', "+ 
+					        		"width double (12,2) not null default '0',"+
+					        		"height double (12,2) not null default '0', "+
+					        		"address varchar(30) not null default 'unknown', " +
+					        		"image1 varchar(30) not null default 'blank.png',  "+
+					        		"image2 varchar(30) not null default 'blank.png',  "+
+					        		"image3 varchar(30) not null default 'blank.png',"+
 					        		"PRIMARY KEY (treeID),"+
 					        		"FOREIGN KEY (requestID) REFERENCES Request(requestID)"+"); "),
 					        "SET FOREIGN_KEY_CHECKS = 1;"
         					};
-        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
-        			("INSERT INTO Tree(treeID, distance, width, height, address, image1, image2, image3, requestID)"+
-        			"values (111, 5, 123, 123, 'Detroit', 'a', 'b', 'c',3),"
-        			+ "(222, 10, 232, 123, 'Detroit', 'a', 'd', 'e',2),"
-        			+ "(333, 15, 121, 123, 'Detroit', 'h', 'g', 'f',4),"
-        			+ "(444, 20, 180, 123, 'Detroit', 'i', 'j', 'k',4),"
-        			+ "(555, 25, 280, 123, 'Detroit', 'n', 'm', 'l',1),"
-        			+ "(666, 30, 321, 123, 'Detroit', 'o', 'p', 'q',4),"
-        			+ "(777, 35, 213, 123, 'Detroit', 't', 's', 'r',2),"
-        			+ "(888, 40, 91, 123, 'Detroit', 'u', 'b', 't',6),"
-        			+ "(999, 45, 145, 123, 'Detroit', 'v','\"y', 's',12),"
-        			+ "(000, 50, 156, 123, 'Detroit', 'w','x', 'z', 2);"),
+        String[] TUPLES = {"alter table Tree auto_increment = 500;",
+        			"SET FOREIGN_KEY_CHECKS = 0;",
+        			("INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID)"+
+        			"values ( 5, 123, 123, 'Detroit', 'a', 'b', 'c',200),"
+        			+ "( 10, 232, 123, 'Detroit', 'a', 'd', 'e',200),"
+        			+ "( 15, 121, 123, 'Detroit', 'h', 'g', 'f',201),"
+        			+ "( 20, 180, 123, 'Detroit', 'i', 'j', 'k',201),"
+        			+ "( 25, 280, 123, 'Detroit', 'n', 'm', 'l',204),"
+        			+ "( 30, 321, 123, 'Detroit', 'o', 'p', 'q',204),"
+        			+ "( 35, 213, 123, 'Detroit', 't', 's', 'r',210),"
+        			+ "( 40, 91, 123, 'Detroit', 'u', 'b', 't',210),"
+        			+ "( 50, 32, 15, 'Detroit', 'f', 'r', 'i',211),"
+        			+ "( 45, 145, 123, 'Detroit', 'v','y', 's',210);"),
         			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         

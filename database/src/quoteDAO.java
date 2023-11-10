@@ -96,9 +96,66 @@ public class quoteDAO
             double price = resultSet.getDouble("price");
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
+            int clientID = resultSet.getInt("clientID");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID);
+            listQuote.add(quotes);
+        }        
+        resultSet.close();
+        disconnect();        
+        return listQuote;
+    }
+    
+    public List<quote> listAllQuotes(int uID) throws SQLException {
+        List<quote> listQuote = new ArrayList<quote>();        
+        System.out.println(uID);
+        String sql = "SELECT * FROM Quote where clientID = " + uID;      
+        connect_func(); 
+        System.out.println(sql);
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            String time = resultSet.getString("times");
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote");
+            double price = resultSet.getDouble("price");
+            int quoteID = resultSet.getInt("quoteID"); 
+            int requestID = resultSet.getInt("requestID"); 
+            int clientID = resultSet.getInt("clientID");
+
+             
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID);
+            listQuote.add(quotes);
+        }        
+        resultSet.close();
+        disconnect();        
+        return listQuote;
+    }
+    
+    public List<quote> listQuote(int qID) throws SQLException {
+        List<quote> listQuote = new ArrayList<quote>();        
+        System.out.println(qID);
+        String sql = "SELECT * FROM Quote where quoteID = " + qID;      
+        connect_func(); 
+        System.out.println(sql);
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            String time = resultSet.getString("times");
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote");
+            double price = resultSet.getDouble("price");
+            int quoteID = resultSet.getInt("quoteID"); 
+            int requestID = resultSet.getInt("requestID"); 
+            int clientID = resultSet.getInt("clientID");
+
+             
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -130,15 +187,44 @@ public class quoteDAO
     
     public void insert(quote quotes) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into Quote(times, smithNote, price, requestID) values (?, ?, ?, ?)";
+    	
+    	System.out.println("INSERT RUNNIUNG");
+    	statement =  (Statement) connect.createStatement();
+    	statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+    	System.out.println("CHECKS OFF");
+    	
+		String sql = "insert into Quote(times, smithNote, price, requestID, clientID) values (?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, quotes.getTime());
 			preparedStatement.setString(2, quotes.getSmithNote());
 			preparedStatement.setDouble(3, quotes.getPrice());
 			preparedStatement.setInt(4, quotes.getRequestID());
+			preparedStatement.setInt(5, quotes.getClientID());
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        System.out.println("CHECKS ON");
+        System.out.println("INSERT DONE");
+    }
+    
+    public boolean delete(int quoteID) throws SQLException {
+        String sql = "DELETE FROM Quote WHERE quoteID = ?";        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, quoteID);
+         
+        boolean rowDeleted = preparedStatement.executeUpdate() > 0;
+        preparedStatement.close();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        disconnect();
+        
+        return rowDeleted;     
     }
     
      
@@ -170,7 +256,8 @@ public class quoteDAO
         connect_func();
         statement =  (Statement) connect.createStatement();
         
-        statement.execute(sql);   
+        statement.execute(sql); 
+        disconnect();
     }
     
     public quote getQuote(int quoteID) throws SQLException {
@@ -190,7 +277,9 @@ public class quoteDAO
             String clientNote = resultSet.getString("clientNote");
             double price = resultSet.getDouble("price");
             int requestID = resultSet.getInt("requestID");
-            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID);
+            int clientID = resultSet.getInt("clientID");
+            
+            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID, clientID);
         }
          
         resultSet.close();
@@ -200,34 +289,104 @@ public class quoteDAO
     }
     
     
+    public int getUserID(int qID) throws SQLException {
+    	int clientID = 0;
+        String sql = "SELECT * FROM Quote WHERE quoteID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, qID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            clientID = resultSet.getInt("clientID"); 
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return clientID;
+    }
+    
+    
+    public int getRequestID(int qID) throws SQLException {
+    	int requestID = 0;
+        String sql = "SELECT * FROM Quote WHERE quoteID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, qID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+        	requestID = resultSet.getInt("requestID"); 
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return requestID;
+    }
+    
+    public double getPrice(int qID) throws SQLException {
+    	double price = 0;
+        String sql = "SELECT * FROM Quote WHERE quoteID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, qID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+        	price = resultSet.getDouble("price"); 
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return price;
+    }
+    
+    
     public void init() throws SQLException, FileNotFoundException, IOException{
     	connect_func();
         statement =  (Statement) connect.createStatement();
         
         String[] INITIAL = {"use testdb",
         					"drop table if exists Quote;",
+        					"SET FOREIGN_KEY_CHECKS = 0;",
 					        ("CREATE TABLE if not exists Quote( " +
-					            "quoteID int, "+
-					            "clientNote varchar(30),"+ 
-					            "smithNote varchar(30),"+ 
-					            "times time,"+ 
-					            "price int,"+
-					            "requestID int,"+
+					            "quoteID int not null auto_increment, "+
+					            "clientNote varchar(150) default 'pending', "+ 
+					            "smithNote varchar(150) default 'pending', "+ 
+					            "times time not null default '1:00:00',"+ 
+					            "price double not null default '0.00',"+
+					            "requestID int not null default '0',"+
+					            "clientID int not null default '0', " +
 					            "PRIMARY KEY (QuoteID),"+
-					            "Foreign key (requestID) references Request(requestID));")
+					            "Foreign key (requestID) references Request(requestID)," +
+					            "foreign key (clientID) references User(clientID));"),
+					        "SET FOREIGN_KEY_CHECKS = 1;"
         					};
         String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
-        					("INSERT INTO Quote(quoteID, clientNote , smithNote, times, price, requestID)"+
-        					"VALUES (00001, 'Sold!', '', '1:00:00', 4500, 1),"+
-        					"(00002, 'Sold!', '', '2:00:00', 5500, 2),"+
-        					"(00003, 'Sold!', '', '3:00:00', 6500, 3),"+
-        					"(00004, 'Sold!', '', '4:00:00', 7500, 2),"+
-        					"(00005, 'Sold!', '', '5:00:00', 8500, 3),"+
-        					"(00006, 'Sold!', '', '6:00:00', 9500, 4),"+
-        					"(00007, 'Sold!', '', '7:00:00', 10500, 3),"+
-        					"(00008, 'Sold!', '', '8:00:00', 11500, 2),"+
-        					"(00009, 'Sold!', '', '9:00:00', 12500, 4),"+
-        					"(00010, 'Sold!', '', '10:00:00', 13500, 2);"),
+        					"alter table Quote auto_increment = 20;",
+        					("INSERT INTO Quote( clientNote , smithNote, times, price, requestID, clientID)"+
+        					"VALUES ( 'Sold!', '', '1:00:00', 4500, 200, 111),"+
+        					"( 'Sold!', '', '2:00:00', 5500, 201, 111),"+
+        					"( 'Sold!', '', '3:00:00', 6500, 204, 111),"+
+        					"( 'Sold!', '', '4:00:00', 7500, 4, 109),"+
+        					"( 'Sold!', '', '5:00:00', 8500, 5, 110),"+
+        					"( 'Sold!', '', '6:00:00', 9500, 6, 100),"+
+        					"( 'Sold!', '', '7:00:00', 10500, 7, 103),"+
+        					"( 'Sold!', '', '8:00:00', 11500, 8, 105),"+
+        					"( 'Sold!', '', '9:00:00', 12500, 9, 104),"+
+        					"( 'Sold!', '', '10:00:00', 13500, 210, 111);"),
         					"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         
