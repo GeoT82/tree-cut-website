@@ -94,10 +94,37 @@ public class requestDAO
             String clientNote = resultSet.getString("clientNote");
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
             
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID);
+            listRequest.add(requests);
+        }        
+        resultSet.close();
+        disconnect();        
+        return listRequest;
+    }
+    
+    public List<request> listAllRequests(int uID) throws SQLException {
+        List<request> listRequest = new ArrayList<request>();        
+        String sql = "SELECT * FROM Request where clientID = " + uID;
+        System.out.println(sql);
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote");
+            int requestID = resultSet.getInt("requestID");
+            int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
+            
+
+             
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -124,9 +151,10 @@ public class requestDAO
             String clientNote = resultSet.getString("clientNote");
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -148,8 +176,9 @@ public class requestDAO
             String clientNote = resultSet.getString("clientNote");
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID,clientID);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -169,6 +198,23 @@ public class requestDAO
 		preparedStatement.executeUpdate();
         preparedStatement.close();
     }
+    
+    public void insert(int uID, String note) throws SQLException {
+    	connect_func();
+        statement =  (Statement) connect.createStatement();
+  
+        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        			("insert into Request(clientID, clientNote)"+
+        			"values ( "+ uID + " , '" + note + "');"),
+        			"SET FOREIGN_KEY_CHECKS = 1;"
+			    	};
+        
+        for (int i = 0; i < TUPLES.length; i++)	
+        	statement.execute(TUPLES[i]);
+        disconnect();
+     
+    }
+    
     
     public boolean delete(String requestID) throws SQLException {
         String sql = "DELETE FROM Request WHERE requestID = ?";        
@@ -220,6 +266,20 @@ public class requestDAO
         statement.execute(sql);   
     }
     
+    public void deleteQuote(int qID) throws SQLException {
+		String sql = "";
+		System.out.println("Delete Quote RUNNIUNG");
+		sql = "update Request set quoteID = 0  where quoteID = " + qID + ";";
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        
+        statement.execute(sql);  
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+    }
+    
     public request getRequest(int requestID) throws SQLException {
     	request request = null;
         String sql = "SELECT * FROM Request WHERE requestID = ?";
@@ -236,14 +296,56 @@ public class requestDAO
             String clientNote = resultSet.getString("clientNote"); 
             int treeCount = resultSet.getInt("treeCount");
             int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
             
-            request = new request(smithNote, clientNote, requestID, quoteID);
+            request = new request(smithNote, clientNote, requestID, quoteID, clientID);
         }
          
         resultSet.close();
         statement.close();
          
         return request;
+    }
+    
+    public int getLatestRequest() throws SQLException {
+    	int requestID = 0;
+        String sql = "SELECT max(requestID) FROM Request";
+         
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+         
+        ResultSet resultSet = statement.executeQuery(sql);
+         
+        if (resultSet.next()) {
+            requestID = resultSet.getInt(1);
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return requestID;
+    }
+    
+    
+    public int getUserID(int rID) throws SQLException {
+    	int clientID = 0;
+        String sql = "SELECT * FROM Request WHERE requestID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, rID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            clientID = resultSet.getInt("clientID"); 
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return clientID;
     }
     
     
@@ -254,24 +356,35 @@ public class requestDAO
         
         String[] INITIAL = {"use testdb;",
 					        "drop table if exists Request;",
+					        "SET FOREIGN_KEY_CHECKS = 0;",
 					        ("CREATE TABLE if not exists Request( " +
-					            "smithNote VARCHAR(500) NOT NULL, " + 
-					            "clientNote VARCHAR(500) NOT NULL, " +
-					            "treeCount INT(10) NOT NULL, " +
-					            "requestID INT(20) NOT NULL, " +
-					            "PRIMARY KEY (requestID) "+"); ")
+					            "smithNote varchar(30) default 'pending', " + 
+					            "clientNote varchar(30) default 'pending', " +
+					            "requestID int not null auto_increment, " +
+					            "quoteID int not null default 0," +
+					            "clientID int not null default 0, " +
+					            "PRIMARY KEY (requestID), " +
+					            "foreign key (quoteID) references Quote(quoteID)," +
+					            "foreign key (clientID) references User(clientID)" +
+					            "); "),
+					        "SET FOREIGN_KEY_CHECKS = 1;"
         					};
-        String[] TUPLES = {("insert into Request(requestID, smithNote, clientNote, treeCount)"+
-        			"values  (1,'Sold!', '',  2)," +
-        			"(2, 'Sold!', '', 4)," +
-        			"(3, 'Sold!', '', 5)," +
-        			"(4, 'Sold!', '', 4)," +
-        			"(5, 'Sold!', '', 2)," +
-        			"(6, 'Sold!', '', 5)," +
-        			"(7, 'Sold!', '', 3)," +
-        			"(8, 'Sold!', '', 2)," +
-        			"(9, 'Sold!', '', 2)," +
-        			"(10, 'Sold!', '', 1); ")
+        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        			"alter table Request auto_increment = 200;",
+        			("INSERT INTO Request(clientNote, smithNote, clientID, quoteID)"+
+        			"values  ( 'Sold!', '', 111, 20)," +
+        			"( 'Sold!', '', 111, 21)," +
+        			"( 'Sold!', '', 108, default)," +
+        			"( 'Sold!', '', 109, default)," +
+        			"( 'Sold!', '', 111, 22)," +
+        			"( 'Sold!', '', 100, default)," +
+        			"( 'Sold!', '', 111, default)," +
+        			"( 'Sold!', '', 112, default)," +
+        			"( 'Sold!', '', 107, default)," +
+        			"( 'Sold!', '', 106, default)," +
+        			"( 'Sold!', '', 111, 29)," +
+        			"( 'Sold!', '', 111, 21);"),
+        			"SET FOREIGN_KEY_CHECKS = 1;"
 			    	};
         
         //for loop to put these in database

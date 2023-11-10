@@ -83,7 +83,7 @@ public class billDAO
     
     public List<bill> listAllBills() throws SQLException {
         List<bill> listBill = new ArrayList<bill>();        
-        String sql = "SELECT * FROM Request";      
+        String sql = "SELECT * FROM Bill";      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -94,14 +94,42 @@ public class billDAO
             String clientNote = resultSet.getString("clientNote");
             int billID = resultSet.getInt("billID");
             int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
+            double price = resultSet.getDouble("price");
 
              
-            bill bills = new bill(smithNote, clientNote, billID, quoteID);
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price);
             listBill.add(bills);
         }        
         resultSet.close();
         disconnect();        
         return listBill;
+    }
+    
+    
+    public List<bill> listAllBills(int id) throws SQLException {
+        List<bill> listRequest = new ArrayList<bill>();        
+        String sql = "SELECT * FROM Bill Where Bill.clientID = " + id;      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING BILLS");
+         
+        while (resultSet.next()) {
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote");
+            int billID = resultSet.getInt("billID");
+            int quoteID = resultSet.getInt("quoteID");
+            int userID = resultSet.getInt("clientID");
+            double price = resultSet.getDouble("price");
+
+             
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, userID, price);
+            listRequest.add(bills);
+        }        
+        resultSet.close();
+        disconnect();        
+        return listRequest;
     }
     
     protected void disconnect() throws SQLException {
@@ -123,9 +151,11 @@ public class billDAO
             String clientNote = resultSet.getString("clientNote");
             int billID = resultSet.getInt("billID");
             int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
+            double price = resultSet.getDouble("price");
 
              
-            bill bills = new bill(smithNote, clientNote, billID, quoteID);
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price);
             listBill.add(bills);
         }        
         resultSet.close();
@@ -134,16 +164,25 @@ public class billDAO
     }
     
     
-    public void insert(request requests) throws SQLException {
+    public void generate(bill bill) throws SQLException {
+    	System.out.println("GENERATING BILL");
     	connect_func("root","pass1234");         
-		String sql = "insert into User(smithNote, clientNote, treeCount, requestID) values (?, ?, ?, ?)";
+    	statement =  (Statement) connect.createStatement();
+    	statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+    	
+		String sql = "insert into Bill(smithNote, clientNote, quoteID, clientID, price) values (?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-		preparedStatement.setString(1, requests.getSmithNote());
-		preparedStatement.setString(2, requests.getClientNote());
-		preparedStatement.setInt(4, requests.getRequestID());	
+		preparedStatement.setString(1, bill.getSmithNote());
+		preparedStatement.setString(2, bill.getClientNote());
+		preparedStatement.setInt(3, bill.getQuoteID());	
+		preparedStatement.setInt(4, bill.getClientID());
+		preparedStatement.setDouble(5, bill.getPrice());	
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        disconnect();
+        System.out.println("BILL GENERATED");
     }
     
     public boolean delete(String requestID) throws SQLException {
@@ -172,29 +211,7 @@ public class billDAO
         return rowUpdated;     
     }
     
-    public request getRequest(int requestID) throws SQLException {
-    	request request = null;
-        String sql = "SELECT * FROM Request WHERE requestID = ?";
-         
-        connect_func();
-         
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setInt(1, requestID);
-         
-        ResultSet resultSet = preparedStatement.executeQuery();
-         
-        if (resultSet.next()) {
-            String smithNote = resultSet.getString("smithNote");
-            String clientNote = resultSet.getString("clientNote"); 
-            
-            request = new request(smithNote, clientNote, requestID);
-        }
-         
-        resultSet.close();
-        statement.close();
-         
-        return request;
-    }
+   
     
     
     
@@ -206,27 +223,31 @@ public class billDAO
 					        "drop table if exists Bill; ",
 					        "SET FOREIGN_KEY_CHECKS = 0;",
 					        ("CREATE TABLE if not exists Bill( " +
-					        	"billID int, "+
-					        	"clientNote varchar(30),"+ 
-					        	"SmithNote varchar(30),"+
-					        	"quoteID int,"+
-					        	"PRIMARY KEY (billID),"+
-					        	"Foreign key (quoteID) references Quote(quoteID)"+"); "),
+					        	"billID int not null auto_increment, "+
+					        	"clientNote varchar(150) default 'pending', "+ 
+					        	"smithNote varchar(150) default 'pending',"+
+					        	"price double(10,2) not null default 0," +
+					        	"quoteID int not null default 0,"+
+					        	"clientID int not null default 0, " +
+					        	"PRIMARY KEY (billID)," +
+					        	"Foreign key (quoteID) references Quote(quoteID)," +
+					        	"Foreign key (clientID) references User(clientID)); "),
 					        "SET FOREIGN_KEY_CHECKS = 1;"
         					};
         String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
-        			("INSERT INTO Bill(billID, clientNote, SmithNote, quoteID)"+
-        			"values (0001, 'Sold!', '', 2),"
-        			+ "(0002, 'Sold!', '',3),"
-        			+ "(0003, 'Sold!', '',1),"
-        			+ "(0004, 'Sold!', '',5),"
-        			+ "(0005, 'Sold!', '',8),"
-        			+ "(0006, 'Sold!', '',3),"
-        			+ "(0007, 'Sold!', '',2),"
-        			+ "(0008, 'Sold!', '',1),"
-        			+ "(0009, 'Sold!', '',7),"
-        			+ "(0010, 'Sold!', '',2);"),
-        			"SET FOREIGN_KEY_CHECKS = 0;"
+        			"alter table Bill auto_increment = 10;",
+        			("INSERT INTO Bill(clientNote, SmithNote, quoteID)"+
+        			"values ( 'Sold!', '', 2),"
+        			+ "( 'Sold!', '', 4),"
+        			+ "( 'Sold!', '',3),"
+        			+ "( 'Sold!', '',4),"
+        			+ "( 'Sold!', '',1),"
+        			+ "( 'Sold!', '',2),"
+        			+ "( 'Sold!', '',5),"
+        			+ "( 'Sold!', '',6),"
+        			+ "( 'Sold!', '',6),"
+        			+ "( 'Sold!', '',1);"),
+        			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         
         //for loop to put these in database

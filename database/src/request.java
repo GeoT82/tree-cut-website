@@ -7,10 +7,12 @@ public class request extends tree
 	    protected String clientNote;
 	    protected int requestID;
 	    protected int quoteID;
+	    protected int clientID;
 	 
 	    //constructors
 	    public request() {
 	    }
+	   
 	 
 	    public request(String smithNote, String clientNote,  int quoteID) 
 	    {
@@ -20,12 +22,13 @@ public class request extends tree
 	        setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	    
-	    public request(String smithNote, String clientNote, int requestID, int quoteID) 
+	    public request(String smithNote, String clientNote, int requestID, int quoteID, int clientID) 
 	    {
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
 	        setRequestID(requestID);
 	        setQuoteID(quoteID);
+	        setClientID(clientID);
 	    }
 	 
 	    
@@ -59,6 +62,13 @@ public class request extends tree
 	    }
 	    public void setQuoteID(int quoteID) {
 	        this.quoteID = quoteID;
+	    }
+	    
+	    public int getClientID() {
+	        return clientID;
+	    }
+	    public void setClientID(int clientID) {
+	        this.clientID = clientID;
 	    }
 	   
 	}

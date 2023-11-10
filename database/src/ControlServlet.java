@@ -88,6 +88,10 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: requestView");
                  showRequest(request, response);           	
                  break;
+        	 case "/quoteView":
+        		 System.out.println("The action is: quoteView");
+                 showQuote(request, response);           	
+                 break;
         	 case "/pendRequest":
         		 System.out.println("The action is: pendRequest");
                  pendRequest(request, response);           	
@@ -116,6 +120,35 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: postNote");
         		 postQuoteNote(request, response);           	
                  break;
+        	 case "/requestForm":
+        		 System.out.println("The action is: requestForm");
+        		 requestForm(request, response);           	
+                 break;
+        	 case "/seeRequests":
+        		 System.out.println("The action is: seeRequests");
+        		 seeRequests(request, response);           	
+                 break;
+        	 case "/seeQuotes":
+        		 System.out.println("The action is: seeQuotes");
+        		 seeQuotes(request, response);           	
+                 break;
+        	 case "/seeBills":
+        		 System.out.println("The action is: seeBills");
+        		 seeBills(request, response);           	
+                 break;
+        	 case "/submitRequest":
+        		 System.out.println("The action is: submitRequest");
+        		 submitRequest(request, response);           	
+                 break;
+        	 case "/quoteAgree":
+        		 System.out.println("The action is: quoteAgree");
+        		 quoteAgree(request, response);           	
+                 break;
+        	 case "/quoteQuit":
+        		 System.out.println("The action is: quoteQuit");
+        		 quoteQuit(request, response);           	
+                 break;
+                 
                  
 	    	}
 	    }
@@ -163,6 +196,20 @@ public class ControlServlet extends HttpServlet {
 	        System.out.println("showRequest finished: 1111111111111111111111111111");
 	    }
 	    
+	    private void showQuote(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("showQuote started: 000000000000000000000000000");
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println("showQuote started: 222222222222222222222222222");
+	        System.out.println(id);
+	        List<quote> listQuote = quoteDAO.listQuote(id);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("quoteList.jsp");
+	        request.setAttribute("listQuote", listQuote);
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the Quote List page in your browser.");
+	        System.out.println("showRequest finished: 1111111111111111111111111111");
+	    }
+	    
 	    private void pendRequest(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("pendRequest started: 000000000000000000000000000");
@@ -177,6 +224,8 @@ public class ControlServlet extends HttpServlet {
 	    private void createQuote(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("createQuote started: 000000000000000000000000000");
+			currentUser = (String) session.getAttribute("username");
+			session.setAttribute("username", currentUser);
 	        int id = Integer.parseInt(request.getParameter("id"));
 	        System.out.println("createQuote started: 222222222222222222222222222");
 	        System.out.println(id);
@@ -189,14 +238,18 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void quoted(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	    	Double price = Double.parseDouble(request.getParameter("price"));
-	        System.out.println("createQuote started: Price");
+	        System.out.println("quoted started: Price");
 	   	 	String time = request.getParameter("time");
-	        System.out.println("createQuote started: Time");
+	        System.out.println("quoted started: Time");
 	   	 	String note = request.getParameter("note");
-	        System.out.println("createQuote started: note");
+	        System.out.println("quoted started: note");
 	   	 	System.out.println((Integer)session.getAttribute("requestID"));
+	   	 	
 	   	 	int rID = (Integer)session.getAttribute("requestID");
-	   	 	quote quote = new quote(price, time, note, rID);
+	   	 	System.out.println(rID);
+	   	 	int uID = requestDAO.getUserID(rID);
+	   	 	System.out.println(uID);
+	   	 	quote quote = new quote(price, time, note, rID, uID);
 	   	 	quoteDAO.insert(quote);
 	   	 	int qID = quoteDAO.getQuoteID(rID);
 	   	 	System.out.println(qID + " " + rID);
@@ -257,6 +310,45 @@ public class ControlServlet extends HttpServlet {
 	   	 	
 	    }
 	    
+	    
+	    private void requestForm(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("requestForm started: 000000000000000000000000000");
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("requestForm.jsp");
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the  Request Form page in your browser.");
+	        System.out.println("requestForm finished: 1111111111111111111111111111");
+	    }
+	    
+	    
+	    private void submitRequest(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("submitRequest started: 000000000000000000000000000");
+	        String note = (request.getParameter("note"));
+	        
+	        String image1 = (request.getParameter("image1"));
+	        String image2 = (request.getParameter("image2"));
+	        String image3 = (request.getParameter("image3"));
+	        String address = (request.getParameter("address"));
+	        double distance = Double.parseDouble(request.getParameter("distance"));
+	        double width = Double.parseDouble(request.getParameter("width"));
+	        double height = Double.parseDouble(request.getParameter("height"));
+	        
+	        currentUser = (String) session.getAttribute("username");
+	        int uID = userDAO.getUserID(currentUser);
+	        requestDAO.insert(uID, note); 
+	        int rID = requestDAO.getLatestRequest();
+	        
+	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID);
+	        treeDAO.insert(tree);
+	        
+	        clientPage(request,response, "");
+	        System.out.println("Now you see the  Request Form page in your browser.");
+	        System.out.println("submitRequest finished: 1111111111111111111111111111");
+	    }
+	    
+	    
+	    
 	    	        
 	    private void rootPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("root view");
@@ -273,6 +365,77 @@ public class ControlServlet extends HttpServlet {
 	    private void clientPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("Client view");
 			request.setAttribute("listRequest", requestDAO.listAllRequests());
+	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
+	    }
+	    
+	    
+	    private void seeRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("Client Requests View");
+	    	currentUser = (String) session.getAttribute("username");
+		 	session = request.getSession();
+			session.setAttribute("username", currentUser);
+	    	int id = userDAO.getUserID(currentUser);
+			request.setAttribute("listRequest", requestDAO.listAllRequests(id));
+	    	request.getRequestDispatcher("clientRequestView.jsp").forward(request, response);
+	    }
+	    
+	    
+	    private void seeQuotes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("Client Quotes View");
+	    	currentUser = (String) session.getAttribute("username");
+	    	System.out.println(currentUser);;
+	    	int id = userDAO.getUserID(currentUser);
+	    	
+	    	if (currentUser.equals("davidSmith@gmail.com")) {
+	    		System.out.println("david Match");
+	    		request.setAttribute("listQuotes", quoteDAO.listAllQuotes());
+	    		request.getRequestDispatcher("davidQuoteView.jsp").forward(request, response);
+	    	} else {
+	    		System.out.println("No Match");
+	    		request.setAttribute("listQuotes", quoteDAO.listAllQuotes(id));
+	    		request.getRequestDispatcher("clientQuoteView.jsp").forward(request, response);
+	    	}
+	    	
+	    }
+	    
+	    
+	    private void seeBills(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("Client Bills View");
+	    	currentUser = (String) session.getAttribute("username");
+	    	session = request.getSession();
+			session.setAttribute("username", currentUser);
+	    	int id = userDAO.getUserID(currentUser);
+	    	System.out.println(id);
+	    	if (currentUser.equals("davidSmith@gmail.com")) {
+	    		request.setAttribute("listBills", billDAO.listAllBills());
+	    		request.getRequestDispatcher("davidBillView.jsp").forward(request, response);
+	    	} else {
+	    		request.setAttribute("listBills", billDAO.listAllBills(id));
+	    		request.getRequestDispatcher("clientBillView.jsp").forward(request, response);
+	    	}
+		
+	    	
+	    }
+	    
+	    
+	    private void quoteAgree(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	int qID = Integer.parseInt(request.getParameter("id"));
+	    	int uID = quoteDAO.getUserID(qID);
+	    	double price = quoteDAO.getPrice(qID);
+	    	
+	    	
+	    	bill bill = new bill(qID, uID, price);
+	    	billDAO.generate(bill);
+	    	
+	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
+	    }
+	    
+	    private void quoteQuit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	int qID = Integer.parseInt(request.getParameter("id"));
+	    	
+	    	quoteDAO.delete(qID);
+	    	requestDAO.deleteQuote(qID);
+	    	
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    

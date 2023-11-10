@@ -6,6 +6,8 @@ public class bill
 		protected String clientNote;
 		protected int billID;
 		protected int quoteID;
+		protected int clientID;
+		protected double price;
 	 
 	    //constructors
 	    public bill() {
@@ -21,12 +23,26 @@ public class bill
 	    }
 	 
 	    
-	    public bill(String smithNote, String clientNote, int billID, int quoteID) 
+	    public bill(int billID, String smithNote, String clientNote, int quoteID, int clientID, double price) 
 	    {
 	    	setSmithNote(smithNote);
 	    	setClientNote(clientNote);
 	    	setBillID(billID);
 	    	setQuoteID(quoteID);
+	    	setClientID(clientID);
+	    	setPrice(price);
+	    }
+	    
+	    
+	    public bill(int quoteID, int userID, double price) 
+	    {
+	    	setSmithNote("");
+	    	setClientNote("");
+	    	setBillID(0);
+	    	setQuoteID(quoteID);
+	    	setClientID(userID);
+	    	setPrice(price);
+	    	
 	    }
 	    
 	    
@@ -57,8 +73,22 @@ public class bill
 	    public int getQuoteID() {
 	        return quoteID;
 	    }
-	    public void setQuoteID(int billID) {
+	    public void setQuoteID(int quoteID) {
 	        this.quoteID = quoteID;
+	    }
+	    
+	    public int getClientID() {
+	        return clientID;
+	    }
+	    public void setClientID(int clientID) {
+	        this.clientID = clientID;
+	    }
+	    
+	    public double getPrice() {
+	        return price;
+	    }
+	    public void setPrice(double price) {
+	        this.price = price;
 	    }
 	  
 	   
