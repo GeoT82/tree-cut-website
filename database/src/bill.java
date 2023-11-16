@@ -1,4 +1,6 @@
 import java.math.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class bill 
 {
@@ -8,6 +10,9 @@ public class bill
 		protected int quoteID;
 		protected int clientID;
 		protected double price;
+		protected Date date;
+	    
+	    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 	 
 	    //constructors
 	    public bill() {
@@ -89,6 +94,13 @@ public class bill
 	    }
 	    public void setPrice(double price) {
 	        this.price = price;
+	    }
+	    
+	    public String getDate() {
+	        return formatter.format(date);
+	    }
+	    public void setDate(Date date) {
+	        this.date = date; 
 	    }
 	  
 	   

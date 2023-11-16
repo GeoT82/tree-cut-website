@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 
 
@@ -29,6 +30,8 @@ public class ControlServlet extends HttpServlet {
 	    private billDAO billDAO = new billDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
+	    
+	    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");  
 	    
 	    public ControlServlet()
 	    {
@@ -249,7 +252,10 @@ public class ControlServlet extends HttpServlet {
 	   	 	System.out.println(rID);
 	   	 	int uID = requestDAO.getUserID(rID);
 	   	 	System.out.println(uID);
-	   	 	quote quote = new quote(price, time, note, rID, uID);
+	   	 	
+	   	 	Date date = new Date();
+	   	 	
+	   	 	quote quote = new quote(price, time, note, rID, uID, date);
 	   	 	quoteDAO.insert(quote);
 	   	 	int qID = quoteDAO.getQuoteID(rID);
 	   	 	System.out.println(qID + " " + rID);
@@ -336,8 +342,12 @@ public class ControlServlet extends HttpServlet {
 	        
 	        currentUser = (String) session.getAttribute("username");
 	        int uID = userDAO.getUserID(currentUser);
-	        requestDAO.insert(uID, note); 
+	        Date date = new Date();
+	        String sDate = formatter.format(date);
+	        
+	        requestDAO.insert(uID, note, sDate); 
 	        int rID = requestDAO.getLatestRequest();
+	        System.out.println(rID);
 	        
 	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID);
 	        treeDAO.insert(tree);

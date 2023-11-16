@@ -194,28 +194,36 @@ public class requestDAO
     
     public void insert(request requests) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into User(smithNote, clientNote, treeCount, requestID) values (?, ?, ?, ?)";
+		String sql = "insert into User(smithNote, clientNote, requestID) values (?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, requests.getSmithNote());
 		preparedStatement.setString(2, requests.getClientNote());
-		preparedStatement.setInt(4, requests.getRequestID());	
+		preparedStatement.setInt(3, requests.getRequestID());	
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
     }
     
-    public void insert(int uID, String note) throws SQLException {
+    public void insert(int uID, String note, String date) throws SQLException {
     	connect_func();
         statement =  (Statement) connect.createStatement();
-  
-        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
-        			("insert into Request(clientID, clientNote)"+
-        			"values ( "+ uID + " , '" + note + "');"),
-        			"SET FOREIGN_KEY_CHECKS = 1;"
-			    	};
+        System.out.println(uID);
+        System.out.println(note);
+        System.out.println(date);
+      
         
-        for (int i = 0; i < TUPLES.length; i++)	
-        	statement.execute(TUPLES[i]);
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        String sql = "insert into Request(clientID, clientNote, issueDate) values (?, ?, ?);";
+        
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, uID);
+        preparedStatement.setString(2, note);
+		preparedStatement.setString(3, date);
+         
+		preparedStatement.executeUpdate();
+        preparedStatement.close();
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
         disconnect();
      
     }
@@ -299,7 +307,6 @@ public class requestDAO
         if (resultSet.next()) {
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote"); 
-            int treeCount = resultSet.getInt("treeCount");
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");

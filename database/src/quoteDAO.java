@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * Servlet implementation class Connect
@@ -97,9 +98,10 @@ public class quoteDAO
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, date);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -125,9 +127,10 @@ public class quoteDAO
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, date);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -153,9 +156,10 @@ public class quoteDAO
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, date);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -278,8 +282,9 @@ public class quoteDAO
             double price = resultSet.getDouble("price");
             int requestID = resultSet.getInt("requestID");
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
             
-            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID, clientID);
+            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID, clientID, date);
         }
          
         resultSet.close();
