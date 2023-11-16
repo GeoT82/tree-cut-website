@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * Servlet implementation class Connect
@@ -95,10 +96,11 @@ public class requestDAO
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
             
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -121,10 +123,11 @@ public class requestDAO
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
             
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -152,9 +155,10 @@ public class requestDAO
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -177,8 +181,9 @@ public class requestDAO
             int requestID = resultSet.getInt("requestID");
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID,clientID);
+            request requests = new request(smithNote, clientNote, requestID, quoteID,clientID, date);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -297,8 +302,9 @@ public class requestDAO
             int treeCount = resultSet.getInt("treeCount");
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
+            Date date = resultSet.getTimestamp("issueDate");
             
-            request = new request(smithNote, clientNote, requestID, quoteID, clientID);
+            request = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
         }
          
         resultSet.close();

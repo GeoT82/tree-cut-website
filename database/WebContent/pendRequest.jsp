@@ -21,6 +21,7 @@
             <caption><h2>List of Requests</h2></caption>
             <tr>
             	<th>clientID</th>
+            	<th>Issue Date</th>
                 <th>Smith Note</th>
                 <th>Client Note</th>
                	<th>Request ID</th>
@@ -31,6 +32,7 @@
             <c:forEach var="requests" items="${listPendRequest}">
                 <tr style="text-align:center">
                 	<td><c:out value="${requests.clientID}" /></td>
+                	<td><c:out value="${requests.date}" /></td>
                     <td><c:out value="${requests.smithNote}" /></td>
                     <td><c:out value="${requests.clientNote}" /></td>
                     <td><c:out value="${requests.requestID}" /></td>

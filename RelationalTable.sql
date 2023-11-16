@@ -5,7 +5,7 @@ Create TABLE if not exists User(
   clientID int(4) auto_increment, 
   phoneNumber varchar(13) not null default '111-222-3333', 
   email varchar(50) not null, 
-  creditCard int not null, 
+  creditCard int(16) not null default '0000000000000000', 
   firstName varchar(20) not null, 
   lastName varchar(20) not null,
   password varchar(20) not null,
@@ -25,7 +25,7 @@ VALUES
 ( 1235134356, 'victorabu@gmail.com', 99999999, 'Victor', 'Abu', '1234'),
 ( 6546534262, 'Lukmanace@gmail.com', 00000000, 'Lukman', 'Ace', '1234'),
 ( 2345234234, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234'),
-( 1234566757, 'susie@gmail.com', '1233216547', 'Susie ', 'Guzman', 'susie1234'),
+( 1234566757, 'susie@gmail.com', '12341234', 'Susie ', 'Guzman', 'susie1234'),
 ( 7777888899, 'root', 00000000, 'default', 'default','pass1234');
 
 
@@ -37,6 +37,9 @@ Create TABLE if not exists Bill(
   price double(10,2) not null default 0,
   quoteID int not null default 0,
   clientID int not null default 0, 
+  issueDate datetime not null default '1990-01-31 10:24:40', 
+  payDate datetime default null,
+  payStatus boolean not null default false,
   PRIMARY KEY (billID),
   Foreign key (quoteID) references Quote(quoteID),
   Foreign key (clientID) references User(clientID)
@@ -65,6 +68,7 @@ Create TABLE if not exists Quote(
   price double not null default '0.00',
   requestID int not null default '0',
   clientID int not null default '0', 
+  issueDate datetime not null default '1990-01-31 10:24:40', 
   PRIMARY KEY (QuoteID),
   Foreign key (requestID) references Request(requestID),
   foreign key (clientID) references User(clientID)
@@ -91,25 +95,26 @@ Create TABLE if not exists Request(
   clientID int not null default 0, 
   clientNote varchar(30) default 'pending',  
   smithNote varchar(30) default 'pending',
+  issueDate datetime not null default '1990-01-31 10:24:40', 
   PRIMARY KEY (requestID),
   foreign key (quoteID) references Quote(quoteID),
   foreign key (clientID) references User(clientID)
 );
 alter table Request auto_increment = 200;
-INSERT INTO Request(clientNote, smithNote, clientID, quoteID)
+INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate)
 VALUES 
-( 'Sold!', '', 111, 20),
-( 'Sold!', '', 111, 21),
-( 'Sold!', '', 108, default),
-( 'Sold!', '', 109, default),
-( 'Sold!', '', 111, 22),
-( 'Sold!', '', 100, default),
-( 'Sold!', '', 111, default),
-( 'Sold!', '', 112, default),
-( 'Sold!', '', 107, default),
-( 'Sold!', '', 106, default),
-( 'Sold!', '', 111, 29),
-( 'Sold!', '', 111, 21);
+( 'Sold!', '', 111, 20, '2020-04-16 06:53:40'),
+( 'Sold!', '', 111, 21, '2022-07-16 06:53:40'),
+( 'Sold!', '', 108, default, default),
+( 'Sold!', '', 109, default, default),
+( 'Sold!', '', 111, 22, default),
+( 'Sold!', '', 100, default, default),
+( 'Sold!', '', 111, default, default),
+( 'Sold!', '', 112, default, default),
+( 'Sold!', '', 107, default, default),
+( 'Sold!', '', 106, default, default),
+( 'Sold!', '', 111, 29, '2021-03-16 06:53:40'),
+( 'Sold!', '', 111, 21, '2020-09-16 06:53:40');
 SET FOREIGN_KEY_CHECKS = 1;
 
 Create TABLE if not exists Tree(
@@ -122,6 +127,7 @@ Create TABLE if not exists Tree(
   image1 varchar(30) not null default 'blank.png', 
   image2 varchar(30) not null default 'blank.png', 
   image3 varchar(30) not null default 'blank.png',
+  cutStatus boolean not null default false,
   PRIMARY KEY (treeID),
   FOREIGN KEY (requestID) REFERENCES Request(requestID)
 );
@@ -142,9 +148,60 @@ VALUES
 SET FOREIGN_KEY_CHECKS = 1;
 
 
+SET FOREIGN_KEY_CHECKS = 0;
+Create TABLE if not exists RequestResponse(
+  replyRID int not null auto_increment,
+  requestID int not null default 0,
+  clientID int not null default 0,  
+  reply varchar(50) not null default '',
+  issueDate datetime not null default '1990-01-31 10:24:40', 
+  PRIMARY KEY (replyRID),
+  foreign key (requestID) references Request(requestID),
+  foreign key (clientID) references User(clientID)
+);
+alter table RequestResponse auto_increment = 600;
+insert into RequestResponse(requestID, clientID, reply)
+values (21, 102, 'pass'),
+(21, 102, 'Looks Good'),
+(21, 102, 'Nevermind'),
+(24, 105, 'OK'),
+(24, 107, 'Where?'),
+(25, 108, 'Too Expensive'),
+(27, 109, 'Ill check'),
+(28, 110, 'Thanks'),
+(29, 111, 'Alright');
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+Create TABLE if not exists QuoteResponse(
+  replyQID int not null auto_increment,
+  requestID int not null default 0,
+  clientID int not null default 0,  
+  reply varchar(50) not null default '',
+  issueDate datetime not null default '1990-01-31 10:24:40', 
+  PRIMARY KEY (replyQID),
+  foreign key (requestID) references Request(requestID),
+  foreign key (clientID) references User(clientID)
+);
+alter table QuoteResponse auto_increment = 500;
+insert into QuoteResponse(requestID, clientID, reply)
+values (21, 102, 'pass'),
+(21, 102, 'Looks Good'),
+(21, 102, 'Nevermind'),
+(24, 105, 'OK'),
+(24, 107, 'Where?'),
+(25, 108, 'Too Expensive'),
+(27, 109, 'Ill check'),
+(28, 110, 'Thanks'),
+(29, 111, 'Alright');
+SET FOREIGN_KEY_CHECKS = 1;
+
 select * from User;
 select * from Bill;
 select * from Request;
 select * from Quote;
 select * from Tree;
+select * from RequestResponse;
+select * from QuoteResponse;
 
