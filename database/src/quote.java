@@ -18,6 +18,15 @@ public class quote
 	    //constructors
 	    public quote() {
 	    }
+	    
+	    public quote(double price, String time, String smithNote, int requestID, int clientID) 
+	    {
+	        setTime(time);
+	        setSmithNote(smithNote);
+	        setPrice(price);
+	        setRequestID(requestID);
+	        setClientID(clientID);
+	    }
 	 
 	    public quote(double price, String time, String smithNote, int requestID, int clientID, Date Date) 
 	    {

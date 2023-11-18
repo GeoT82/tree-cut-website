@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * Servlet implementation class Connect
@@ -97,8 +98,13 @@ public class billDAO
             int clientID = resultSet.getInt("clientID");
             double price = resultSet.getDouble("price");
 
+            Date issueDate = resultSet.getTimestamp("issueDate");
+            Date dueDate = resultSet.getTimestamp("dueDate");
+            
+            boolean payStatus = resultSet.getBoolean("payStatus");
+
              
-            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price);
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
             listBill.add(bills);
         }        
         resultSet.close();
@@ -120,11 +126,16 @@ public class billDAO
             String clientNote = resultSet.getString("clientNote");
             int billID = resultSet.getInt("billID");
             int quoteID = resultSet.getInt("quoteID");
-            int userID = resultSet.getInt("clientID");
+            int clientID = resultSet.getInt("clientID");
             double price = resultSet.getDouble("price");
 
+            Date issueDate = resultSet.getTimestamp("issueDate");
+            Date dueDate = resultSet.getTimestamp("dueDate");
+            
+            boolean payStatus = resultSet.getBoolean("payStatus");
+
              
-            bill bills = new bill(billID, smithNote, clientNote, quoteID, userID, price);
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
             listRequest.add(bills);
         }        
         resultSet.close();
@@ -153,9 +164,14 @@ public class billDAO
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             double price = resultSet.getDouble("price");
+            
+            Date issueDate = resultSet.getTimestamp("issueDate");
+            Date dueDate = resultSet.getTimestamp("dueDate");
+            
+            boolean payStatus = resultSet.getBoolean("payStatus");
 
              
-            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price);
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
             listBill.add(bills);
         }        
         resultSet.close();
@@ -170,13 +186,15 @@ public class billDAO
     	statement =  (Statement) connect.createStatement();
     	statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
     	
-		String sql = "insert into Bill(smithNote, clientNote, quoteID, clientID, price) values (?, ?, ?, ?, ?)";
+		String sql = "insert into Bill(smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate) values (?, ?, ?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, bill.getSmithNote());
 		preparedStatement.setString(2, bill.getClientNote());
 		preparedStatement.setInt(3, bill.getQuoteID());	
 		preparedStatement.setInt(4, bill.getClientID());
 		preparedStatement.setDouble(5, bill.getPrice());	
+		preparedStatement.setString(6, bill.getIssueDate());
+		preparedStatement.setString(7, bill.getDueDate());
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();

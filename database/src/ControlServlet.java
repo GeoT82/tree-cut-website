@@ -189,11 +189,13 @@ public class ControlServlet extends HttpServlet {
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("showRequest started: 000000000000000000000000000");
 	        int id = Integer.parseInt(request.getParameter("id"));
-	        System.out.println("showRequest started: 222222222222222222222222222");
+	        System.out.println("showID");
+	        
 	        System.out.println(id);
 	        List<request> listRequest = requestDAO.listRequests(id);
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("requestList.jsp");
 	        request.setAttribute("listRequest", listRequest);
+	        
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
 	        System.out.println("Now you see the Request List page in your browser.");
 	        System.out.println("showRequest finished: 1111111111111111111111111111");
@@ -254,9 +256,10 @@ public class ControlServlet extends HttpServlet {
 	   	 	System.out.println(uID);
 	   	 	
 	   	 	Date date = new Date();
+	   	 	String sDate = formatter.format(date);
 	   	 	
-	   	 	quote quote = new quote(price, time, note, rID, uID, date);
-	   	 	quoteDAO.insert(quote);
+	   	 	quote quote = new quote(price, time, note, rID, uID);
+	   	 	quoteDAO.insert(quote, sDate);
 	   	 	int qID = quoteDAO.getQuoteID(rID);
 	   	 	System.out.println(qID + " " + rID);
 	   	 	requestDAO.update(qID, rID);
@@ -268,9 +271,11 @@ public class ControlServlet extends HttpServlet {
 	    private void createRequestNote(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("createRequestNote started: 000000000000000000000000000");
+	        
 	        int id = Integer.parseInt(request.getParameter("id"));
 	        System.out.println(id);
 	        session.setAttribute("requestID", id);
+	        
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("requestNoteMaker.jsp");
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
 	        System.out.println("Now you see the note form in your browser.");
@@ -278,10 +283,14 @@ public class ControlServlet extends HttpServlet {
 	    }
 	    
 	    private void postRequestNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	
 	    	String note = (request.getParameter("note"));
 	   	 	int rID = (Integer)session.getAttribute("requestID");
 	   	 	currentUser = (String) session.getAttribute("username");
 	   	 	requestDAO.update(rID, note, currentUser);
+	   	 	
+	   	 	
+	   	 	
 	   	 	if(currentUser.matches("davidSmith@gmail.com")) {
 	   	 		smithPage(request, response, "");
 	   	 	} else {
@@ -433,8 +442,12 @@ public class ControlServlet extends HttpServlet {
 	    	int uID = quoteDAO.getUserID(qID);
 	    	double price = quoteDAO.getPrice(qID);
 	    	
+	    	Date issueDate = new Date();
+	        
+	        Date dueDate = new Date();
+	        dueDate.setMonth(dueDate.getMonth() + 1);
 	    	
-	    	bill bill = new bill(qID, uID, price);
+	    	bill bill = new bill(qID, uID, price, issueDate, dueDate);
 	    	billDAO.generate(bill);
 	    	
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);

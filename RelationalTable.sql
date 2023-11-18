@@ -197,6 +197,10 @@ values (21, 102, 'pass'),
 (29, 111, 'Alright');
 SET FOREIGN_KEY_CHECKS = 1;
 
+SET FOREIGN_KEY_CHECKS = 0;
+insert into Request(clientID, clientNote, issueDate) values (111, 'hi', '2023/11/16 13:44:13');
+SET FOREIGN_KEY_CHECKS = 1;
+
 select * from User;
 select * from Bill;
 select * from Request;

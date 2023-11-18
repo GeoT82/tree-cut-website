@@ -189,7 +189,7 @@ public class quoteDAO
         }
     }
     
-    public void insert(quote quotes) throws SQLException {
+    public void insert(quote quotes, String date) throws SQLException {
     	connect_func("root","pass1234");         
     	
     	System.out.println("INSERT RUNNIUNG");
@@ -197,13 +197,14 @@ public class quoteDAO
     	statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
     	System.out.println("CHECKS OFF");
     	
-		String sql = "insert into Quote(times, smithNote, price, requestID, clientID) values (?, ?, ?, ?, ?)";
+		String sql = "insert into Quote(times, smithNote, price, requestID, clientID, issueDate) values (?, ?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, quotes.getTime());
 			preparedStatement.setString(2, quotes.getSmithNote());
 			preparedStatement.setDouble(3, quotes.getPrice());
 			preparedStatement.setInt(4, quotes.getRequestID());
 			preparedStatement.setInt(5, quotes.getClientID());
+			preparedStatement.setString(6, date);
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
