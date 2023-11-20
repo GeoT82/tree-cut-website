@@ -108,20 +108,28 @@ public class ControlServlet extends HttpServlet {
                  quoted(request, response);           	
                  break;
         	 case "/createRequestNote":
-        		 System.out.println("The action is: createNote");
+        		 System.out.println("The action is: createRequestNote");
         		 createRequestNote(request, response);           	
                  break;
         	 case "/createQuoteNote":
-        		 System.out.println("The action is: createNote");
+        		 System.out.println("The action is: createQuoteNote");
         		 createQuoteNote(request, response);           	
                  break;
+        	 case "/createBillNote":
+        		 System.out.println("The action is: createBillNote");
+        		 createBillNote(request, response);           	
+                 break;
         	 case "/postRequestNote":
-        		 System.out.println("The action is: postNote");
+        		 System.out.println("The action is: postRequestNote");
         		 postRequestNote(request, response);           	
                  break;
         	 case "/postQuoteNote":
-        		 System.out.println("The action is: postNote");
+        		 System.out.println("The action is: postQuoteNote");
         		 postQuoteNote(request, response);           	
+                 break;
+        	 case "/postBillNote":
+        		 System.out.println("The action is: postBillNote");
+        		 postBillNote(request, response);           	
                  break;
         	 case "/requestForm":
         		 System.out.println("The action is: requestForm");
@@ -260,9 +268,13 @@ public class ControlServlet extends HttpServlet {
 	   	 	
 	   	 	quote quote = new quote(price, time, note, rID, uID);
 	   	 	quoteDAO.insert(quote, sDate);
+	   	 	
 	   	 	int qID = quoteDAO.getQuoteID(rID);
 	   	 	System.out.println(qID + " " + rID);
 	   	 	requestDAO.update(qID, rID);
+	   	 	
+	   	 	quoteDAO.saveNote(qID, uID, note, sDate);
+	   	 	
 	   		smithPage(request, response, "");
 	   	 	
 	    }
@@ -287,8 +299,15 @@ public class ControlServlet extends HttpServlet {
 	    	String note = (request.getParameter("note"));
 	   	 	int rID = (Integer)session.getAttribute("requestID");
 	   	 	currentUser = (String) session.getAttribute("username");
+	   	 	
+	   	 	int uID = userDAO.getUserID(currentUser);
+	   	 	Date date = new Date();
+	   	 	
+	   	 	String iDate = formatter.format(date);
+	   	 	
 	   	 	requestDAO.update(rID, note, currentUser);
 	   	 	
+	   	 	requestDAO.saveNote(rID, uID, note, iDate);
 	   	 	
 	   	 	
 	   	 	if(currentUser.matches("davidSmith@gmail.com")) {
@@ -302,10 +321,12 @@ public class ControlServlet extends HttpServlet {
 	    private void createQuoteNote(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("createQuoteNote started: 000000000000000000000000000");
+	        
 	        int id = Integer.parseInt(request.getParameter("id"));
 	        System.out.println(id);
 	        session.setAttribute("quoteID", id);
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("quoteNoteMaker.jsp");
+	        
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
 	        System.out.println("Now you see the note form in your browser.");
 	        System.out.println("createQuoteNote finished: 1111111111111111111111111111");
@@ -314,9 +335,64 @@ public class ControlServlet extends HttpServlet {
 	    private void postQuoteNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	    	String note = (request.getParameter("note"));
 	        System.out.println(note);
+	        
 	   	 	int qID = (Integer)session.getAttribute("quoteID");
+	   	 	
 	   	 	currentUser = (String) session.getAttribute("username");
+	   	 	
+	   	 	int uID = userDAO.getUserID(currentUser);
+	   	 	
+	   	 	Date date = new Date();
+	   	 	
+	   	 	String iDate = formatter.format(date);
+	   	 	
 	   	 	quoteDAO.update(qID, note, currentUser);
+	   	 	
+	   	 	quoteDAO.saveNote(qID, uID, note, iDate);
+	   	 	
+	   	 	if(currentUser.matches("davidSmith@gmail.com")) {
+	   	 		smithPage(request, response, "");
+	   	 	} else {
+	   	 		clientPage(request,response, "");
+	   	 	} 	
+	   	 	
+	    }
+	    
+	    
+	    
+	    private void createBillNote(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("createBillNote started: 000000000000000000000000000");
+	        
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        System.out.println(id);
+	        session.setAttribute("billID", id);
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("billNoteMaker.jsp");
+	        
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the note form in your browser.");
+	        System.out.println("createBillNote finished: 1111111111111111111111111111");
+	    }
+	    
+	    
+	    private void postBillNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	String note = (request.getParameter("note"));
+	        System.out.println(note);
+	        
+	   	 	int bID = (Integer)session.getAttribute("billID");
+	   	 	
+	   	 	currentUser = (String) session.getAttribute("username");
+	   	 	
+	   	 	int uID = userDAO.getUserID(currentUser);
+	   	 	
+	   	 	Date date = new Date();
+	   	 	
+	   	 	String iDate = formatter.format(date);
+	   	 	
+	   	 	billDAO.update(bID, note, currentUser);
+	   	 	
+	   	 	billDAO.saveNote(bID, uID, note, iDate);
+	   	 	
 	   	 	if(currentUser.matches("davidSmith@gmail.com")) {
 	   	 		smithPage(request, response, "");
 	   	 	} else {
@@ -360,6 +436,8 @@ public class ControlServlet extends HttpServlet {
 	        
 	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID);
 	        treeDAO.insert(tree);
+	        
+	        requestDAO.saveNote(rID, uID, note, sDate);
 	        
 	        clientPage(request,response, "");
 	        System.out.println("Now you see the  Request Form page in your browser.");

@@ -229,6 +229,36 @@ public class requestDAO
     }
     
     
+    public void saveNote(int rID, int uID, String note, String date) throws SQLException {
+    	System.out.println("SAVE NOTE FUNCTION RUNNING IN REQUESTDAO");
+    	
+    	connect_func();
+        statement =  (Statement) connect.createStatement();
+        System.out.println(rID);
+        System.out.println(uID);
+        System.out.println(note);
+        System.out.println(date);
+      
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        String sql = "insert into RequestResponse(requestID, clientID, reply, issueDate) values (?, ?, ?, ?);";
+        
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, rID);
+        preparedStatement.setInt(2, uID);
+        preparedStatement.setString(3, note);
+		preparedStatement.setString(4, date);
+         
+		preparedStatement.executeUpdate();
+        preparedStatement.close();
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        disconnect();
+     
+        System.out.println("SAVE NOTE FUNCTION TERMINATED IN REQUESTDAO");
+    }
+    
+    
     public boolean delete(String requestID) throws SQLException {
         String sql = "DELETE FROM Request WHERE requestID = ?";        
         connect_func();

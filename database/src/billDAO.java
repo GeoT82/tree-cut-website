@@ -186,15 +186,13 @@ public class billDAO
     	statement =  (Statement) connect.createStatement();
     	statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
     	
-		String sql = "insert into Bill(smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into Bill(quoteID, clientID, price, issueDate, dueDate) values (?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-		preparedStatement.setString(1, bill.getSmithNote());
-		preparedStatement.setString(2, bill.getClientNote());
-		preparedStatement.setInt(3, bill.getQuoteID());	
-		preparedStatement.setInt(4, bill.getClientID());
-		preparedStatement.setDouble(5, bill.getPrice());	
-		preparedStatement.setString(6, bill.getIssueDate());
-		preparedStatement.setString(7, bill.getDueDate());
+		preparedStatement.setInt(1, bill.getQuoteID());	
+		preparedStatement.setInt(2, bill.getClientID());
+		preparedStatement.setDouble(3, bill.getPrice());	
+		preparedStatement.setString(4, bill.getIssueDate());
+		preparedStatement.setString(5, bill.getDueDate());
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -202,6 +200,37 @@ public class billDAO
         disconnect();
         System.out.println("BILL GENERATED");
     }
+    
+    
+    public void saveNote(int bID, int uID, String note, String date) throws SQLException {
+    	System.out.println("SAVE NOTE FUNCTION RUNNING IN BILLDAO");
+    	
+    	connect_func();
+        statement =  (Statement) connect.createStatement();
+        System.out.println(bID);
+        System.out.println(uID);
+        System.out.println(note);
+        System.out.println(date);
+      
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        String sql = "insert into BillResponse(billID, clientID, reply, issueDate) values (?, ?, ?, ?);";
+        
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, bID);
+        preparedStatement.setInt(2, uID);
+        preparedStatement.setString(3, note);
+		preparedStatement.setString(4, date);
+         
+		preparedStatement.executeUpdate();
+        preparedStatement.close();
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        disconnect();
+     
+        System.out.println("SAVE NOTE FUNCTION TERMINATED IN BILLDAO");
+    }
+    
     
     public boolean delete(String requestID) throws SQLException {
         String sql = "DELETE FROM Request WHERE requestID = ?";        
@@ -230,7 +259,22 @@ public class billDAO
     }
     
    
-    
+    public void update(int bID, String note, String user) throws SQLException {
+		String sql = "";
+		System.out.println("UPDATE POST RUNNIUNG IN BILLDAO");
+		if(user.matches("davidSmith@gmail.com")) {
+			sql = "update Bill set smithNote = '" + note + "' where billID = " + bID + ";";
+		} else {
+			sql = "update Bill set clientNote = '" + note + "' where billID = " + bID + ";";
+		}
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
+        
+        System.out.println("UPDATE POST TERMINATED IN BILLDAO");
+    }
     
     
     public void init() throws SQLException, FileNotFoundException, IOException{

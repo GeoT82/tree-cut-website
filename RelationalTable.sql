@@ -38,7 +38,7 @@ Create TABLE if not exists Bill(
   quoteID int not null default 0,
   clientID int not null default 0, 
   issueDate datetime not null default '1990-01-31 10:24:40', 
-  payDate datetime default null,
+  dueDate datetime not null default '1990-02-24 10:24:40',
   payStatus boolean not null default false,
   PRIMARY KEY (billID),
   Foreign key (quoteID) references Quote(quoteID),
@@ -176,16 +176,40 @@ SET FOREIGN_KEY_CHECKS = 1;
 SET FOREIGN_KEY_CHECKS = 0;
 Create TABLE if not exists QuoteResponse(
   replyQID int not null auto_increment,
-  requestID int not null default 0,
+  quoteID int not null default 0,
   clientID int not null default 0,  
   reply varchar(50) not null default '',
   issueDate datetime not null default '1990-01-31 10:24:40', 
   PRIMARY KEY (replyQID),
-  foreign key (requestID) references Request(requestID),
+  foreign key (quoteID) references Quote(quoteID),
   foreign key (clientID) references User(clientID)
 );
 alter table QuoteResponse auto_increment = 500;
-insert into QuoteResponse(requestID, clientID, reply)
+insert into QuoteResponse(quoteID, clientID, reply)
+values (21, 102, 'pass'),
+(21, 102, 'Looks Good'),
+(21, 102, 'Nevermind'),
+(24, 105, 'OK'),
+(24, 107, 'Where?'),
+(25, 108, 'Too Expensive'),
+(27, 109, 'Ill check'),
+(28, 110, 'Thanks'),
+(29, 111, 'Alright');
+SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 0;
+Create TABLE if not exists BillResponse(
+  replyBID int not null auto_increment,
+  billID int not null default 0,
+  clientID int not null default 0,  
+  reply varchar(50) not null default '',
+  issueDate datetime not null default '1990-01-31 10:24:40', 
+  PRIMARY KEY (replyBID),
+  foreign key (billID) references Bill(billID),
+  foreign key (clientID) references User(clientID)
+);
+alter table BillResponse auto_increment = 700;
+insert into BillResponse(billID, clientID, reply)
 values (21, 102, 'pass'),
 (21, 102, 'Looks Good'),
 (21, 102, 'Nevermind'),
@@ -208,4 +232,4 @@ select * from Quote;
 select * from Tree;
 select * from RequestResponse;
 select * from QuoteResponse;
-
+select * from BillResponse;

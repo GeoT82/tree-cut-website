@@ -214,6 +214,37 @@ public class quoteDAO
         System.out.println("INSERT DONE");
     }
     
+    
+    public void saveNote(int qID, int uID, String note, String date) throws SQLException {
+    	System.out.println("SAVE NOTE FUNCTION RUNNING IN QUOTEDAO");
+    	
+    	connect_func();
+        statement =  (Statement) connect.createStatement();
+        System.out.println(qID);
+        System.out.println(uID);
+        System.out.println(note);
+        System.out.println(date);
+      
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        String sql = "insert into QuoteResponse(quoteID, clientID, reply, issueDate) values (?, ?, ?, ?);";
+        
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, qID);
+        preparedStatement.setInt(2, uID);
+        preparedStatement.setString(3, note);
+		preparedStatement.setString(4, date);
+         
+		preparedStatement.executeUpdate();
+        preparedStatement.close();
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        disconnect();
+     
+        System.out.println("SAVE NOTE FUNCTION TERMINATED IN QUOTEDAO");
+    }
+    
+    
     public boolean delete(int quoteID) throws SQLException {
         String sql = "DELETE FROM Quote WHERE quoteID = ?";        
         connect_func();
