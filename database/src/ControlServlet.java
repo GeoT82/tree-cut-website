@@ -159,6 +159,18 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: quoteQuit");
         		 quoteQuit(request, response);           	
                  break;
+        	 case "/billAgree":
+        		 System.out.println("The action is: billAgree");
+        		 billAgree(request, response);           	
+                 break;
+        	 case "/billQuit":
+        		 System.out.println("The action is: billQuit");
+        		 //billQuit(request, response);           	
+                 break;
+        	 case "/payBill":
+        		 System.out.println("The action is: payBill");
+        		 payBill(request, response);           	
+                 break;
                  
                  
 	    	}
@@ -540,6 +552,53 @@ public class ControlServlet extends HttpServlet {
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    
+	    
+	    
+	    private void billAgree(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	int bID = Integer.parseInt(request.getParameter("id"));
+	    	session.setAttribute("bID", bID);
+	    	
+	    	double price = billDAO.getPrice(bID);
+	    	
+	    	request.setAttribute("bID", bID);
+	    	request.setAttribute("price", price);
+	    	
+	    	request.getRequestDispatcher("payBillView.jsp").forward(request, response);
+	    }
+	    
+	    
+	    private void payBill(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("PAY BILL RUNNING IN CONTROL SERVLET");
+	    	int bID = (Integer) (session.getAttribute("bID"));
+	    	int cardNum = Integer.parseInt(request.getParameter("cardNum"));
+	    	
+	    	currentUser = (String) session.getAttribute("username");
+	    	session.setAttribute("username", currentUser);
+	    	
+	    	int uID = userDAO.getUserID(currentUser);
+	    	
+	    	System.out.println("CURRENT USER: " + currentUser);
+	    	System.out.println("USERID: " + uID);
+	    	
+	    	if(userDAO.cardValid(cardNum, uID)) 
+			{
+			 	 
+	    		billDAO.updatePayStatus(bID);
+	    		request.getRequestDispatcher("clientView.jsp").forward(request, response);
+			 			 			 			 
+			 }
+			 else {
+				 double price = billDAO.getPrice(bID);
+				 
+				 request.setAttribute("cardStr","Card Failed: Please check your credentials.");
+				 request.setAttribute("bID", bID);
+				 request.setAttribute("price", price);
+				 request.getRequestDispatcher("payBillView.jsp").forward(request, response);
+			 }
+	    	
+	    	System.out.println("PAY BILL TERMINATED IN CONTROL SERVLET");
+	    	
+	    }
 	    
 	    protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	    	 String email = request.getParameter("email");

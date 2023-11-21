@@ -277,6 +277,42 @@ public class billDAO
     }
     
     
+    public double getPrice(int bID) throws SQLException {
+    	double price = 0;
+        String sql = "SELECT * FROM Bill WHERE billID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, bID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+        	price = resultSet.getDouble("price"); 
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return price;
+    }
+    
+    
+    public void updatePayStatus(int bID) throws SQLException {
+		String sql = "";
+		System.out.println("UPDATE PAY STATUS RUNNIUNG IN BILLDAO");
+		
+		sql = "update Bill set payStatus = true where billID = " + bID + ";";
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
+        
+        System.out.println("UPDATE PAY STATUS TERMINATED IN BILLDAO");
+    }
+    
     public void init() throws SQLException, FileNotFoundException, IOException{
     	connect_func();
         statement =  (Statement) connect.createStatement();

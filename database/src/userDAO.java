@@ -269,6 +269,33 @@ public class userDAO
     	return false;
     }
     
+    public boolean cardValid(int cardNum, int uID) throws SQLException
+    {
+    	System.out.println("CARD VALID IS RUNNING IN USERDAO");
+    	boolean valid = false;
+    	int creditCard = 0;
+    	String sql = "SELECT * FROM User where clientID = " + uID;
+    	connect_func();
+    	statement = (Statement) connect.createStatement();
+    	ResultSet resultSet = statement.executeQuery(sql);
+    	
+    	if (resultSet.next()) {
+    		creditCard = resultSet.getInt("creditCard");
+        	System.out.println("ENTERED CARD: " + cardNum);
+        	System.out.println("USER CARD: " + creditCard);
+    	}
+        if (creditCard == cardNum)
+            valid = true;
+        
+        resultSet.close();
+        disconnect();
+        
+        System.out.println("CARD VALID IS TERMINATING IN USERDAO");
+        
+    	return valid;
+    }
+    
+    
     
     public void init() throws SQLException, FileNotFoundException, IOException{
     	connect_func();
