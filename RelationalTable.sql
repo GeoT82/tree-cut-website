@@ -34,7 +34,7 @@ Create TABLE if not exists Bill(
   billID int not null auto_increment, 
   clientNote varchar(150) default 'pending', 
   smithNote varchar(150) default 'pending',
-  price double(10,2) not null default 0,
+  price double(10,2) not null default 5000,
   quoteID int not null default 0,
   clientID int not null default 0, 
   issueDate datetime not null default '1990-01-31 10:24:40', 
@@ -233,3 +233,5 @@ select * from Tree;
 select * from RequestResponse;
 select * from QuoteResponse;
 select * from BillResponse;
+
+select * from User where clientID = 111;

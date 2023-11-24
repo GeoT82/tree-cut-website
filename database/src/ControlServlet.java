@@ -171,6 +171,19 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: payBill");
         		 payBill(request, response);           	
                  break;
+        	 case "/cutTree":
+        		 System.out.println("The action is: cutTree");
+        		 cutTree(request, response);           	
+                 break;
+        	 case "/addTreeView":
+        		 System.out.println("The action is: addTreeView");
+        		 addTreeView(request, response);           	
+                 break;
+        	 case "/submitTree":
+        		 System.out.println("The action is: submitTree");
+        		 submitTree(request, response);           	
+                 break;
+                 
                  
                  
 	    	}
@@ -194,11 +207,23 @@ public class ControlServlet extends HttpServlet {
 	    private void showTrees(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("showTrees started: 000000000000000000000000000");
-	        int id = Integer.parseInt(request.getParameter("id"));
+	        int rID = Integer.parseInt(request.getParameter("id"));
 	        System.out.println("showTrees started: 222222222222222222222222222");
-	        System.out.println(id);
-	        List<tree> listTree = treeDAO.listTrees(id);
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("treeList.jsp");
+	        System.out.println(rID);
+	        
+	        List<tree> listTree = treeDAO.listTrees(rID);
+	        
+	        currentUser = (String) session.getAttribute("username");
+	        session.setAttribute("username", currentUser);
+	        
+	        RequestDispatcher dispatcher = null;
+	        
+	        if (currentUser.matches("davidSmith@gmail.com")) {
+	        	dispatcher = request.getRequestDispatcher("davidTreeView.jsp");
+	        } else {
+	        	dispatcher = request.getRequestDispatcher("clientTreeView.jsp");
+	        }
+	        
 	        request.setAttribute("listTree", listTree);
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
 	        System.out.println("Now you see the Tree List page in your browser.");
@@ -446,7 +471,7 @@ public class ControlServlet extends HttpServlet {
 	        int rID = requestDAO.getLatestRequest();
 	        System.out.println(rID);
 	        
-	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID);
+	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID, false);
 	        treeDAO.insert(tree);
 	        
 	        requestDAO.saveNote(rID, uID, note, sDate);
@@ -598,6 +623,59 @@ public class ControlServlet extends HttpServlet {
 	    	
 	    	System.out.println("PAY BILL TERMINATED IN CONTROL SERVLET");
 	    	
+	    }
+	    
+	    
+	    private void cutTree(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("CUT TREE RUNNING IN CONTROL SERVLET");
+	    	int tID = Integer.parseInt(request.getParameter("id"));
+			 	 
+	    	treeDAO.updateCutStatus(tID);
+	    	request.getRequestDispatcher("davidSmithView.jsp").forward(request, response);
+			 			 			 			 
+	    	System.out.println("CUT TREE TERMINATED IN CONTROL SERVLET");
+	    	
+	    }
+	    
+	    
+	    private void addTreeView(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("Add Tree Form started: 000000000000000000000000000");
+	        
+	        int rID = Integer.parseInt(request.getParameter("id"));
+	        
+	        session.setAttribute("rID", rID);
+	        
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("treeForm.jsp");
+	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
+	        System.out.println("Now you see the  Tree Form page in your browser.");
+	        System.out.println("Add Tree Form finished: 1111111111111111111111111111");
+	    }
+	    
+	    
+	    private void submitTree(HttpServletRequest request, HttpServletResponse response)
+	            throws SQLException, ServletException, IOException {
+	        System.out.println("submitTree started: 000000000000000000000000000");
+	        
+	        String image1 = (request.getParameter("image1"));
+	        String image2 = (request.getParameter("image2"));
+	        String image3 = (request.getParameter("image3"));
+	        String address = (request.getParameter("address"));
+	        double distance = Double.parseDouble(request.getParameter("distance"));
+	        double width = Double.parseDouble(request.getParameter("width"));
+	        double height = Double.parseDouble(request.getParameter("height"));
+	        
+	        int rID = (Integer) session.getAttribute("rID");
+	        
+	        System.out.println(rID);
+	        
+	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID, false);
+	        treeDAO.insert(tree);
+	       
+	        
+	        clientPage(request,response, "");
+	        System.out.println("Now you see the  Client page in your browser.");
+	        System.out.println("submitTree finished: 1111111111111111111111111111");
 	    }
 	    
 	    protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {

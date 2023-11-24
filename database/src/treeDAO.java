@@ -99,9 +99,10 @@ public class treeDAO
             double height = resultSet.getDouble("height"); 
             int treeID = resultSet.getInt("treeID"); 
             int requestID = resultSet.getInt("requestID"); 
+            boolean cutStatus = resultSet.getBoolean("cutStatus");
 
              
-            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -109,9 +110,9 @@ public class treeDAO
         return listTree;
     }
     
-    public List<tree> listTrees(int id) throws SQLException {
+    public List<tree> listTrees(int rID) throws SQLException {
         List<tree> listTree = new ArrayList<tree>();        
-        String sql = "SELECT * FROM Tree Where Tree.requestID = " + id;      
+        String sql = "SELECT * FROM Tree Where Tree.requestID = " + rID;      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -127,9 +128,10 @@ public class treeDAO
             double height = resultSet.getDouble("height"); 
             int treeID = resultSet.getInt("treeID"); 
             int requestID = resultSet.getInt("requestID"); 
+            boolean cutStatus = resultSet.getBoolean("cutStatus");
 
              
-            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -216,6 +218,21 @@ public class treeDAO
         statement.close();
          
         return user;
+    }
+    
+    
+    public void updateCutStatus(int tID) throws SQLException {
+		String sql = "";
+		System.out.println("UPDATE CUT STATUS RUNNIUNG IN TREEDAO");
+		
+		sql = "update Tree set cutStatus = true where treeID = " + tID + ";";
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
+        
+        System.out.println("UPDATE CUT STATUS TERMINATED IN TREEDAO");
     }
     
     

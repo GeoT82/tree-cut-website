@@ -11,12 +11,13 @@ public class tree
 	    protected double height;
 	    protected int treeID;
 	    protected int requestID;
+	    protected boolean cutStatus;
 	 
 	    //constructors
 	    public tree() {
 	    }
 	    
-	    public tree(int treeID, String image1, String image2, String image3, String address, double distance, double width, double height, int requestID) 
+	    public tree(int treeID, String image1, String image2, String image3, String address, double distance, double width, double height, int requestID, boolean cutStatus) 
 	    {
 	    	setImage1(image1);
 	    	setImage2(image2);
@@ -27,10 +28,11 @@ public class tree
 	    	setHeight(height);
 	    	setTreeID(treeID);
 	    	setRequestID(requestID);
+	    	setCutStatus(cutStatus);
 	    }
 	 
 	    
-	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height, int requestID) 
+	    public tree(String image1, String image2, String image3, String address, double distance, double width, double height, int requestID, boolean cutStatus) 
 	    {
 	    	setImage1(image1);
 	    	setImage2(image2);
@@ -41,6 +43,7 @@ public class tree
 	    	setHeight(height);
 	    	setTreeID(0);
 	    	setRequestID(requestID);
+	    	setCutStatus(cutStatus);
 	    }
 	 
 	    
@@ -114,6 +117,17 @@ public class tree
 	    }
 	    public void setRequestID(int requestID) {
 	        this.requestID = requestID;
+	    }
+	    
+	    public String getCutStatus() {
+	        if(cutStatus == false) {
+	        	return "Uncut";
+	        } else {
+	        	return "Cut";
+	        }
+	    }
+	    public void setCutStatus(boolean cutStatus) {
+	        this.cutStatus = cutStatus;
 	    }
 	   
 	}

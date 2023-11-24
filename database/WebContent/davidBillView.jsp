@@ -33,8 +33,6 @@
                 <th>Pay Status</th>
                	<th>Quote ID</th>
                	<th>Attach Note</th>
-               	<th>Agree</th>
-               	<th>Quit</th>
                	
             </tr>
             <c:forEach var="bills" items="${listBills}">
@@ -52,12 +50,6 @@
                     </td>
                     <td>
                     	<a href="createBillNote?id=<c:out value='${bills.billID}' />">Post Note</a>
-                    </td>
-                    <td>
-                    	<a href="billAgree?id=<c:out value='${bills.billID}' />">Agree</a>
-                    </td>
-                    <td>
-                    	<a href="billQuit?id=<c:out value='${bills.billID}' />">Quit</a>
                     </td>
             </c:forEach>
         </table>
