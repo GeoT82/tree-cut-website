@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * Servlet implementation class Connect
@@ -100,9 +101,10 @@ public class treeDAO
             int treeID = resultSet.getInt("treeID"); 
             int requestID = resultSet.getInt("requestID"); 
             boolean cutStatus = resultSet.getBoolean("cutStatus");
+            Date date = resultSet.getTimestamp("cutDate");
 
              
-            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus, date);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -129,9 +131,10 @@ public class treeDAO
             int treeID = resultSet.getInt("treeID"); 
             int requestID = resultSet.getInt("requestID"); 
             boolean cutStatus = resultSet.getBoolean("cutStatus");
+            Date date = resultSet.getTimestamp("cutDate");
 
              
-            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus, date);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -163,74 +166,31 @@ public class treeDAO
         preparedStatement.close();
     }
     
-    public boolean delete(String email) throws SQLException {
-        String sql = "DELETE FROM User WHERE email = ?";        
-        connect_func();
-         
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, email);
-         
-        boolean rowDeleted = preparedStatement.executeUpdate() > 0;
-        preparedStatement.close();
-        return rowDeleted;     
-    }
-     
-    public boolean update(user users) throws SQLException {
-        String sql = "update User set firstName=?, lastName =?,password = ?,creditCard = ?, phoneNumber = ? where email = ?";
-        connect_func();
-        
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, users.getEmail());
-		preparedStatement.setString(2, users.getFirstName());
-		preparedStatement.setString(3, users.getLastName());
-		preparedStatement.setString(4, users.getPassword());
-		preparedStatement.setString(5, users.getCreditCard());
-		preparedStatement.setString(6, users.getPhoneNumber());
-         
-        boolean rowUpdated = preparedStatement.executeUpdate() > 0;
-        preparedStatement.close();
-        return rowUpdated;     
-    }
-    
-    public user getUser(String email) throws SQLException {
-    	user user = null;
-        String sql = "SELECT * FROM User WHERE email = ?";
-         
-        connect_func();
-         
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, email);
-         
-        ResultSet resultSet = preparedStatement.executeQuery();
-         
-        if (resultSet.next()) {
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String password = resultSet.getString("password");
-            String creditCard = resultSet.getString("creditCard");
-            String phoneNumber = resultSet.getString("phoneNumber"); 
-            int clientID = resultSet.getInt("clientID"); 
-            
-            user = new user(email, firstName, lastName, password, creditCard, phoneNumber, clientID);
-        }
-         
-        resultSet.close();
-        statement.close();
-         
-        return user;
-    }
     
     
-    public void updateCutStatus(int tID) throws SQLException {
-		String sql = "";
+    
+    public void updateCutStatus(int tID, String cDate) throws SQLException {
+		
 		System.out.println("UPDATE CUT STATUS RUNNIUNG IN TREEDAO");
+		
+		connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        String sql = "";
+		System.out.println("TREE ID: " + tID);
+		System.out.println("CUT DATE: " + cDate);
 		
 		sql = "update Tree set cutStatus = true where treeID = " + tID + ";";
         
-        connect_func();
-        statement =  (Statement) connect.createStatement();
+        statement.execute(sql);   
+        
+        sql = "update Tree set cutDate = '" + cDate + "' where treeID = " + tID + ";";
+        
+        System.out.println(sql);
         
         statement.execute(sql);   
+        
+        disconnect();
         
         System.out.println("UPDATE CUT STATUS TERMINATED IN TREEDAO");
     }

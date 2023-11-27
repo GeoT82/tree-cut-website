@@ -22,6 +22,7 @@
                	<th>Tree ID</th>
                	<th>Request ID</th>
                	<th>Cut Status</th>
+               	<th>Cut Date</th>
             </tr>
             <c:forEach var="trees" items="${listTree}">
                 <tr style="text-align:center">
@@ -35,6 +36,7 @@
                     <td><c:out value="${trees.treeID}" /></td>
                     <td><c:out value="${trees.requestID}" /></td>
                     <td><c:out value="${trees.cutStatus}" /></td>
+                     <td><c:out value="${trees.date}" /></td>
                 </tr>
             </c:forEach>
         </table>

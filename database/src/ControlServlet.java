@@ -663,7 +663,9 @@ public class ControlServlet extends HttpServlet {
 	    	System.out.println("CUT TREE RUNNING IN CONTROL SERVLET");
 	    	int tID = Integer.parseInt(request.getParameter("id"));
 			 	 
-	    	treeDAO.updateCutStatus(tID);
+	    	Date date = new Date();
+	    	String cDate = formatter.format(date);
+	    	treeDAO.updateCutStatus(tID, cDate);
 	    	request.getRequestDispatcher("davidSmithView.jsp").forward(request, response);
 			 			 			 			 
 	    	System.out.println("CUT TREE TERMINATED IN CONTROL SERVLET");
