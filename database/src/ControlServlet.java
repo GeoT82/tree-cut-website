@@ -161,13 +161,18 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: quoteQuit");
         		 quoteQuit(request, response);           	
                  break;
+        	 case "/quotePrint":
+        		 System.out.println("The action is: quotePrint");
+        		 quotePrint(request, response);           	
+                 break;
+                 
         	 case "/billAgree":
         		 System.out.println("The action is: billAgree");
         		 billAgree(request, response);           	
                  break;
         	 case "/billQuit":
         		 System.out.println("The action is: billQuit");
-        		 //billQuit(request, response);           	
+        		 billQuit(request, response);           	
                  break;
         	 case "/payBill":
         		 System.out.println("The action is: payBill");
@@ -572,6 +577,10 @@ public class ControlServlet extends HttpServlet {
 	    	bill bill = new bill(qID, uID, price, issueDate, dueDate);
 	    	billDAO.generate(bill);
 	    	
+	    	int bID = billDAO.getBillID(qID);
+	   	 	System.out.println(bID + " " + qID);
+	   	 	quoteDAO.update(qID, bID);
+	    	
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    
@@ -584,7 +593,30 @@ public class ControlServlet extends HttpServlet {
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    
-	    
+	    private void quotePrint(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("QUOTE PRINT RUNNING IN CONTROL SERVLET");
+	    	int qID = Integer.parseInt(request.getParameter("id"));
+	    	System.out.println("Quote ID: " + qID);
+	    	
+	    	currentUser = (String) session.getAttribute("username");
+	    	session.setAttribute("username", currentUser);
+	    	
+	    	System.out.println("CURRENT USER: " + currentUser);
+	    	
+	    	quote quote = quoteDAO.getQuote(qID);
+	    	user user = userDAO.getUser(currentUser);
+	    	
+	    	
+	    	request.setAttribute("quote", quote);
+	    	request.setAttribute("user", user);
+	    	request.setAttribute("listResponses", replyDAO.listAllQuoteReplies(qID));
+	    	
+	    	
+			request.getRequestDispatcher("printQuoteView.jsp").forward(request, response);
+	    	
+	    	System.out.println("QUOTE PRINT TERMINATED IN CONTROL SERVLET");
+	    	
+	    }
 	    
 	    private void billAgree(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
 	    	int bID = Integer.parseInt(request.getParameter("id"));
@@ -596,6 +628,16 @@ public class ControlServlet extends HttpServlet {
 	    	request.setAttribute("price", price);
 	    	
 	    	request.getRequestDispatcher("payBillView.jsp").forward(request, response);
+	    }
+	    
+	    
+	    private void billQuit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	int bID = Integer.parseInt(request.getParameter("id"));
+	    	
+	    	billDAO.delete(bID);
+	    	quoteDAO.deleteBill(bID);
+	    	
+	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    
 	    

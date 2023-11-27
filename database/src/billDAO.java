@@ -343,6 +343,48 @@ public class billDAO
         return bill;
     }
     
+    
+    public int getBillID(int qID) throws SQLException {
+    	int billID = 0;
+        String sql = "SELECT * FROM Bill WHERE quoteID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, qID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+        	billID = resultSet.getInt("billID"); 
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return billID;
+    }
+    
+    
+    public boolean delete(int billID) throws SQLException {
+        String sql = "DELETE FROM Bill WHERE billID = ?";        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, billID);
+         
+        boolean rowDeleted = preparedStatement.executeUpdate() > 0;
+        preparedStatement.close();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        disconnect();
+        
+        return rowDeleted;     
+    }
+    
+    
     public void init() throws SQLException, FileNotFoundException, IOException{
     	connect_func();
         statement =  (Statement) connect.createStatement();

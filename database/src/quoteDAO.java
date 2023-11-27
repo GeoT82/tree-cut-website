@@ -98,10 +98,11 @@ public class quoteDAO
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
             int clientID = resultSet.getInt("clientID");
+            int billID = resultSet.getInt("billID");
             Date date = resultSet.getTimestamp("issueDate");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, date);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, billID, date);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -127,10 +128,11 @@ public class quoteDAO
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
             int clientID = resultSet.getInt("clientID");
+            int billID = resultSet.getInt("billID");
             Date date = resultSet.getTimestamp("issueDate");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, date);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, billID, date);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -156,10 +158,11 @@ public class quoteDAO
             int quoteID = resultSet.getInt("quoteID"); 
             int requestID = resultSet.getInt("requestID"); 
             int clientID = resultSet.getInt("clientID");
+            int billID = resultSet.getInt("billID");
             Date date = resultSet.getTimestamp("issueDate");
 
              
-            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, date);
+            quote quotes = new quote(time, smithNote, clientNote, price, quoteID, requestID,clientID, billID, date);
             listQuote.add(quotes);
         }        
         resultSet.close();
@@ -215,6 +218,15 @@ public class quoteDAO
     }
     
     
+    public void update(int qID, int bID) throws SQLException {
+    	
+        String sql = "update Quote set billID = " + bID + " where quoteID = " + qID + ";";
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        statement.execute(sql);   
+    }
+    
     public void saveNote(int qID, int uID, String note, String date) throws SQLException {
     	System.out.println("SAVE NOTE FUNCTION RUNNING IN QUOTEDAO");
     	
@@ -246,6 +258,8 @@ public class quoteDAO
     
     
     public boolean delete(int quoteID) throws SQLException {
+    	System.out.println("DELETE QUOTE RUNNIUNG");
+    	
         String sql = "DELETE FROM Quote WHERE quoteID = ?";        
         connect_func();
         statement =  (Statement) connect.createStatement();
@@ -260,7 +274,25 @@ public class quoteDAO
         statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
         disconnect();
         
+        System.out.println("DELETE QUOTE TERMINATED");
+        
         return rowDeleted;     
+    }
+    
+    public void deleteBill(int bID) throws SQLException {
+		String sql = "";
+		System.out.println("DELETE BILL RUNNIUNG");
+		sql = "update Quote set billID = 0  where billID = " + bID + ";";
+        
+        connect_func();
+        statement =  (Statement) connect.createStatement();
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        
+        statement.execute(sql);  
+        
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        
+        System.out.println("DELETE BILL TERMINATED");
     }
     
      
@@ -294,11 +326,13 @@ public class quoteDAO
         
         statement.execute(sql); 
         disconnect();
+        System.out.println("UPDATE POST TERMINATED");
     }
     
     public quote getQuote(int quoteID) throws SQLException {
+    	System.out.println("GET QUOTE RUNNIUNG");
     	quote quote = null;
-        String sql = "SELECT * FROM User WHERE email = ?";
+        String sql = "SELECT * FROM Quote WHERE quoteID = ?";
          
         connect_func();
          
@@ -308,19 +342,21 @@ public class quoteDAO
         ResultSet resultSet = preparedStatement.executeQuery();
          
         if (resultSet.next()) {
-            String time = resultSet.getString("time");
+            String time = resultSet.getString("times");
             String smithNote = resultSet.getString("smithNote");
             String clientNote = resultSet.getString("clientNote");
             double price = resultSet.getDouble("price");
             int requestID = resultSet.getInt("requestID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");
+            int billID = resultSet.getInt("billID");
             
-            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID, clientID, date);
+            quote = new quote(time, smithNote, clientNote, price, quoteID, requestID, clientID, billID, date);
         }
          
         resultSet.close();
         statement.close();
+        System.out.println("GET QUOTE TERMINATED");
          
         return quote;
     }

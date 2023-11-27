@@ -68,9 +68,11 @@ Create TABLE if not exists Quote(
   price double not null default '0.00',
   requestID int not null default '0',
   clientID int not null default '0', 
+  billID int not null default '0',
   issueDate datetime not null default '1990-01-31 10:24:40', 
   PRIMARY KEY (QuoteID),
   Foreign key (requestID) references Request(requestID),
+  Foreign key (billID) references Bill(billID),
   foreign key (clientID) references User(clientID)
 );
 alter table Quote auto_increment = 20;
@@ -128,6 +130,7 @@ Create TABLE if not exists Tree(
   image2 varchar(30) not null default 'blank.png', 
   image3 varchar(30) not null default 'blank.png',
   cutStatus boolean not null default false,
+  cutDate datetime default null, 
   PRIMARY KEY (treeID),
   FOREIGN KEY (requestID) REFERENCES Request(requestID)
 );

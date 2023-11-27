@@ -10,6 +10,7 @@ public class quote
 	    protected double price;
 	    protected int quoteID;
 	    protected int requestID;
+	    protected int billID;
 	    protected int clientID;
 	    protected Date date;
 	    
@@ -38,7 +39,7 @@ public class quote
 	        setDate(date);
 	    }
 	    
-	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID, int clientID, Date date) 
+	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID, int clientID, int billID, Date date) 
 	    {
 	    	setTime(time);
 	        setSmithNote(smithNote);
@@ -47,6 +48,7 @@ public class quote
 	        setQuoteID(quoteID);
 	        setRequestID(requestID);
 	        setClientID(clientID);
+	        setBillID(billID);
 	        setDate(date);
 	    }
 	 
@@ -89,6 +91,13 @@ public class quote
 	    }
 	    public void setRequestID(int requestID) {
 	        this.requestID = requestID;
+	    }
+	    
+	    public int getBillID() {
+	        return billID;
+	    }
+	    public void setBillID(int billID) {
+	        this.billID = billID;
 	    }
 	    
 	    public int getClientID() {
