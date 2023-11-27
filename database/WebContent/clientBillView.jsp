@@ -35,6 +35,7 @@
                	<th>Attach Note</th>
                	<th>Agree</th>
                	<th>Quit</th>
+               	<th>Print</th>
                	
             </tr>
             <c:forEach var="bills" items="${listBills}">
@@ -61,6 +62,9 @@
                     </td>
                     <td>
                     	<a href="billQuit?id=<c:out value='${bills.billID}' />">Quit</a>
+                    </td>
+                    <td>
+                    	<a href="billPrint?id=<c:out value='${bills.billID}' />">Print</a>
                     </td>
             </c:forEach>
         </table>

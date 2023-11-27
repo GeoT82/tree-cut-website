@@ -33,6 +33,7 @@
                 <th>Pay Status</th>
                	<th>Quote ID</th>
                	<th>Attach Note</th>
+               	<th>Print Log</th>
                	
             </tr>
             <c:forEach var="bills" items="${listBills}">
@@ -50,6 +51,9 @@
                     </td>
                     <td>
                     	<a href="createBillNote?id=<c:out value='${bills.billID}' />">Post Note</a>
+                    </td>
+                    <td>
+                    	<a href="printLog?id=<c:out value='${bills.billID}' />">Post Note</a>
                     </td>
             </c:forEach>
         </table>

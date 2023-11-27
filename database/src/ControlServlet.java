@@ -28,6 +28,7 @@ public class ControlServlet extends HttpServlet {
 	    private quoteDAO quoteDAO = new quoteDAO();
 	    private treeDAO treeDAO = new treeDAO();
 	    private billDAO billDAO = new billDAO();
+	    private replyDAO replyDAO = new replyDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -45,6 +46,7 @@ public class ControlServlet extends HttpServlet {
 	    	quoteDAO = new quoteDAO();
 	    	treeDAO = new treeDAO();
 	    	billDAO = new billDAO();
+	    	replyDAO = new replyDAO();
 	    	currentUser= "";
 	    }
 	    
@@ -171,6 +173,10 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: payBill");
         		 payBill(request, response);           	
                  break;
+        	 case "/billPrint":
+        		 System.out.println("The action is: billPrint");
+        		 billPrint(request, response);           	
+                 break;
         	 case "/cutTree":
         		 System.out.println("The action is: cutTree");
         		 cutTree(request, response);           	
@@ -183,6 +189,7 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: submitTree");
         		 submitTree(request, response);           	
                  break;
+                 
                  
                  
                  
@@ -622,6 +629,32 @@ public class ControlServlet extends HttpServlet {
 			 }
 	    	
 	    	System.out.println("PAY BILL TERMINATED IN CONTROL SERVLET");
+	    	
+	    }
+	    
+	    
+	    private void billPrint(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("BILL PRINT RUNNING IN CONTROL SERVLET");
+	    	int bID = Integer.parseInt(request.getParameter("id"));
+	    	System.out.println("BILL ID: " + bID);
+	    	
+	    	currentUser = (String) session.getAttribute("username");
+	    	session.setAttribute("username", currentUser);
+	    	
+	    	System.out.println("CURRENT USER: " + currentUser);
+	    	
+	    	bill bill = billDAO.getBill(bID);
+	    	user user = userDAO.getUser(currentUser);
+	    	
+	    	
+	    	request.setAttribute("bill", bill);
+	    	request.setAttribute("user", user);
+	    	request.setAttribute("listResponses", replyDAO.listAllBillReplies(bID));
+	    	
+	    	
+			request.getRequestDispatcher("printBillView.jsp").forward(request, response);
+	    	
+	    	System.out.println("BILL PRINT TERMINATED IN CONTROL SERVLET");
 	    	
 	    }
 	    

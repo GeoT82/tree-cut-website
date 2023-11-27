@@ -313,6 +313,36 @@ public class billDAO
         System.out.println("UPDATE PAY STATUS TERMINATED IN BILLDAO");
     }
     
+    public bill getBill(int billID) throws SQLException {
+    	bill bill = null;
+        String sql = "SELECT * FROM Bill WHERE billID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, billID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            String smithNote = resultSet.getString("smithNote");
+            String clientNote = resultSet.getString("clientNote"); 
+            int quoteID = resultSet.getInt("quoteID");
+            int clientID = resultSet.getInt("clientID");
+            double price = resultSet.getDouble("price");
+            Date issueDate = resultSet.getTimestamp("issueDate");
+            Date dueDate = resultSet.getTimestamp("dueDate");
+            boolean payStatus = resultSet.getBoolean("payStatus");
+            
+            bill = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        return bill;
+    }
+    
     public void init() throws SQLException, FileNotFoundException, IOException{
     	connect_func();
         statement =  (Statement) connect.createStatement();
