@@ -13,6 +13,7 @@ public class bill
 		
 		protected Date issueDate;
 		protected Date dueDate;
+		protected Date payDate;
 		boolean payStatus;
 	    
 	    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
@@ -44,7 +45,7 @@ public class bill
 	    }
 	    
 	    
-	    public bill(int billID, String smithNote, String clientNote, int quoteID, int clientID, double price, Date issueDate, Date dueDate, boolean payStatus) 
+	    public bill(int billID, String smithNote, String clientNote, int quoteID, int clientID, double price, Date issueDate, Date dueDate, Date payDate, boolean payStatus) 
 	    {
 	    	setSmithNote(smithNote);
 	    	setClientNote(clientNote);
@@ -54,6 +55,7 @@ public class bill
 	    	setPrice(price);
 	    	setIssueDate(issueDate);
 	    	setDueDate(dueDate);
+	    	setPayDate(payDate);
 	    	setPayStatus(payStatus);
 	    }
 	    
@@ -132,6 +134,16 @@ public class bill
 	        this.dueDate = dueDate; 
 	    }
 	    
+	    
+	    public String getPayDate() {
+	    	if (payDate == null)
+	    		return "";
+	    	else
+	    		return formatter.format(payDate);
+	    }
+	    public void setPayDate(Date payDate) {
+	        this.payDate = payDate; 
+	    }
 	    
 	    public String getPayStatus() {
 	        if(payStatus == false) {

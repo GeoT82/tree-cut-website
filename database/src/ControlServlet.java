@@ -133,6 +133,10 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: postBillNote");
         		 postBillNote(request, response);           	
                  break;
+        	 case "/postDavidBillNote":
+        		 System.out.println("The action is: postDavidBillNote");
+        		 postDavidBillNote(request, response);           	
+                 break;
         	 case "/requestForm":
         		 System.out.println("The action is: requestForm");
         		 requestForm(request, response);           	
@@ -413,10 +417,19 @@ public class ControlServlet extends HttpServlet {
 	            throws SQLException, ServletException, IOException {
 	        System.out.println("createBillNote started: 000000000000000000000000000");
 	        
+	        RequestDispatcher dispatcher = null;
+	        
 	        int id = Integer.parseInt(request.getParameter("id"));
 	        System.out.println(id);
 	        session.setAttribute("billID", id);
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("billNoteMaker.jsp");
+	        currentUser = (String) session.getAttribute("username");
+	        
+	        if(currentUser.matches("davidSmith@gmail.com")) {
+	        	dispatcher = request.getRequestDispatcher("davidBillNoteMaker.jsp");
+	   	 	} else {
+	   	 		dispatcher = request.getRequestDispatcher("billNoteMaker.jsp");
+	   	 	}
+	        
 	        
 	        dispatcher.forward(request, response); // The forward() method works at server side, and It sends the same request and response objects to another servlet.
 	        System.out.println("Now you see the note form in your browser.");
@@ -438,7 +451,7 @@ public class ControlServlet extends HttpServlet {
 	   	 	
 	   	 	String iDate = formatter.format(date);
 	   	 	
-	   	 	billDAO.update(bID, note, currentUser);
+	   	 	billDAO.update(bID, note, 0, currentUser);
 	   	 	
 	   	 	billDAO.saveNote(bID, uID, note, iDate);
 	   	 	
@@ -448,6 +461,39 @@ public class ControlServlet extends HttpServlet {
 	   	 		clientPage(request,response, "");
 	   	 	} 	
 	   	 	
+	    }
+	    
+	    
+	    private void postDavidBillNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	String note = (request.getParameter("note"));
+	    	double discount = Double.parseDouble(request.getParameter("discount"));
+	    	
+	        System.out.println(note);
+	        
+	        if (discount >= 0 && discount <= 100) {
+	        	int bID = (Integer)session.getAttribute("billID");
+		   	 	
+		   	 	currentUser = (String) session.getAttribute("username");
+		   	 	
+		   	 	int uID = userDAO.getUserID(currentUser);
+		   	 	
+		   	 	Date date = new Date();
+		   	 	
+		   	 	String iDate = formatter.format(date);
+		   	 	
+		   	 	billDAO.update(bID, note, discount, currentUser);
+		   	 	
+		   	 	billDAO.saveNote(bID, uID, note, iDate);
+		   	 	
+		   	 	smithPage(request, response, "");
+		   	 	
+		   	 	
+	        } else {
+	    		System.out.println("Invalid Discount");
+	    		request.setAttribute("errStr","Invalid Discount Amount.");
+	    		request.getRequestDispatcher("davidBillNoteMaker.jsp").forward(request, response);
+	    	}
+	       
 	    }
 	    
 	    

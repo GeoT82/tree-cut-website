@@ -28,35 +28,65 @@ VALUES
 ( 1234566757, 'susie@gmail.com', '12341234', 'Susie ', 'Guzman', 'susie1234'),
 ( 7777888899, 'root', 00000000, 'default', 'default','pass1234');
 
+SET FOREIGN_KEY_CHECKS = 0;
+Create TABLE if not exists Tree(
+  treeID int not null auto_increment, 
+  requestID int not null default 0,
+  distance double (12,2) not null default '0', 
+  width double (12,2) not null default '0',
+  height double (12,2) not null default '0', 
+  address varchar(30) not null default 'unknown', 
+  image1 varchar(30) not null default 'blank.png', 
+  image2 varchar(30) not null default 'blank.png', 
+  image3 varchar(30) not null default 'blank.png',
+  cutStatus boolean not null default false,
+  cutDate datetime default null, 
+  PRIMARY KEY (treeID),
+  FOREIGN KEY (requestID) REFERENCES Request(requestID)
+);
+alter table Tree auto_increment = 500;
+
+INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID)
+VALUES 
+( 5, 123, 234, 'Detroit', 'a', 'b', 'c',200),
+( 10, 232, 52, 'Detroit', 'a', 'd', 'e',200),
+( 15, 121, 2356, 'Detroit', 'h', 'g', 'f',201),
+( 20, 180, 678, 'Detroit', 'i', 'j', 'k',202),
+( 25, 280, 346, 'Detroit', 'n', 'm', 'l',203),
+( 30, 321, 7456, 'Detroit', 'o', 'p', 'q',204),
+( 35, 213, 345, 'Detroit', 't', 's', 'r',209),
+( 40, 91, 537, 'Detroit', 'u', 'b', 't',210),
+( 50, 32, 964, 'Detroit', 'f', 'r', 'i',211),
+( 45, 145, 457, 'Detroit', 'v','y', 's',210);
+SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
-Create TABLE if not exists Bill(
-  billID int not null auto_increment, 
-  clientNote varchar(150) default 'pending', 
-  smithNote varchar(150) default 'pending',
-  price double(10,2) not null default 5000,
+Create TABLE if not exists Request(
+  requestID int not null auto_increment,
   quoteID int not null default 0,
   clientID int not null default 0, 
+  clientNote varchar(30) default 'pending',  
+  smithNote varchar(30) default 'pending',
   issueDate datetime not null default '1990-01-31 10:24:40', 
-  dueDate datetime not null default '1990-02-24 10:24:40',
-  payStatus boolean not null default false,
-  PRIMARY KEY (billID),
-  Foreign key (quoteID) references Quote(quoteID),
-  Foreign key (clientID) references User(clientID)
+  PRIMARY KEY (requestID),
+  foreign key (quoteID) references Quote(quoteID),
+  foreign key (clientID) references User(clientID)
 );
-alter table Bill auto_increment = 10;
-INSERT INTO Bill(clientNote, SmithNote, quoteID)
+alter table Request auto_increment = 200;
+INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate)
 VALUES 
-( 'Sold!', '', 2),
-( 'Sold!', '', 4),
-( 'Sold!', '',3),
-( 'Sold!', '',4),
-( 'Sold!', '',1),
-( 'Sold!', '',2),
-( 'Sold!', '',5),
-( 'Sold!', '',6),
-( 'Sold!', '',6),
-( 'Sold!', '',1);
+( 'Added Tree', 'Ok', 111, 20, '2020-04-16 06:53:40'),
+( 'Wait for One more tree', 'Alright', 111, 21, '2022-07-16 07:23:40'),
+( 'Looks Good!', 'Thanks', 108, 23, '2022-05-16 09:52:40'),
+( 'What does distance mean!', 'From home', 105, 23, '2022-02-16 07:34:40'),
+( 'Who is this!', 'David', 102, 22, '2022-08-16 08:51:40'),
+( '3 big trees!', 'Wow', 100, 24, '2021-10-16 10:14:40'),
+( 'Tonight!', 'I cant', 110, 25, '2021-12-16 12:21:40'),
+( 'Cut only to the stump!', 'Sure thing', 112, 26, '2022-01-16 15:12:40'),
+( 'I think Im missing a tree!', 'Better find it!', 107, 27, '2022-04-16 13:51:40'),
+( 'How do I get a quote!', 'I will send one out', 106, 28, '2022-08-16 06:46:40'),
+( 'Tomorrow!', 'Yes', 110, 29, '2021-04-16 09:21:40'),
+( 'Seems ok!', 'Good', 106, 21, '2020-05-16 10:12:40');
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -76,78 +106,49 @@ Create TABLE if not exists Quote(
   foreign key (clientID) references User(clientID)
 );
 alter table Quote auto_increment = 20;
-INSERT INTO Quote( clientNote , smithNote, times, price, requestID, clientID)
+INSERT INTO Quote( clientNote , smithNote, times, price, requestID, clientID, issueDate, billID)
 VALUES 
-( 'Sold!', '', '1:00:00', 4500, 200, 111),
-( 'Sold!', '', '2:00:00', 5500, 201, 111),
-( 'Sold!', '', '3:00:00', 6500, 204, 111),
-( 'Sold!', '', '4:00:00', 7500, 4, 109),
-( 'Sold!', '', '5:00:00', 8500, 5, 110),
-( 'Sold!', '', '6:00:00', 9500, 6, 100),
-( 'Sold!', '', '7:00:00', 10500, 7, 103),
-( 'Sold!', '', '8:00:00', 11500, 8, 105),
-( 'Sold!', '', '9:00:00', 12500, 9, 104),
-( 'Sold!', '', '10:00:00', 13500, 210, 111);
+( 'Looks Good!', 'Awsome', '1:00:00', 4500, 200, 111, '2022-05-16 06:46:40', default),
+( 'Please!', 'Sure', '2:00:00', 5500, 201, 111, '2022-08-16 06:46:40', 10),
+( 'Sold!', 'thank you', '3:00:00', 6500, 204, 111, '2022-06-16 06:46:40', default),
+( 'Why so much!', 'Its a lot of trees', '4:00:00', 7500, 4, 109, '2022-03-16 06:46:40', 10),
+( 'Roger!', 'Yay', '5:00:00', 8500, 5, 110, '2022-11-16 06:46:40', 11),
+( 'NeverMind!', 'OK', '6:00:00', 9500, 6, 100, '2023-01-16 06:46:40', 12),
+( default, 'Here you go', '7:00:00', 10500, 7, 103, '2022-05-16 06:46:40', 13),
+( default, 'Just look over this', '8:00:00', 11500, 8, 105, '2022-09-16 06:46:40', 14),
+( default, 'I got you', '9:00:00', 12500, 9, 104, '2022-06-16 06:46:40', 15),
+( 'Nice!', 'Thanks', '10:00:00', 13500, 210, 111, '2022-12-16 06:46:40', default);
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
-Create TABLE if not exists Request(
-  requestID int not null auto_increment,
+Create TABLE if not exists Bill(
+  billID int not null auto_increment, 
+  clientNote varchar(150) default 'pending', 
+  smithNote varchar(150) default 'pending',
+  price double(10,2) not null default 5000,
   quoteID int not null default 0,
   clientID int not null default 0, 
-  clientNote varchar(30) default 'pending',  
-  smithNote varchar(30) default 'pending',
-  issueDate datetime not null default '1990-01-31 10:24:40', 
-  PRIMARY KEY (requestID),
-  foreign key (quoteID) references Quote(quoteID),
-  foreign key (clientID) references User(clientID)
+  issueDate datetime not null default '2023-01-31 10:24:40', 
+  dueDate datetime not null default '2023-02-24 10:24:40',
+  payDate datetime  default current_timestamp,
+  payStatus boolean not null default false,
+  PRIMARY KEY (billID),
+  Foreign key (quoteID) references Quote(quoteID),
+  Foreign key (clientID) references User(clientID)
 );
-alter table Request auto_increment = 200;
-INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate)
+alter table Bill auto_increment = 10;
+INSERT INTO Bill(clientNote, smithNote, quoteID, clientID, issueDate, dueDate, payDate, payStatus)
 VALUES 
-( 'Sold!', '', 111, 20, '2020-04-16 06:53:40'),
-( 'Sold!', '', 111, 21, '2022-07-16 06:53:40'),
-( 'Sold!', '', 108, default, default),
-( 'Sold!', '', 109, default, default),
-( 'Sold!', '', 111, 22, default),
-( 'Sold!', '', 100, default, default),
-( 'Sold!', '', 111, default, default),
-( 'Sold!', '', 112, default, default),
-( 'Sold!', '', 107, default, default),
-( 'Sold!', '', 106, default, default),
-( 'Sold!', '', 111, 29, '2021-03-16 06:53:40'),
-( 'Sold!', '', 111, 21, '2020-09-16 06:53:40');
-SET FOREIGN_KEY_CHECKS = 1;
-
-Create TABLE if not exists Tree(
-  treeID int not null auto_increment, 
-  requestID int not null default 0,
-  distance double (12,2) not null default '0', 
-  width double (12,2) not null default '0',
-  height double (12,2) not null default '0', 
-  address varchar(30) not null default 'unknown', 
-  image1 varchar(30) not null default 'blank.png', 
-  image2 varchar(30) not null default 'blank.png', 
-  image3 varchar(30) not null default 'blank.png',
-  cutStatus boolean not null default false,
-  cutDate datetime default null, 
-  PRIMARY KEY (treeID),
-  FOREIGN KEY (requestID) REFERENCES Request(requestID)
-);
-alter table Tree auto_increment = 500;
-SET FOREIGN_KEY_CHECKS = 0;
-INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID)
-VALUES 
-( 5, 123, 123, 'Detroit', 'a', 'b', 'c',200),
-( 10, 232, 123, 'Detroit', 'a', 'd', 'e',200),
-( 15, 121, 123, 'Detroit', 'h', 'g', 'f',201),
-( 20, 180, 123, 'Detroit', 'i', 'j', 'k',201),
-( 25, 280, 123, 'Detroit', 'n', 'm', 'l',204),
-( 30, 321, 123, 'Detroit', 'o', 'p', 'q',204),
-( 35, 213, 123, 'Detroit', 't', 's', 'r',210),
-( 40, 91, 123, 'Detroit', 'u', 'b', 't',210),
-( 50, 32, 15, 'Detroit', 'f', 'r', 'i',211),
-( 45, 145, 123, 'Detroit', 'v','y', 's',210);
+( default, 'Thank You', 21, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-07-25 08:24:40', true),
+( 'Paid', 'Thank You', 23, 108, '2022-09-24 10:24:40', '2022-10-24 10:24:40' , '2022-09-25 06:24:40', true),
+( 'Too expensive', 'Why', 24, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , default, false),
+( 'Why this date', 'Its the fastest', 25, 106, '2022-04-24 10:24:40', '2022-05-24 10:24:40' , '2022-08-11 10:24:40', true),
+( 'Can you show me what your charging', 'Sure', 26, 107, '2022-12-24 10:24:40', '2023-01-24 10:24:40' , default, false),
+( 'Alright', 'Sweet', 27, 108, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-08-01 10:24:40', true),
+( default, 'Thank You', 28, 109, '2022-02-24 10:24:40', '2022-03-24 10:24:40' , '2022-03-11 10:24:40', true),
+( default, 'Thank You', 29, 110, '2022-06-24 10:24:40', '2022-07-24 10:24:40' , '2022-08-11 10:24:40', true),
+( default, 'Thank You', 30, 100, '2022-10-24 10:24:40', '2022-11-24 10:24:40' , '2022-12-11 10:24:40', true),
+( default, 'Thank You', 31, 104, '2022-07-24 10:24:40', '2023-01-24 10:24:40' , '2023-12-11 10:24:40', true);
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -229,12 +230,93 @@ insert into Request(clientID, clientNote, issueDate) values (111, 'hi', '2023/11
 SET FOREIGN_KEY_CHECKS = 1;
 
 select * from User;
-select * from Bill;
+select * from Tree;
 select * from Request;
 select * from Quote;
-select * from Tree;
+select * from Bill;
 select * from RequestResponse;
 select * from QuoteResponse;
 select * from BillResponse;
 
-select * from User where clientID = 111;
+# Tree Count 
+create View TreeCount(request, count) AS
+select requestID, count(treeID) as treeNum
+from Tree t
+group by requestID;
+select * from TreeCount;
+
+# BIG CLIENT TABLE
+select clientID as BigClient
+from Request
+where requestID in (
+	select request from TreeCount
+	where count = (
+		select max(count)
+		from TreeCount
+));
+
+# EASY CLIENT TABLE
+select clientID as easyClient
+from Quote
+where billID != 0 and clientNote = "pending";
+
+
+# One Tree Quotes
+select quoteID
+from Quote
+where billID != 0 and quoteID in (
+	select quoteID as oneTreeQuote
+	from Request
+	where requestID in (
+		select request from TreeCount
+		where count = 1
+));
+
+
+# Select prospective clients
+select clientID as ProspectiveClient
+from Request
+where quoteID = 0;
+
+
+# Highest Tree
+select treeID
+from Tree
+where height = (
+select max(height)
+from Tree
+);
+
+# Select overdue bills
+select billID
+from Bill
+where TIMESTAMPDIFF(hour, issueDate, payDate) > 168 and payStatus = false;
+
+#Bad Clients
+select distinct clientID
+from Bill
+where TIMESTAMPDIFF(hour, issueDate, payDate) >TIMESTAMPDIFF(hour, issueDate, dueDate) and payStatus = false;
+
+#Good Clients
+select distinct clientID
+from Bill
+where TIMESTAMPDIFF(hour, issueDate, payDate) < 24 and payStatus = true;
+
+
+
+#clientStats
+create view clientWithTree AS
+select clientID, requestID
+from Request
+where requestID in (
+	select distinct request from TreeCount
+);
+
+select * from clientWithTree;
+
+select TCC.clientID, sum(TC.count)
+from clientWithTree as TCC, TreeCount as TC
+where TCC.requestID in (
+	select request from TreeCount
+)
+group by TCC.clientID;

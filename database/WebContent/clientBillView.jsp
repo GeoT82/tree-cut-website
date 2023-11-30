@@ -31,6 +31,7 @@
                 <th>Client Note</th>
                 <th>Price</th>
                	<th>Quote ID</th>
+               	<th>Pay Date</th>
                	<th>Pay Status</th>
                	<th>Attach Note</th>
                	<th>Agree</th>
@@ -52,6 +53,7 @@
                     	<a href="quoteView?id=<c:out value='${bills.quoteID}' />"><c:out value='${bills.quoteID}' /></a>
                     </td>
                     
+                    <td><c:out value="${bills.payDate}" /></td>
                     <td><c:out value="${bills.payStatus}" /></td>
                     
                     <td>

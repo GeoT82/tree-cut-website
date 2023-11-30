@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 //import java.sql.Connection;
 //import java.sql.PreparedStatement;
@@ -34,6 +35,7 @@ public class billDAO
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
+	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 	
 	public billDAO(){}
 	
@@ -100,11 +102,14 @@ public class billDAO
 
             Date issueDate = resultSet.getTimestamp("issueDate");
             Date dueDate = resultSet.getTimestamp("dueDate");
+            Date payDate = resultSet.getTimestamp("payDate");
+            
+            //System.out.println(payDate.toString());
             
             boolean payStatus = resultSet.getBoolean("payStatus");
 
              
-            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payDate, payStatus);
             listBill.add(bills);
         }        
         resultSet.close();
@@ -131,11 +136,11 @@ public class billDAO
 
             Date issueDate = resultSet.getTimestamp("issueDate");
             Date dueDate = resultSet.getTimestamp("dueDate");
+            Date payDate = resultSet.getTimestamp("payDate");
             
             boolean payStatus = resultSet.getBoolean("payStatus");
-
-             
-            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
+            
+            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payDate, payStatus);
             listRequest.add(bills);
         }        
         resultSet.close();
@@ -149,35 +154,6 @@ public class billDAO
         }
     }
     
-    public List<bill> listRequests(int id) throws SQLException {
-    	List<bill> listBill = new ArrayList<bill>();        
-        String sql = "SELECT * FROM Request WHERE Request.requestID = " + id;      
-        connect_func();      
-        statement = (Statement) connect.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-        System.out.println("LISTING BILLS");
-         
-        while (resultSet.next()) {
-            String smithNote = resultSet.getString("smithNote");
-            String clientNote = resultSet.getString("clientNote");
-            int billID = resultSet.getInt("billID");
-            int quoteID = resultSet.getInt("quoteID");
-            int clientID = resultSet.getInt("clientID");
-            double price = resultSet.getDouble("price");
-            
-            Date issueDate = resultSet.getTimestamp("issueDate");
-            Date dueDate = resultSet.getTimestamp("dueDate");
-            
-            boolean payStatus = resultSet.getBoolean("payStatus");
-
-             
-            bill bills = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
-            listBill.add(bills);
-        }        
-        resultSet.close();
-        disconnect();        
-        return listBill;
-    }
     
     
     public void generate(bill bill) throws SQLException {
@@ -259,7 +235,7 @@ public class billDAO
     }
     
    
-    public void update(int bID, String note, String user) throws SQLException {
+    public void update(int bID, String note, double discountNum, String user) throws SQLException {
 		String sql = "";
 		System.out.println("UPDATE POST RUNNIUNG IN BILLDAO");
 		if(user.matches("davidSmith@gmail.com")) {
@@ -271,9 +247,26 @@ public class billDAO
         connect_func();
         statement =  (Statement) connect.createStatement();
         
-        statement.execute(sql);   
+        statement.execute(sql);  
+        
+        double price = getPrice(bID);
+        double discount = discountNum;
+        if (discount == 0) {
+        	discount = 1;
+        } else {
+        	discount = discount / 100;
+        }
+        
+        price = price * discount;
+        
+        sql = "update Bill set price = '" + price + "' where billID = " + bID + ";";
+        
+        statement =  (Statement) connect.createStatement();
+        statement.execute(sql);
         
         System.out.println("UPDATE POST TERMINATED IN BILLDAO");
+        
+        disconnect();
     }
     
     
@@ -310,6 +303,14 @@ public class billDAO
         
         statement.execute(sql);   
         
+        Date payDate = new Date();
+        
+        String pDate = formatter.format(payDate);
+        
+        sql = "update Bill set payDate = '" + pDate + "' where billID = " + bID + ";";
+        
+        statement.execute(sql);   
+        
         System.out.println("UPDATE PAY STATUS TERMINATED IN BILLDAO");
     }
     
@@ -332,9 +333,10 @@ public class billDAO
             double price = resultSet.getDouble("price");
             Date issueDate = resultSet.getTimestamp("issueDate");
             Date dueDate = resultSet.getTimestamp("dueDate");
+            Date payDate = resultSet.getTimestamp("payDate");
             boolean payStatus = resultSet.getBoolean("payStatus");
             
-            bill = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payStatus);
+            bill = new bill(billID, smithNote, clientNote, quoteID, clientID, price, issueDate, dueDate, payDate, payStatus);
         }
          
         resultSet.close();
