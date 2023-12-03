@@ -4,9 +4,10 @@ import java.util.Date;
 
 public class request extends tree
 {
-		protected tree[] treeArr;
+		
 	 	protected String smithNote;
 	    protected String clientNote;
+	    protected int treeCount;
 	    protected int requestID;
 	    protected int quoteID;
 	    protected int clientID;
@@ -27,7 +28,7 @@ public class request extends tree
 	        setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	    
-	    public request(String smithNote, String clientNote, int requestID, int quoteID, int clientID, Date date) 
+	    public request(String smithNote, String clientNote, int requestID, int quoteID, int clientID, Date date, int treeCount)
 	    {
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
@@ -35,6 +36,7 @@ public class request extends tree
 	        setQuoteID(quoteID);
 	        setClientID(clientID);
 	        setDate(date);
+	        setTreeCount(treeCount);
 	    }
 	 
 	    
@@ -54,6 +56,12 @@ public class request extends tree
 	        this.clientNote = clientNote;
 	    }
 	    
+	    public int getTreeCount(){
+	    	return treeCount;
+	    }
+	    public void setTreeCount(int treeCount){
+	    	this.treeCount = treeCount;
+	    }
 	    
 	    public int getRequestID() {
 	        return requestID;

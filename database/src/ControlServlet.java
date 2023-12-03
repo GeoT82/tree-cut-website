@@ -153,6 +153,11 @@ public class ControlServlet extends HttpServlet {
         		 System.out.println("The action is: seeBills");
         		 seeBills(request, response);           	
                  break;
+        	 case "/seeStats":
+        		 System.out.println("The action is: seeStats");
+        		 seeStats(request, response);           	
+                 break;
+                 
         	 case "/submitRequest":
         		 System.out.println("The action is: submitRequest");
         		 submitRequest(request, response);           	
@@ -610,6 +615,39 @@ public class ControlServlet extends HttpServlet {
 	    }
 	    
 	    
+	    private void seeStats(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
+	    	System.out.println("Client Stats View");
+	    	List<request> bigClient = requestDAO.getBigClient();
+	    	List<quote> easyClient = quoteDAO.getEasyClient();
+	    	List<quote> oneTreeQuote = quoteDAO.getOneTreeQuotes();
+	    	List<request> prospectiveClients = requestDAO.getProspectiveClient();
+	    	List<tree> highestTree = treeDAO.getTallestTree();
+	    	List<bill> overdueBills = billDAO.getOverdueBills();
+	    	List<bill> badClients = billDAO.getBadClients();
+	    	List<bill> goodClients = billDAO.getGoodClients();
+	    	List<request> treeCount = requestDAO.getTreeCount();
+	    	List<bill> clientTotal = billDAO.getClientTotal();
+	    	List<bill> clientPaid = billDAO.getClientPaid();
+	    	List<tree> treeDetails = treeDAO.getTreeDetails();
+	    	
+	    	
+	    	request.setAttribute("bigClient", bigClient);
+	    	request.setAttribute("easyClient", easyClient);
+	    	request.setAttribute("oneTreeQuote", oneTreeQuote);
+	    	request.setAttribute("prospectiveClients", prospectiveClients);
+	    	request.setAttribute("highestTree", highestTree);
+	    	request.setAttribute("overdueBills", overdueBills);
+	    	request.setAttribute("badClients", badClients);
+	    	request.setAttribute("goodClients", goodClients);
+	    	request.setAttribute("treeCount", treeCount);
+	    	request.setAttribute("clientTotal", clientTotal);
+	    	request.setAttribute("clientPaid", clientPaid);
+	    	request.setAttribute("treeDetails", treeDetails);
+    		request.getRequestDispatcher("rootStats.jsp").forward(request, response);
+	    	
+	    }
+	    
+	    
 	    private void quoteAgree(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
 	    	int qID = Integer.parseInt(request.getParameter("id"));
 	    	int uID = quoteDAO.getUserID(qID);
@@ -794,7 +832,7 @@ public class ControlServlet extends HttpServlet {
 	        
 	        tree tree = new tree(image1, image2, image3, address, distance, width, height, rID, false);
 	        treeDAO.insert(tree);
-	       
+	        requestDAO.updateTreeCount(rID); 
 	        
 	        clientPage(request,response, "");
 	        System.out.println("Now you see the  Client page in your browser.");

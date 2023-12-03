@@ -32,6 +32,7 @@
                 <th>Client Note</th>
                	<th>Request ID</th>
                 <th>Quote ID</th>
+                <th>Tree Count</th>
                 <th>Trees</th>
                 <th>Post</th>
                 <th>New Tree</th>
@@ -44,6 +45,7 @@
                     <td><c:out value="${requests.clientNote}" /></td>
                     <td><c:out value="${requests.requestID}" /></td>
                     <td><c:out value="${requests.quoteID}" /></td>
+                    <td><c:out value="${requests.treeCount}" /></td>
                     <td>
                     	<a href="treeView?id=<c:out value='${requests.requestID}' />">View Trees</a>
                     </td>

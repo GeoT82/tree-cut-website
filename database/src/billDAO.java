@@ -118,6 +118,127 @@ public class billDAO
     }
     
     
+    public List<bill> getOverdueBills() throws SQLException {
+    	System.out.println("GET OVERDUE BILLS RUNNING");
+        List<bill> listBill = new ArrayList<bill>();        
+        String sql = "select billID from Bill where TIMESTAMPDIFF(hour, issueDate, current_timestamp) > 168 and payStatus = false;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING BILLS");
+         
+        while (resultSet.next()) {
+            int billID = resultSet.getInt("billID");
+            
+
+             
+            bill bills = new bill(billID, "", "", 0, 0, 0, null, null, null, false);
+            listBill.add(bills);
+        }        
+        resultSet.close();
+        disconnect();   
+        System.out.println("GET OVERDUE BILLS TERMIANTED");
+        return listBill;
+    }
+    
+    
+    public List<bill> getBadClients() throws SQLException {
+    	System.out.println("GET BAD CLIENTS RUNNING");
+        List<bill> listBill = new ArrayList<bill>();        
+        String sql = "select clientID from Bill where TIMESTAMPDIFF(hour, issueDate, current_timestamp) > TIMESTAMPDIFF(hour, issueDate, dueDate) and payStatus = false group by clientID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING BILLS");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            
+
+             
+            bill bills = new bill(0, "", "", 0, clientID, 0, null, null, null, false);
+            listBill.add(bills);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET BAD CLIENTS TERMINATED");
+        return listBill;
+    }
+    
+    
+    public List<bill> getGoodClients() throws SQLException {
+    	System.out.println("GET GOOD CLIENTS RUNNING");
+        List<bill> listBill = new ArrayList<bill>();        
+        String sql = "select clientID from Bill where TIMESTAMPDIFF(hour, issueDate, payDate) < 24 and payStatus = true group by clientID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING BILLS");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            
+
+             
+            bill bills = new bill(0, "", "", 0, clientID, 0, null, null, null, false);
+            listBill.add(bills);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET GOOD CLIENTS TERMINATED");
+        return listBill;
+    }
+    
+    
+    public List<bill> getClientTotal() throws SQLException {
+    	System.out.println("GET CLIENT TOTAL RUNNING");
+        List<bill> listBill = new ArrayList<bill>();        
+        String sql = "select clientID, sum(price) from Bill group by clientID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING BILLS");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            double price = resultSet.getDouble("sum(price)");
+            
+
+             
+            bill bills = new bill(0, "", "", 0, clientID, price, null, null, null, false);
+            listBill.add(bills);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET CLIENT TOTAL TERMINATED");
+        return listBill;
+    }
+    
+    
+    public List<bill> getClientPaid() throws SQLException {
+    	System.out.println("GET CLIENT TOTAL RUNNING");
+        List<bill> listBill = new ArrayList<bill>();        
+        String sql = "select clientID, sum(price) from Bill where payStatus = true group by clientID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING BILLS");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            double price = resultSet.getDouble("sum(price)");
+            
+
+             
+            bill bills = new bill(0, "", "", 0, clientID, price, null, null, null, false);
+            listBill.add(bills);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET CLIENT TOTAL TERMINATED");
+        return listBill;
+    }
+    
     public List<bill> listAllBills(int id) throws SQLException {
         List<bill> listRequest = new ArrayList<bill>();        
         String sql = "SELECT * FROM Bill Where Bill.clientID = " + id;      

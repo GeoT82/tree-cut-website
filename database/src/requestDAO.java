@@ -97,16 +97,96 @@ public class requestDAO
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");
+            int treeCount = resultSet.getInt("treeCount");
             
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date, treeCount);
             listRequest.add(requests);
         }        
         resultSet.close();
         disconnect();        
         return listRequest;
     }
+    
+    
+    public List<request> getBigClient() throws SQLException {
+    	System.out.println("GET BIG CLIENT RUNNING");
+    	
+        List<request> listRequest = new ArrayList<request>();        
+        String sql = "select clientID, sumCount from TreeCount where sumCount = (select max(sumCount) from TreeCount);";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            int treeCount = resultSet.getInt("sumCount");
+            
+
+             
+            request requests = new request("", "", 0, 0, clientID, null, treeCount);
+            listRequest.add(requests);
+        }        
+        resultSet.close();
+        disconnect();        
+        System.out.println("GET BIG CLIENT TERMINATED");
+        
+        return listRequest;
+    }
+    
+    
+    public List<request> getTreeCount() throws SQLException {
+    	System.out.println("GET TREE COUNT RUNNING");
+        List<request> listRequest = new ArrayList<request>();        
+        String sql = "select clientID, sum(treeCount) from Request group by clientID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            int treeCount = resultSet.getInt("sum(treeCount)");
+            
+
+             
+            request requests = new request("", "", 0, 0, clientID, null, treeCount);
+            listRequest.add(requests);
+        }        
+        resultSet.close();
+        disconnect();        
+        System.out.println("GET TREE COUNT TERMINATED");
+        return listRequest;
+    }
+    
+    
+    public List<request> getProspectiveClient() throws SQLException {
+    	System.out.println("GET PROSPECTIVE CLIENT RUNNING");
+        List<request> listRequest = new ArrayList<request>();        
+        String sql = "select clientID from Request where quoteID = 0";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            
+
+             
+            request requests = new request("", "", 0, 0, clientID, null, 0);
+            listRequest.add(requests);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET PROSPECTIVE CLIENT TERMINATED");
+        return listRequest;
+    }
+    
+    
     
     public List<request> listAllRequests(int uID) throws SQLException {
         List<request> listRequest = new ArrayList<request>();        
@@ -124,10 +204,10 @@ public class requestDAO
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");
-            
+            int treeCount = resultSet.getInt("treeCount");
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date, treeCount);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -141,9 +221,9 @@ public class requestDAO
         }
     }
     
-    public List<request> listRequests(int id) throws SQLException {
+    public List<request> listRequests(int rID) throws SQLException {
         List<request> listRequest = new ArrayList<request>();        
-        String sql = "SELECT * FROM Request Where Request.requestID = " + id;      
+        String sql = "SELECT * FROM Request Where Request.requestID = " + rID;      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -156,9 +236,10 @@ public class requestDAO
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");
+            int treeCount = resultSet.getInt("treeCount");
 
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
+            request requests = new request(smithNote, clientNote, requestID, quoteID, clientID, date, treeCount);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -182,8 +263,9 @@ public class requestDAO
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");
+            int treeCount = resultSet.getInt("treeCount");
              
-            request requests = new request(smithNote, clientNote, requestID, quoteID,clientID, date);
+            request requests = new request(smithNote, clientNote, requestID, quoteID,clientID, date, treeCount);
             listRequest.add(requests);
         }        
         resultSet.close();
@@ -213,12 +295,13 @@ public class requestDAO
       
         
         statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
-        String sql = "insert into Request(clientID, clientNote, issueDate) values (?, ?, ?);";
+        String sql = "insert into Request(clientID, clientNote, issueDate, treeCount) values (?, ?, ?, ?);";
         
         preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
         preparedStatement.setInt(1, uID);
         preparedStatement.setString(2, note);
 		preparedStatement.setString(3, date);
+		preparedStatement.setInt(4, 1);
          
 		preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -340,8 +423,9 @@ public class requestDAO
             int quoteID = resultSet.getInt("quoteID");
             int clientID = resultSet.getInt("clientID");
             Date date = resultSet.getTimestamp("issueDate");
+            int treeCount = resultSet.getInt("treeCount");
             
-            request = new request(smithNote, clientNote, requestID, quoteID, clientID, date);
+            request = new request(smithNote, clientNote, requestID, quoteID, clientID, date, treeCount);
         }
          
         resultSet.close();
@@ -389,6 +473,35 @@ public class requestDAO
         statement.close();
          
         return clientID;
+    }
+    
+    
+    public void updateTreeCount(int rID) throws SQLException {
+    	
+        String sql = "SELECT * FROM Request WHERE requestID = ?";
+         
+        connect_func();
+        
+        statement =  (Statement) connect.createStatement();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, rID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            int treeCount = resultSet.getInt("treeCount");
+            treeCount++;
+            sql = "update Request set treeCount = " + treeCount + " where requestID = " + rID + ";";
+            statement.execute(sql);
+            
+        }
+         
+        resultSet.close();
+        preparedStatement.close();
+        statement.close();
+        disconnect();
+    
     }
     
     

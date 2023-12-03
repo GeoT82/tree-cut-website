@@ -46,25 +46,26 @@ Create TABLE if not exists Tree(
 );
 alter table Tree auto_increment = 500;
 
-INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID)
+INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID, cutDate, cutStatus)
 VALUES 
-( 5, 123, 234, 'Detroit', 'a', 'b', 'c',200),
-( 10, 232, 52, 'Detroit', 'a', 'd', 'e',200),
-( 15, 121, 2356, 'Detroit', 'h', 'g', 'f',201),
-( 20, 180, 678, 'Detroit', 'i', 'j', 'k',202),
-( 25, 280, 346, 'Detroit', 'n', 'm', 'l',203),
-( 30, 321, 7456, 'Detroit', 'o', 'p', 'q',204),
-( 35, 213, 345, 'Detroit', 't', 's', 'r',209),
-( 40, 91, 537, 'Detroit', 'u', 'b', 't',210),
-( 50, 32, 964, 'Detroit', 'f', 'r', 'i',211),
-( 45, 145, 457, 'Detroit', 'v','y', 's',210);
+( 5, 123, 234, 'Detroit', 'a', 'b', 'c',200, '2022-11-19 7:24:40', true),
+( 10, 232, 52, 'Detroit', 'a', 'd', 'e',200, '2022-05-19 7:24:40', true),
+( 15, 121, 2356, 'Detroit', 'h', 'g', 'f',201, '2022-09-19 7:24:40', true),
+( 20, 180, 678, 'Detroit', 'i', 'j', 'k',202, default, default),
+( 25, 280, 346, 'Detroit', 'n', 'm', 'l',203, '2022-04-19 7:24:40', true),
+( 30, 321, 7456, 'Detroit', 'o', 'p', 'q',204, '2022-08-19 7:24:40', true),
+( 35, 213, 345, 'Detroit', 't', 's', 'r',209,  default, default),
+( 40, 91, 537, 'Detroit', 'u', 'b', 't',210, '2022-10-19 7:24:40', true),
+( 50, 32, 964, 'Detroit', 'f', 'r', 'i',211, default, default),
+( 45, 145, 457, 'Detroit', 'v','y', 's',210, default, default);
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 Create TABLE if not exists Request(
   requestID int not null auto_increment,
   quoteID int not null default 0,
-  clientID int not null default 0, 
+  clientID int not null default 0,
+  treeCount int not null default 0,
   clientNote varchar(30) default 'pending',  
   smithNote varchar(30) default 'pending',
   issueDate datetime not null default '1990-01-31 10:24:40', 
@@ -73,20 +74,20 @@ Create TABLE if not exists Request(
   foreign key (clientID) references User(clientID)
 );
 alter table Request auto_increment = 200;
-INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate)
+INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate, treeCount)
 VALUES 
-( 'Added Tree', 'Ok', 111, 20, '2020-04-16 06:53:40'),
-( 'Wait for One more tree', 'Alright', 111, 21, '2022-07-16 07:23:40'),
-( 'Looks Good!', 'Thanks', 108, 23, '2022-05-16 09:52:40'),
-( 'What does distance mean!', 'From home', 105, 23, '2022-02-16 07:34:40'),
-( 'Who is this!', 'David', 102, 22, '2022-08-16 08:51:40'),
-( '3 big trees!', 'Wow', 100, 24, '2021-10-16 10:14:40'),
-( 'Tonight!', 'I cant', 110, 25, '2021-12-16 12:21:40'),
-( 'Cut only to the stump!', 'Sure thing', 112, 26, '2022-01-16 15:12:40'),
-( 'I think Im missing a tree!', 'Better find it!', 107, 27, '2022-04-16 13:51:40'),
-( 'How do I get a quote!', 'I will send one out', 106, 28, '2022-08-16 06:46:40'),
-( 'Tomorrow!', 'Yes', 110, 29, '2021-04-16 09:21:40'),
-( 'Seems ok!', 'Good', 106, 21, '2020-05-16 10:12:40');
+( 'Added Tree', 'Ok', 111, 20, '2020-04-16 06:53:40', 2),
+( 'Wait for One more tree', 'Alright', 111, 21, '2022-07-16 07:23:40', 1),
+( 'Looks Good!', 'Thanks', 108, 23, '2022-05-16 09:52:40', 1),
+( 'What does distance mean!', 'From home', 105, 23, '2022-02-16 07:34:40', 1),
+( 'Who is this!', 'David', 102, 22, '2022-08-16 08:51:40', 1),
+( '3 big trees!', 'Wow', 100, 24, '2021-10-16 10:14:40', default),
+( 'Tonight!', 'I cant', 110, 25, '2021-12-16 12:21:40', default),
+( 'Cut only to the stump!', 'Sure thing', 112, 26, '2022-01-16 15:12:40', default),
+( 'I think Im missing a tree!', 'Better find it!', 107, 27, '2022-04-16 13:51:40', 1),
+( 'How do I get a quote!', 'I will send one out', 106, 28, '2022-08-16 06:46:40', 2),
+( 'Tomorrow!', 'Yes', 110, 29, '2021-04-16 09:21:40', 1),
+( 'Seems ok!', 'Good', 106, 21, '2020-05-16 10:12:40', default);
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -111,11 +112,11 @@ VALUES
 ( 'Looks Good!', 'Awsome', '1:00:00', 4500, 200, 111, '2022-05-16 06:46:40', default),
 ( 'Please!', 'Sure', '2:00:00', 5500, 201, 111, '2022-08-16 06:46:40', 10),
 ( 'Sold!', 'thank you', '3:00:00', 6500, 204, 111, '2022-06-16 06:46:40', default),
-( 'Why so much!', 'Its a lot of trees', '4:00:00', 7500, 4, 109, '2022-03-16 06:46:40', 10),
+( 'Why so much!', 'Its a lot of trees', '4:00:00', 7500, 202, 109, '2022-03-16 06:46:40', 10),
 ( 'Roger!', 'Yay', '5:00:00', 8500, 5, 110, '2022-11-16 06:46:40', 11),
 ( 'NeverMind!', 'OK', '6:00:00', 9500, 6, 100, '2023-01-16 06:46:40', 12),
 ( default, 'Here you go', '7:00:00', 10500, 7, 103, '2022-05-16 06:46:40', 13),
-( default, 'Just look over this', '8:00:00', 11500, 8, 105, '2022-09-16 06:46:40', 14),
+( default, 'Just look over this', '8:00:00', 11500, 208, 105, '2022-09-16 06:46:40', 14),
 ( default, 'I got you', '9:00:00', 12500, 9, 104, '2022-06-16 06:46:40', 15),
 ( 'Nice!', 'Thanks', '10:00:00', 13500, 210, 111, '2022-12-16 06:46:40', default);
 SET FOREIGN_KEY_CHECKS = 1;
@@ -130,7 +131,7 @@ Create TABLE if not exists Bill(
   clientID int not null default 0, 
   issueDate datetime not null default '2023-01-31 10:24:40', 
   dueDate datetime not null default '2023-02-24 10:24:40',
-  payDate datetime  default current_timestamp,
+  payDate datetime  default null,
   payStatus boolean not null default false,
   PRIMARY KEY (billID),
   Foreign key (quoteID) references Quote(quoteID),
@@ -238,39 +239,30 @@ select * from RequestResponse;
 select * from QuoteResponse;
 select * from BillResponse;
 
-# Tree Count 
-create View TreeCount(request, count) AS
-select requestID, count(treeID) as treeNum
-from Tree t
-group by requestID;
-select * from TreeCount;
-
-# BIG CLIENT TABLE
-select clientID as BigClient
+#Big Client
+create view TreeCount AS 
+select clientID, sum(treeCount) as sumCount
 from Request
-where requestID in (
-	select request from TreeCount
-	where count = (
-		select max(count)
-		from TreeCount
-));
+group by clientID;
+
+select clientID, sumCount
+from TreeCount 
+where sumCount = (select max(sumCount) from TreeCount);
 
 # EASY CLIENT TABLE
-select clientID as easyClient
+select clientID as EasyClient
 from Quote
 where billID != 0 and clientNote = "pending";
 
 
 # One Tree Quotes
-select quoteID
+select quoteID as OneTreeQuotes, requestID
 from Quote
 where billID != 0 and quoteID in (
-	select quoteID as oneTreeQuote
+	select quoteID
 	from Request
-	where requestID in (
-		select request from TreeCount
-		where count = 1
-));
+	where treeCount = 1
+);
 
 
 # Select prospective clients
@@ -280,7 +272,7 @@ where quoteID = 0;
 
 
 # Highest Tree
-select treeID
+select treeID as HighestTree, height
 from Tree
 where height = (
 select max(height)
@@ -288,35 +280,36 @@ from Tree
 );
 
 # Select overdue bills
-select billID
+select billID as OverDueBills
 from Bill
-where TIMESTAMPDIFF(hour, issueDate, payDate) > 168 and payStatus = false;
+where TIMESTAMPDIFF(hour, issueDate, current_timestamp) > 168 and payStatus = false;
 
 #Bad Clients
-select distinct clientID
+select clientID as BadClients
 from Bill
-where TIMESTAMPDIFF(hour, issueDate, payDate) >TIMESTAMPDIFF(hour, issueDate, dueDate) and payStatus = false;
+where TIMESTAMPDIFF(hour, issueDate, current_timestamp) > TIMESTAMPDIFF(hour, issueDate, dueDate) and payStatus = false
+group by clientID;
 
 #Good Clients
-select distinct clientID
+select clientID as GoodClients
 from Bill
-where TIMESTAMPDIFF(hour, issueDate, payDate) < 24 and payStatus = true;
-
-
+where TIMESTAMPDIFF(hour, issueDate, payDate) < 24 and payStatus = true
+group by clientID;
 
 #clientStats
-create view clientWithTree AS
-select clientID, requestID
+select clientID, sum(treeCount)
 from Request
-where requestID in (
-	select distinct request from TreeCount
-);
+group by clientID;
 
-select * from clientWithTree;
+select clientID, sum(price)
+from Bill 
+group by clientID;
 
-select TCC.clientID, sum(TC.count)
-from clientWithTree as TCC, TreeCount as TC
-where TCC.requestID in (
-	select request from TreeCount
-)
-group by TCC.clientID;
+select clientID, sum(price)
+from Bill
+where payStatus = true
+group by clientID;
+
+select treeID, T.requestID, cutDate, R.clientID
+from Tree T, Request R
+where cutStatus = true and T.requestID = R.requestID;

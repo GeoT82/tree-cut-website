@@ -110,6 +110,54 @@ public class quoteDAO
         return listQuote;
     }
     
+    
+    public List<quote> getEasyClient() throws SQLException {
+    	
+    	System.out.println("GET EASY CLIENT RUNNING");
+        List<quote> listQuote = new ArrayList<quote>();        
+        String sql = "select clientID from Quote where billID != 0 and clientNote = 'pending';";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) { 
+            int clientID = resultSet.getInt("clientID");
+
+             
+            quote quotes = new quote(null, "", "", 0, 0, 0,clientID, 0, null);
+            listQuote.add(quotes);
+        }        
+        resultSet.close();
+        disconnect();     
+        System.out.println("GET EASY CLIENT TERMINATED");
+        return listQuote;
+    }
+    
+    public List<quote> getOneTreeQuotes() throws SQLException {
+    	System.out.println("GET ONE TREE QUOTES RUNNING");
+        List<quote> listQuote = new ArrayList<quote>();        
+        String sql = "select quoteID, requestID from Quote where billID != 0 and quoteID in ( select quoteID from Request	where treeCount = 1 );";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) { 
+            int quoteID = resultSet.getInt("quoteID");
+            int requestID = resultSet.getInt("requestID");
+            System.out.println("QuoteID: " + quoteID + " Request ID: " + requestID);
+
+             
+            quote quotes = new quote(null, "", "", 0, quoteID, requestID, 0, 0, null);
+            listQuote.add(quotes);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET ONE TREE QUOTES TERMINATED");
+        return listQuote;
+    }
+    
     public List<quote> listAllQuotes(int uID) throws SQLException {
         List<quote> listQuote = new ArrayList<quote>();        
         System.out.println(uID);

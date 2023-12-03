@@ -13,6 +13,7 @@ public class tree
 	    protected double height;
 	    protected int treeID;
 	    protected int requestID;
+	    protected int clientID;
 	    protected boolean cutStatus;
 	    protected Date date;
 	    
@@ -51,6 +52,16 @@ public class tree
 	    	setRequestID(requestID);
 	    	setCutStatus(cutStatus);
 	    }
+	    
+	    public tree( int treeID, int requestID, Date date, int clientID)
+	    {
+	    	
+	    	setTreeID(treeID);
+	    	setRequestID(requestID);
+	    	setDate(date);
+	    	setClientID(clientID);
+	    }
+	 
 	 
 	    
 	   //getter and setter methods
@@ -123,6 +134,13 @@ public class tree
 	    }
 	    public void setRequestID(int requestID) {
 	        this.requestID = requestID;
+	    }
+	    
+	    public int getClientID() {
+	        return clientID;
+	    }
+	    public void setClientID(int clientID) {
+	        this.clientID = clientID;
 	    }
 	    
 	    public String getCutStatus() {

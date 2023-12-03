@@ -112,6 +112,59 @@ public class treeDAO
         return listTree;
     }
     
+    
+    public List<tree> getTallestTree() throws SQLException {
+    	System.out.println("GET TALLEST TREE RUNNING");
+        List<tree> listTree = new ArrayList<tree>();        
+        String sql = "select treeID, height from Tree where height = (select max(height) from Tree);";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING TREES");
+         
+        while (resultSet.next()) {
+            int treeID = resultSet.getInt("treeID"); 
+            int height = resultSet.getInt("height"); 
+
+             
+            tree trees = new tree(treeID, "", "", "", "", 0, 0, height, 0, false, null);
+            listTree.add(trees);
+        }        
+        resultSet.close();
+        disconnect();       
+        
+        System.out.println("GET TALLEST TREE TERMINATED");
+        return listTree;
+    }
+    
+    
+    public List<tree> getTreeDetails() throws SQLException {
+    	System.out.println("GET TREE DETAILS RUNNING");
+        List<tree> listTree = new ArrayList<tree>();        
+        String sql = "select treeID, T.requestID, cutDate, R.clientID from Tree T, Request R where cutStatus = true and T.requestID = R.requestID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING TREES");
+         
+        while (resultSet.next()) {
+            int treeID = resultSet.getInt("treeID"); 
+            int requestID = resultSet.getInt("T.requestID");
+            Date date = resultSet.getTimestamp("cutDate");
+            int clientID = resultSet.getInt("R.clientID");
+
+             
+            tree trees = new tree(treeID, requestID, date, clientID);
+            listTree.add(trees);
+        }        
+        resultSet.close();
+        disconnect();       
+        
+        System.out.println("GET TREE DETAILS TERMINATED");
+        return listTree;
+    }
+    
+    
     public List<tree> listTrees(int rID) throws SQLException {
         List<tree> listTree = new ArrayList<tree>();        
         String sql = "SELECT * FROM Tree Where Tree.requestID = " + rID;      

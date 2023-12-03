@@ -13,10 +13,7 @@
 <div align = "center">
 	
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
-	
-	<form action = "pendRequest">
-		<input type = "submit" value = "See Pending Requests"/>
-	</form>
+
 
     <div align="center">
     	<h1>THIS IS DAVID SMITHS VIEW</h1>
