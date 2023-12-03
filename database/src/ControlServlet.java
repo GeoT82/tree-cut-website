@@ -68,10 +68,11 @@ public class ControlServlet extends HttpServlet {
         		break;
         	case "/initialize":
         		userDAO.init();
+        		treeDAO.init();
         		requestDAO.init();
         		quoteDAO.init();
-        		treeDAO.init();
         		billDAO.init();
+        		replyDAO.init();
         		System.out.println("Database successfully initialized!");
         		rootPage(request,response,"");
         		break;
@@ -561,7 +562,6 @@ public class ControlServlet extends HttpServlet {
 	    
 	    private void clientPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("Client view");
-			request.setAttribute("listRequest", requestDAO.listAllRequests());
 	    	request.getRequestDispatcher("clientView.jsp").forward(request, response);
 	    }
 	    

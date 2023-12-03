@@ -482,32 +482,36 @@ public class quoteDAO
         String[] INITIAL = {"use testdb",
         					"drop table if exists Quote;",
         					"SET FOREIGN_KEY_CHECKS = 0;",
-					        ("CREATE TABLE if not exists Quote( " +
-					            "quoteID int not null auto_increment, "+
-					            "clientNote varchar(150) default 'pending', "+ 
-					            "smithNote varchar(150) default 'pending', "+ 
-					            "times time not null default '1:00:00',"+ 
-					            "price double not null default '0.00',"+
-					            "requestID int not null default '0',"+
-					            "clientID int not null default '0', " +
-					            "PRIMARY KEY (QuoteID),"+
-					            "Foreign key (requestID) references Request(requestID)," +
-					            "foreign key (clientID) references User(clientID));"),
-					        "SET FOREIGN_KEY_CHECKS = 1;"
+					        ("Create TABLE if not exists Quote(\n"
+					        		+ "  quoteID int not null auto_increment, \n"
+					        		+ "  clientNote varchar(150) default 'pending', \n"
+					        		+ "  smithNote varchar(150) default 'pending', \n"
+					        		+ "  times time not null default '1:00:00', \n"
+					        		+ "  price double not null default '0.00',\n"
+					        		+ "  requestID int not null default '0',\n"
+					        		+ "  clientID int not null default '0', \n"
+					        		+ "  billID int not null default '0',\n"
+					        		+ "  issueDate datetime not null default '1990-01-31 10:24:40', \n"
+					        		+ "  PRIMARY KEY (QuoteID),\n"
+					        		+ "  Foreign key (requestID) references Request(requestID),\n"
+					        		+ "  Foreign key (billID) references Bill(billID),\n"
+					        		+ "  foreign key (clientID) references User(clientID)\n"
+					        		+ ");")
         					};
-        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        String[] TUPLES = {
         					"alter table Quote auto_increment = 20;",
-        					("INSERT INTO Quote( clientNote , smithNote, times, price, requestID, clientID)"+
-        					"VALUES ( 'Sold!', '', '1:00:00', 4500, 200, 111),"+
-        					"( 'Sold!', '', '2:00:00', 5500, 201, 111),"+
-        					"( 'Sold!', '', '3:00:00', 6500, 204, 111),"+
-        					"( 'Sold!', '', '4:00:00', 7500, 4, 109),"+
-        					"( 'Sold!', '', '5:00:00', 8500, 5, 110),"+
-        					"( 'Sold!', '', '6:00:00', 9500, 6, 100),"+
-        					"( 'Sold!', '', '7:00:00', 10500, 7, 103),"+
-        					"( 'Sold!', '', '8:00:00', 11500, 8, 105),"+
-        					"( 'Sold!', '', '9:00:00', 12500, 9, 104),"+
-        					"( 'Sold!', '', '10:00:00', 13500, 210, 111);"),
+        					("INSERT INTO Quote( clientNote , smithNote, times, price, requestID, clientID, issueDate, billID)\n"
+        							+ "VALUES \n"
+        							+ "( 'Looks Good!', 'Awsome', '1:00:00', 4500, 200, 111, '2022-05-16 06:46:40', default),\n"
+        							+ "( 'Please!', 'Sure', '2:00:00', 5500, 201, 111, '2022-08-16 06:46:40', 10),\n"
+        							+ "( 'Sold!', 'thank you', '3:00:00', 6500, 204, 111, '2022-06-16 06:46:40', default),\n"
+        							+ "( 'Why so much!', 'Its a lot of trees', '4:00:00', 7500, 202, 109, '2022-03-16 06:46:40', 10),\n"
+        							+ "( 'Roger!', 'Yay', '5:00:00', 8500, 5, 110, '2022-11-16 06:46:40', 11),\n"
+        							+ "( 'NeverMind!', 'OK', '6:00:00', 9500, 6, 100, '2023-01-16 06:46:40', 12),\n"
+        							+ "( default, 'Here you go', '7:00:00', 10500, 7, 103, '2022-05-16 06:46:40', 13),\n"
+        							+ "( default, 'Just look over this', '8:00:00', 11500, 208, 105, '2022-09-16 06:46:40', 14),\n"
+        							+ "( default, 'I got you', '9:00:00', 12500, 9, 104, '2022-06-16 06:46:40', 15),\n"
+        							+ "( 'Nice!', 'Thanks', '10:00:00', 13500, 210, 111, '2022-12-16 06:46:40', default);"),
         					"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         

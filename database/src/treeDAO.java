@@ -256,33 +256,34 @@ public class treeDAO
         String[] INITIAL = {"use testdb; ",
 					        "drop table if exists Tree; ",
 					        "SET FOREIGN_KEY_CHECKS = 0;",
-					        ("CREATE TABLE if not exists Tree( " +
-					        		"treeID int not null auto_increment,"+ 
-					        		"requestID int not null default 0,"+
-					        		"distance double (12,2) not null default '0', "+ 
-					        		"width double (12,2) not null default '0',"+
-					        		"height double (12,2) not null default '0', "+
-					        		"address varchar(30) not null default 'unknown', " +
-					        		"image1 varchar(30) not null default 'blank.png',  "+
-					        		"image2 varchar(30) not null default 'blank.png',  "+
-					        		"image3 varchar(30) not null default 'blank.png',"+
-					        		"PRIMARY KEY (treeID),"+
-					        		"FOREIGN KEY (requestID) REFERENCES Request(requestID)"+"); "),
-					        "SET FOREIGN_KEY_CHECKS = 1;"
+					        ("Create TABLE if not exists Tree(\n"
+					        		+ "  treeID int not null auto_increment, \n"
+					        		+ "  requestID int not null default 0,\n"
+					        		+ "  distance double (12,2) not null default '0', \n"
+					        		+ "  width double (12,2) not null default '0',\n"
+					        		+ "  height double (12,2) not null default '0', \n"
+					        		+ "  address varchar(30) not null default 'unknown', \n"
+					        		+ "  image1 varchar(30) not null default 'blank.png', \n"
+					        		+ "  image2 varchar(30) not null default 'blank.png', \n"
+					        		+ "  image3 varchar(30) not null default 'blank.png',\n"
+					        		+ "  cutStatus boolean not null default false,\n"
+					        		+ "  cutDate datetime default null, \n"
+					        		+ "  PRIMARY KEY (treeID),\n"
+					        		+ "  FOREIGN KEY (requestID) REFERENCES Request(requestID));")
         					};
         String[] TUPLES = {"alter table Tree auto_increment = 500;",
-        			"SET FOREIGN_KEY_CHECKS = 0;",
-        			("INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID)"+
-        			"values ( 5, 123, 123, 'Detroit', 'a', 'b', 'c',200),"
-        			+ "( 10, 232, 123, 'Detroit', 'a', 'd', 'e',200),"
-        			+ "( 15, 121, 123, 'Detroit', 'h', 'g', 'f',201),"
-        			+ "( 20, 180, 123, 'Detroit', 'i', 'j', 'k',201),"
-        			+ "( 25, 280, 123, 'Detroit', 'n', 'm', 'l',204),"
-        			+ "( 30, 321, 123, 'Detroit', 'o', 'p', 'q',204),"
-        			+ "( 35, 213, 123, 'Detroit', 't', 's', 'r',210),"
-        			+ "( 40, 91, 123, 'Detroit', 'u', 'b', 't',210),"
-        			+ "( 50, 32, 15, 'Detroit', 'f', 'r', 'i',211),"
-        			+ "( 45, 145, 123, 'Detroit', 'v','y', 's',210);"),
+        			("INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID, cutDate, cutStatus)\n"
+        					+ "VALUES \n"
+        					+ "( 5, 123, 234, 'Detroit', 'a', 'b', 'c',200, '2022-11-19 7:24:40', true),\n"
+        					+ "( 10, 232, 52, 'Detroit', 'a', 'd', 'e',200, '2022-05-19 7:24:40', true),\n"
+        					+ "( 15, 121, 2356, 'Detroit', 'h', 'g', 'f',201, '2022-09-19 7:24:40', true),\n"
+        					+ "( 20, 180, 678, 'Detroit', 'i', 'j', 'k',202, default, default),\n"
+        					+ "( 25, 280, 346, 'Detroit', 'n', 'm', 'l',203, '2022-04-19 7:24:40', true),\n"
+        					+ "( 30, 321, 7456, 'Detroit', 'o', 'p', 'q',204, '2022-08-19 7:24:40', true),\n"
+        					+ "( 35, 213, 345, 'Detroit', 't', 's', 'r',209,  default, default),\n"
+        					+ "( 40, 91, 537, 'Detroit', 'u', 'b', 't',210, '2022-10-19 7:24:40', true),\n"
+        					+ "( 50, 32, 964, 'Detroit', 'f', 'r', 'i',211, default, default),\n"
+        					+ "( 45, 145, 457, 'Detroit', 'v','y', 's',210, default, default);"),
         			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         

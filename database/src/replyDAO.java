@@ -148,35 +148,75 @@ public class replyDAO
         statement =  (Statement) connect.createStatement();
         
         String[] INITIAL = {"use testdb;",
-					        "drop table if exists Request;",
+					        "drop table if exists RequestResponse;",
 					        "SET FOREIGN_KEY_CHECKS = 0;",
-					        ("CREATE TABLE if not exists Request( " +
-					            "smithNote varchar(30) default 'pending', " + 
-					            "clientNote varchar(30) default 'pending', " +
-					            "requestID int not null auto_increment, " +
-					            "quoteID int not null default 0," +
-					            "clientID int not null default 0, " +
-					            "PRIMARY KEY (requestID), " +
-					            "foreign key (quoteID) references Quote(quoteID)," +
-					            "foreign key (clientID) references User(clientID)" +
-					            "); "),
-					        "SET FOREIGN_KEY_CHECKS = 1;"
+					        ("Create TABLE if not exists RequestResponse(\n"
+					        		+ "  replyRID int not null auto_increment,\n"
+					        		+ "  requestID int not null default 0,\n"
+					        		+ "  clientID int not null default 0,  \n"
+					        		+ "  reply varchar(50) not null default '',\n"
+					        		+ "  issueDate datetime not null default '1990-01-31 10:24:40', \n"
+					        		+ "  PRIMARY KEY (replyRID),\n"
+					        		+ "  foreign key (requestID) references Request(requestID),\n"
+					        		+ "  foreign key (clientID) references User(clientID)\n"
+					        		+ ");"),
+					        "drop table if exists QuoteResponse;",
+					        ("Create TABLE if not exists QuoteResponse(\n"
+					        		+ "  replyQID int not null auto_increment,\n"
+					        		+ "  quoteID int not null default 0,\n"
+					        		+ "  clientID int not null default 0,  \n"
+					        		+ "  reply varchar(50) not null default '',\n"
+					        		+ "  issueDate datetime not null default '1990-01-31 10:24:40', \n"
+					        		+ "  PRIMARY KEY (replyQID),\n"
+					        		+ "  foreign key (quoteID) references Quote(quoteID),\n"
+					        		+ "  foreign key (clientID) references User(clientID)\n"
+					        		+ ");"),
+					        "drop table if exists BillResponse;",
+					        ("Create TABLE if not exists BillResponse(\n"
+					        		+ "  replyBID int not null auto_increment,\n"
+					        		+ "  billID int not null default 0,\n"
+					        		+ "  clientID int not null default 0,  \n"
+					        		+ "  reply varchar(50) not null default '',\n"
+					        		+ "  issueDate datetime not null default '1990-01-31 10:24:40', \n"
+					        		+ "  PRIMARY KEY (replyBID),\n"
+					        		+ "  foreign key (billID) references Bill(billID),\n"
+					        		+ "  foreign key (clientID) references User(clientID)\n"
+					        		+ ");")
         					};
-        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
-        			"alter table Request auto_increment = 200;",
-        			("INSERT INTO Request(clientNote, smithNote, clientID, quoteID)"+
-        			"values  ( 'Sold!', '', 111, 20)," +
-        			"( 'Sold!', '', 111, 21)," +
-        			"( 'Sold!', '', 108, default)," +
-        			"( 'Sold!', '', 109, default)," +
-        			"( 'Sold!', '', 111, 22)," +
-        			"( 'Sold!', '', 100, default)," +
-        			"( 'Sold!', '', 111, default)," +
-        			"( 'Sold!', '', 112, default)," +
-        			"( 'Sold!', '', 107, default)," +
-        			"( 'Sold!', '', 106, default)," +
-        			"( 'Sold!', '', 111, 29)," +
-        			"( 'Sold!', '', 111, 21);"),
+        String[] TUPLES = {
+        			"alter table RequestResponse auto_increment = 600;;",
+        			("insert into RequestResponse(requestID, clientID, reply)\n"
+        					+ "values (21, 102, 'pass'),\n"
+        					+ "(21, 102, 'Looks Good'),\n"
+        					+ "(21, 102, 'Nevermind'),\n"
+        					+ "(24, 105, 'OK'),\n"
+        					+ "(24, 107, 'Where?'),\n"
+        					+ "(25, 108, 'Too Expensive'),\n"
+        					+ "(27, 109, 'Ill check'),\n"
+        					+ "(28, 110, 'Thanks'),\n"
+        					+ "(29, 111, 'Alright');"),
+        			"alter table QuoteResponse auto_increment = 500;",
+        			("insert into QuoteResponse(quoteID, clientID, reply)\n"
+        					+ "values (21, 102, 'pass'),\n"
+        					+ "(21, 102, 'Looks Good'),\n"
+        					+ "(21, 102, 'Nevermind'),\n"
+        					+ "(24, 105, 'OK'),\n"
+        					+ "(24, 107, 'Where?'),\n"
+        					+ "(25, 108, 'Too Expensive'),\n"
+        					+ "(27, 109, 'Ill check'),\n"
+        					+ "(28, 110, 'Thanks'),\n"
+        					+ "(29, 111, 'Alright');"),
+        			"alter table BillResponse auto_increment = 700;",
+        			("insert into BillResponse(billID, clientID, reply)\n"
+        					+ "values (21, 102, 'pass'),\n"
+        					+ "(21, 102, 'Looks Good'),\n"
+        					+ "(21, 102, 'Nevermind'),\n"
+        					+ "(24, 105, 'OK'),\n"
+        					+ "(24, 107, 'Where?'),\n"
+        					+ "(25, 108, 'Too Expensive'),\n"
+        					+ "(27, 109, 'Ill check'),\n"
+        					+ "(28, 110, 'Thanks'),\n"
+        					+ "(29, 111, 'Alright');"),
         			"SET FOREIGN_KEY_CHECKS = 1;"
 			    	};
         

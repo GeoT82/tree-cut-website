@@ -515,31 +515,36 @@ public class billDAO
         String[] INITIAL = {"use testdb; ",
 					        "drop table if exists Bill; ",
 					        "SET FOREIGN_KEY_CHECKS = 0;",
-					        ("CREATE TABLE if not exists Bill( " +
-					        	"billID int not null auto_increment, "+
-					        	"clientNote varchar(150) default 'pending', "+ 
-					        	"smithNote varchar(150) default 'pending',"+
-					        	"price double(10,2) not null default 0," +
-					        	"quoteID int not null default 0,"+
-					        	"clientID int not null default 0, " +
-					        	"PRIMARY KEY (billID)," +
-					        	"Foreign key (quoteID) references Quote(quoteID)," +
-					        	"Foreign key (clientID) references User(clientID)); "),
-					        "SET FOREIGN_KEY_CHECKS = 1;"
+					        ("Create TABLE if not exists Bill(\n"
+					        		+ "  billID int not null auto_increment, \n"
+					        		+ "  clientNote varchar(150) default 'pending', \n"
+					        		+ "  smithNote varchar(150) default 'pending',\n"
+					        		+ "  price double(10,2) not null default 5000,\n"
+					        		+ "  quoteID int not null default 0,\n"
+					        		+ "  clientID int not null default 0, \n"
+					        		+ "  issueDate datetime not null default '2023-01-31 10:24:40', \n"
+					        		+ "  dueDate datetime not null default '2023-02-24 10:24:40',\n"
+					        		+ "  payDate datetime  default null,\n"
+					        		+ "  payStatus boolean not null default false,\n"
+					        		+ "  PRIMARY KEY (billID),\n"
+					        		+ "  Foreign key (quoteID) references Quote(quoteID),\n"
+					        		+ "  Foreign key (clientID) references User(clientID)\n"
+					        		+ ");")
         					};
-        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        String[] TUPLES = {
         			"alter table Bill auto_increment = 10;",
-        			("INSERT INTO Bill(clientNote, SmithNote, quoteID)"+
-        			"values ( 'Sold!', '', 2),"
-        			+ "( 'Sold!', '', 4),"
-        			+ "( 'Sold!', '',3),"
-        			+ "( 'Sold!', '',4),"
-        			+ "( 'Sold!', '',1),"
-        			+ "( 'Sold!', '',2),"
-        			+ "( 'Sold!', '',5),"
-        			+ "( 'Sold!', '',6),"
-        			+ "( 'Sold!', '',6),"
-        			+ "( 'Sold!', '',1);"),
+        			("INSERT INTO Bill(clientNote, smithNote, quoteID, clientID, issueDate, dueDate, payDate, payStatus)\n"
+        					+ "VALUES \n"
+        					+ "( default, 'Thank You', 21, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-07-25 08:24:40', true),\n"
+        					+ "( 'Paid', 'Thank You', 23, 108, '2022-09-24 10:24:40', '2022-10-24 10:24:40' , '2022-09-25 06:24:40', true),\n"
+        					+ "( 'Too expensive', 'Why', 24, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , default, false),\n"
+        					+ "( 'Why this date', 'Its the fastest', 25, 106, '2022-04-24 10:24:40', '2022-05-24 10:24:40' , '2022-08-11 10:24:40', true),\n"
+        					+ "( 'Can you show me what your charging', 'Sure', 26, 107, '2022-12-24 10:24:40', '2023-01-24 10:24:40' , default, false),\n"
+        					+ "( 'Alright', 'Sweet', 27, 108, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-08-01 10:24:40', true),\n"
+        					+ "( default, 'Thank You', 28, 109, '2022-02-24 10:24:40', '2022-03-24 10:24:40' , '2022-03-11 10:24:40', true),\n"
+        					+ "( default, 'Thank You', 29, 110, '2022-06-24 10:24:40', '2022-07-24 10:24:40' , '2022-08-11 10:24:40', true),\n"
+        					+ "( default, 'Thank You', 30, 100, '2022-10-24 10:24:40', '2022-11-24 10:24:40' , '2022-12-11 10:24:40', true),\n"
+        					+ "( default, 'Thank You', 31, 104, '2022-07-24 10:24:40', '2023-01-24 10:24:40' , '2023-12-11 10:24:40', true);"),
         			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         

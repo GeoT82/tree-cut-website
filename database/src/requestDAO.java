@@ -513,34 +513,40 @@ public class requestDAO
         String[] INITIAL = {"use testdb;",
 					        "drop table if exists Request;",
 					        "SET FOREIGN_KEY_CHECKS = 0;",
-					        ("CREATE TABLE if not exists Request( " +
-					            "smithNote varchar(30) default 'pending', " + 
-					            "clientNote varchar(30) default 'pending', " +
-					            "requestID int not null auto_increment, " +
-					            "quoteID int not null default 0," +
-					            "clientID int not null default 0, " +
-					            "PRIMARY KEY (requestID), " +
-					            "foreign key (quoteID) references Quote(quoteID)," +
-					            "foreign key (clientID) references User(clientID)" +
-					            "); "),
-					        "SET FOREIGN_KEY_CHECKS = 1;"
+					        ("Create TABLE if not exists Request(\n"
+					        		+ "  requestID int not null auto_increment,\n"
+					        		+ "  quoteID int not null default 0,\n"
+					        		+ "  clientID int not null default 0,\n"
+					        		+ "  treeCount int not null default 0,\n"
+					        		+ "  clientNote varchar(30) default 'pending',  \n"
+					        		+ "  smithNote varchar(30) default 'pending',\n"
+					        		+ "  issueDate datetime not null default '1990-01-31 10:24:40', \n"
+					        		+ "  PRIMARY KEY (requestID),\n"
+					        		+ "  foreign key (quoteID) references Quote(quoteID),\n"
+					        		+ "  foreign key (clientID) references User(clientID)\n"
+					        		+ ");")
         					};
-        String[] TUPLES = {"SET FOREIGN_KEY_CHECKS = 0;",
+        String[] TUPLES = {
         			"alter table Request auto_increment = 200;",
-        			("INSERT INTO Request(clientNote, smithNote, clientID, quoteID)"+
-        			"values  ( 'Sold!', '', 111, 20)," +
-        			"( 'Sold!', '', 111, 21)," +
-        			"( 'Sold!', '', 108, default)," +
-        			"( 'Sold!', '', 109, default)," +
-        			"( 'Sold!', '', 111, 22)," +
-        			"( 'Sold!', '', 100, default)," +
-        			"( 'Sold!', '', 111, default)," +
-        			"( 'Sold!', '', 112, default)," +
-        			"( 'Sold!', '', 107, default)," +
-        			"( 'Sold!', '', 106, default)," +
-        			"( 'Sold!', '', 111, 29)," +
-        			"( 'Sold!', '', 111, 21);"),
-        			"SET FOREIGN_KEY_CHECKS = 1;"
+        			("INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate, treeCount)\n"
+        					+ "VALUES \n"
+        					+ "( 'Added Tree', 'Ok', 111, 20, '2020-04-16 06:53:40', 2),\n"
+        					+ "( 'Wait for One more tree', 'Alright', 111, 21, '2022-07-16 07:23:40', 1),\n"
+        					+ "( 'Looks Good!', 'Thanks', 108, 23, '2022-05-16 09:52:40', 1),\n"
+        					+ "( 'What does distance mean!', 'From home', 105, 23, '2022-02-16 07:34:40', 1),\n"
+        					+ "( 'Who is this!', 'David', 102, 22, '2022-08-16 08:51:40', 1),\n"
+        					+ "( '3 big trees!', 'Wow', 100, 24, '2021-10-16 10:14:40', default),\n"
+        					+ "( 'Tonight!', 'I cant', 110, 25, '2021-12-16 12:21:40', default),\n"
+        					+ "( 'Cut only to the stump!', 'Sure thing', 112, 26, '2022-01-16 15:12:40', default),\n"
+        					+ "( 'I think Im missing a tree!', 'Better find it!', 107, 27, '2022-04-16 13:51:40', 1),\n"
+        					+ "( 'How do I get a quote!', 'I will send one out', 106, 28, '2022-08-16 06:46:40', 2),\n"
+        					+ "( 'Tomorrow!', 'Yes', 110, 29, '2021-04-16 09:21:40', 1),\n"
+        					+ "( 'Seems ok!', 'Good', 106, 21, '2020-05-16 10:12:40', default);"),
+        			"SET FOREIGN_KEY_CHECKS = 1;",
+        			("create view TreeCount AS \n"
+        					+ "select clientID, sum(treeCount) as sumCount\n"
+        					+ "from Request\n"
+        					+ "group by clientID;")
 			    	};
         
         //for loop to put these in database
