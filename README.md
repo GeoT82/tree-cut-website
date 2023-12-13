@@ -19,7 +19,9 @@ Database Course Project
 8. within the same properties menu -> project facets -> select java -> select version 15 -> select dynamic web module -> select version 4.0 -> apply and close
 9. Go to Servers->right click apache tomcat->add or remove->select imported project folder->add->Finish
 10. Within Project Explorer on eclipse -> open project folder -> src -> default package -> right-click control servlet -> Run as -> Run on server
-11. Sign in as "root" and enter password "pass1234" to enter root view and initialize database.
+11. Sign in as "root" and enter password "pass1234" to enter root view and initialize database and see client statistics.
+12. Reguster a user to see user view and options.
+13. 11. Sign in as "davidSmith@gmail.com" and enter password "ds1234" to enter david smith view and work with clients and access david features.
 
 
 ## Contributions:
