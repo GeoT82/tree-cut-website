@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 //import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * Servlet implementation class Connect
@@ -99,9 +100,11 @@ public class treeDAO
             double height = resultSet.getDouble("height"); 
             int treeID = resultSet.getInt("treeID"); 
             int requestID = resultSet.getInt("requestID"); 
+            boolean cutStatus = resultSet.getBoolean("cutStatus");
+            Date date = resultSet.getTimestamp("cutDate");
 
              
-            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus, date);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -109,9 +112,62 @@ public class treeDAO
         return listTree;
     }
     
-    public List<tree> listTrees(int id) throws SQLException {
+    
+    public List<tree> getTallestTree() throws SQLException {
+    	System.out.println("GET TALLEST TREE RUNNING");
         List<tree> listTree = new ArrayList<tree>();        
-        String sql = "SELECT * FROM Tree Where Tree.requestID = " + id;      
+        String sql = "select treeID, height from Tree where height = (select max(height) from Tree);";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING TREES");
+         
+        while (resultSet.next()) {
+            int treeID = resultSet.getInt("treeID"); 
+            int height = resultSet.getInt("height"); 
+
+             
+            tree trees = new tree(treeID, "", "", "", "", 0, 0, height, 0, false, null);
+            listTree.add(trees);
+        }        
+        resultSet.close();
+        disconnect();       
+        
+        System.out.println("GET TALLEST TREE TERMINATED");
+        return listTree;
+    }
+    
+    
+    public List<tree> getTreeDetails() throws SQLException {
+    	System.out.println("GET TREE DETAILS RUNNING");
+        List<tree> listTree = new ArrayList<tree>();        
+        String sql = "select treeID, T.requestID, cutDate, R.clientID from Tree T, Request R where cutStatus = true and T.requestID = R.requestID;";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING TREES");
+         
+        while (resultSet.next()) {
+            int treeID = resultSet.getInt("treeID"); 
+            int requestID = resultSet.getInt("T.requestID");
+            Date date = resultSet.getTimestamp("cutDate");
+            int clientID = resultSet.getInt("R.clientID");
+
+             
+            tree trees = new tree(treeID, requestID, date, clientID);
+            listTree.add(trees);
+        }        
+        resultSet.close();
+        disconnect();       
+        
+        System.out.println("GET TREE DETAILS TERMINATED");
+        return listTree;
+    }
+    
+    
+    public List<tree> listTrees(int rID) throws SQLException {
+        List<tree> listTree = new ArrayList<tree>();        
+        String sql = "SELECT * FROM Tree Where Tree.requestID = " + rID;      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -127,9 +183,11 @@ public class treeDAO
             double height = resultSet.getDouble("height"); 
             int treeID = resultSet.getInt("treeID"); 
             int requestID = resultSet.getInt("requestID"); 
+            boolean cutStatus = resultSet.getBoolean("cutStatus");
+            Date date = resultSet.getTimestamp("cutDate");
 
              
-            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID);
+            tree trees = new tree(treeID, image1, image2, image3, address, distance, width, height, requestID, cutStatus, date);
             listTree.add(trees);
         }        
         resultSet.close();
@@ -161,61 +219,33 @@ public class treeDAO
         preparedStatement.close();
     }
     
-    public boolean delete(String email) throws SQLException {
-        String sql = "DELETE FROM User WHERE email = ?";        
-        connect_func();
-         
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, email);
-         
-        boolean rowDeleted = preparedStatement.executeUpdate() > 0;
-        preparedStatement.close();
-        return rowDeleted;     
-    }
-     
-    public boolean update(user users) throws SQLException {
-        String sql = "update User set firstName=?, lastName =?,password = ?,creditCard = ?, phoneNumber = ? where email = ?";
-        connect_func();
-        
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, users.getEmail());
-		preparedStatement.setString(2, users.getFirstName());
-		preparedStatement.setString(3, users.getLastName());
-		preparedStatement.setString(4, users.getPassword());
-		preparedStatement.setString(5, users.getCreditCard());
-		preparedStatement.setString(6, users.getPhoneNumber());
-         
-        boolean rowUpdated = preparedStatement.executeUpdate() > 0;
-        preparedStatement.close();
-        return rowUpdated;     
-    }
     
-    public user getUser(String email) throws SQLException {
-    	user user = null;
-        String sql = "SELECT * FROM User WHERE email = ?";
-         
-        connect_func();
-         
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, email);
-         
-        ResultSet resultSet = preparedStatement.executeQuery();
-         
-        if (resultSet.next()) {
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String password = resultSet.getString("password");
-            String creditCard = resultSet.getString("creditCard");
-            String phoneNumber = resultSet.getString("phoneNumber"); 
-            int clientID = resultSet.getInt("clientID"); 
-            
-            user = new user(email, firstName, lastName, password, creditCard, phoneNumber, clientID);
-        }
-         
-        resultSet.close();
-        statement.close();
-         
-        return user;
+    
+    
+    public void updateCutStatus(int tID, String cDate) throws SQLException {
+		
+		System.out.println("UPDATE CUT STATUS RUNNIUNG IN TREEDAO");
+		
+		connect_func();
+        statement =  (Statement) connect.createStatement();
+        
+        String sql = "";
+		System.out.println("TREE ID: " + tID);
+		System.out.println("CUT DATE: " + cDate);
+		
+		sql = "update Tree set cutStatus = true where treeID = " + tID + ";";
+        
+        statement.execute(sql);   
+        
+        sql = "update Tree set cutDate = '" + cDate + "' where treeID = " + tID + ";";
+        
+        System.out.println(sql);
+        
+        statement.execute(sql);   
+        
+        disconnect();
+        
+        System.out.println("UPDATE CUT STATUS TERMINATED IN TREEDAO");
     }
     
     
@@ -226,33 +256,34 @@ public class treeDAO
         String[] INITIAL = {"use testdb; ",
 					        "drop table if exists Tree; ",
 					        "SET FOREIGN_KEY_CHECKS = 0;",
-					        ("CREATE TABLE if not exists Tree( " +
-					        		"treeID int not null auto_increment,"+ 
-					        		"requestID int not null default 0,"+
-					        		"distance double (12,2) not null default '0', "+ 
-					        		"width double (12,2) not null default '0',"+
-					        		"height double (12,2) not null default '0', "+
-					        		"address varchar(30) not null default 'unknown', " +
-					        		"image1 varchar(30) not null default 'blank.png',  "+
-					        		"image2 varchar(30) not null default 'blank.png',  "+
-					        		"image3 varchar(30) not null default 'blank.png',"+
-					        		"PRIMARY KEY (treeID),"+
-					        		"FOREIGN KEY (requestID) REFERENCES Request(requestID)"+"); "),
-					        "SET FOREIGN_KEY_CHECKS = 1;"
+					        ("Create TABLE if not exists Tree(\n"
+					        		+ "  treeID int not null auto_increment, \n"
+					        		+ "  requestID int not null default 0,\n"
+					        		+ "  distance double (12,2) not null default '0', \n"
+					        		+ "  width double (12,2) not null default '0',\n"
+					        		+ "  height double (12,2) not null default '0', \n"
+					        		+ "  address varchar(30) not null default 'unknown', \n"
+					        		+ "  image1 varchar(30) not null default 'blank.png', \n"
+					        		+ "  image2 varchar(30) not null default 'blank.png', \n"
+					        		+ "  image3 varchar(30) not null default 'blank.png',\n"
+					        		+ "  cutStatus boolean not null default false,\n"
+					        		+ "  cutDate datetime default null, \n"
+					        		+ "  PRIMARY KEY (treeID),\n"
+					        		+ "  FOREIGN KEY (requestID) REFERENCES Request(requestID));")
         					};
         String[] TUPLES = {"alter table Tree auto_increment = 500;",
-        			"SET FOREIGN_KEY_CHECKS = 0;",
-        			("INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID)"+
-        			"values ( 5, 123, 123, 'Detroit', 'a', 'b', 'c',200),"
-        			+ "( 10, 232, 123, 'Detroit', 'a', 'd', 'e',200),"
-        			+ "( 15, 121, 123, 'Detroit', 'h', 'g', 'f',201),"
-        			+ "( 20, 180, 123, 'Detroit', 'i', 'j', 'k',201),"
-        			+ "( 25, 280, 123, 'Detroit', 'n', 'm', 'l',204),"
-        			+ "( 30, 321, 123, 'Detroit', 'o', 'p', 'q',204),"
-        			+ "( 35, 213, 123, 'Detroit', 't', 's', 'r',210),"
-        			+ "( 40, 91, 123, 'Detroit', 'u', 'b', 't',210),"
-        			+ "( 50, 32, 15, 'Detroit', 'f', 'r', 'i',211),"
-        			+ "( 45, 145, 123, 'Detroit', 'v','y', 's',210);"),
+        			("INSERT INTO Tree(distance, width, height, address, image1, image2, image3, requestID, cutDate, cutStatus)\n"
+        					+ "VALUES \n"
+        					+ "( 5, 123, 234, 'Detroit', 'a', 'b', 'c',200, '2022-11-19 7:24:40', true),\n"
+        					+ "( 10, 232, 52, 'Detroit', 'a', 'd', 'e',200, '2022-05-19 7:24:40', true),\n"
+        					+ "( 15, 121, 2356, 'Detroit', 'h', 'g', 'f',201, '2022-09-19 7:24:40', true),\n"
+        					+ "( 20, 180, 678, 'Detroit', 'i', 'j', 'k',202, default, default),\n"
+        					+ "( 25, 280, 346, 'Detroit', 'n', 'm', 'l',203, '2022-04-19 7:24:40', true),\n"
+        					+ "( 30, 321, 7456, 'Detroit', 'o', 'p', 'q',204, '2022-08-19 7:24:40', true),\n"
+        					+ "( 35, 213, 345, 'Detroit', 't', 's', 'r',209,  default, default),\n"
+        					+ "( 40, 91, 537, 'Detroit', 'u', 'b', 't',210, '2022-10-19 7:24:40', true),\n"
+        					+ "( 50, 32, 964, 'Detroit', 'f', 'r', 'i',211, default, default),\n"
+        					+ "( 45, 145, 457, 'Detroit', 'v','y', 's',210, default, default);"),
         			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         

@@ -115,7 +115,7 @@ public class userDAO
     
     public void insert(user users) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into User(email, firstName, lastName, password, creditCard, phoneNumber) values (?, ?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, users.getEmail());
 			preparedStatement.setString(2, users.getFirstName());
@@ -123,7 +123,6 @@ public class userDAO
 			preparedStatement.setString(4, users.getPassword());
 			preparedStatement.setString(5, users.getCreditCard());
 			preparedStatement.setString(6, users.getPhoneNumber());			
-			preparedStatement.setInt(7, users.getClientID());	
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -174,6 +173,35 @@ public class userDAO
             String lastName = resultSet.getString("lastName");
             String password = resultSet.getString("password");
             String creditCard = resultSet.getString("creditCard");
+            String phoneNumber = resultSet.getString("phoneNumber"); 
+            int clientID = resultSet.getInt("clientID"); 
+            
+            user = new user(email, firstName, lastName, password, creditCard, phoneNumber, clientID);
+        }
+         
+        resultSet.close();
+        preparedStatement.close();
+         
+        return user;
+    }
+    
+    public user getUser(int uID) throws SQLException {
+    	user user = null;
+        String sql = "SELECT * FROM User WHERE clientID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, uID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            String password = resultSet.getString("password");
+            String creditCard = resultSet.getString("creditCard");
+            String email = resultSet.getString("email");
             String phoneNumber = resultSet.getString("phoneNumber"); 
             int clientID = resultSet.getInt("clientID"); 
             
@@ -269,6 +297,33 @@ public class userDAO
     	return false;
     }
     
+    public boolean cardValid(int cardNum, int uID) throws SQLException
+    {
+    	System.out.println("CARD VALID IS RUNNING IN USERDAO");
+    	boolean valid = false;
+    	int creditCard = 0;
+    	String sql = "SELECT * FROM User where clientID = " + uID;
+    	connect_func();
+    	statement = (Statement) connect.createStatement();
+    	ResultSet resultSet = statement.executeQuery(sql);
+    	
+    	if (resultSet.next()) {
+    		creditCard = resultSet.getInt("creditCard");
+        	System.out.println("ENTERED CARD: " + cardNum);
+        	System.out.println("USER CARD: " + creditCard);
+    	}
+        if (creditCard == cardNum)
+            valid = true;
+        
+        resultSet.close();
+        disconnect();
+        
+        System.out.println("CARD VALID IS TERMINATING IN USERDAO");
+        
+    	return valid;
+    }
+    
+    
     
     public void init() throws SQLException, FileNotFoundException, IOException{
     	connect_func();
@@ -278,31 +333,33 @@ public class userDAO
 					        "create database testdb; ",
 					        "use testdb; ",
 					        "drop table if exists User; ",
-					        ("CREATE TABLE if not exists User( " +
-					            "email VARCHAR(50) NOT NULL, " + 
-					            "firstName VARCHAR(20) NOT NULL, " +
-					            "lastName VARCHAR(20) NOT NULL, " +
-					            "password VARCHAR(20) NOT NULL, " +
-					            "creditCard int not null, " +
-					            "phoneNumber varchar(13) not null default '111-222-3333', " +
-					            "clientID int(4) auto_increment," +
-					            "PRIMARY KEY (clientID) "+"); ")
+					        ("Create TABLE if not exists User(\n"
+					        		+ "  clientID int(4) auto_increment, \n"
+					        		+ "  phoneNumber varchar(13) not null default '111-222-3333', \n"
+					        		+ "  email varchar(50) not null, \n"
+					        		+ "  creditCard int(16) not null default '0000000000000000', \n"
+					        		+ "  firstName varchar(20) not null, \n"
+					        		+ "  lastName varchar(20) not null,\n"
+					        		+ "  password varchar(20) not null,\n"
+					        		+ "  PRIMARY KEY (clientID)\n"
+					        		+ ");")
         					};
         String[] TUPLES = {"alter table User auto_increment = 100;",
-        			("INSERT INTO User (phoneNumber, email, creditCard, firstName, lastName, password)"+
-        			"values ( 1234567890, 'johnsmith@gmail.com', 11111111, 'John', 'Smith', '1234')," +
-        			"( 4353536377, 'joerey@gmail.com', 22222222, 'Joe', 'Rey', '1234')," +
-        			"( 6456478874, 'jameswhite@gmail.com', 33333333, 'James', 'White' , '1234'), " +
-        			"( 1124435677, 'aaronrodgers@gmail.com', 44444444, 'Aaron', 'Rodgers' , '1234')," +
-        			"( 9898654463, 'johndoe@gmail.com', 55555555, 'John', 'Doe' , '1234')," +
-        			"( 8478976444, 'barbakew@gmail.com', 66666666, 'Barb', 'Akew' , '1234')," +
-        			"( 4645735282, 'oliveyew@gmail.com', 77777777, 'Olive', 'Yew' , '1234')," +
-        			"( 0902848747, 'noahlyles@gmail.com', 88888888, 'Noah', 'Lyles' , '1234')," +
-        			"( 1235134356, 'victorabu@gmail.com', 99999999, 'Victor', 'Abu', '1234')," +
-        			"( 6546534262, 'Lukmanace@gmail.com', 00000000, 'Lukman', 'Ace', '1234')," +
-        			"( 2345234234, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234')," +
-        			"( 1234566757, 'susie@gmail.com', '1233216547', 'Susie ', 'Guzman', 'susie1234')," +
-        			"( 7777888899, 'root', 00000000, 'default', 'default','pass1234');")
+        			("INSERT INTO User (phoneNumber, email, creditCard, firstName, lastName, password)\n"
+        					+ "VALUES \n"
+        					+ "( 1234567890, 'johnsmith@gmail.com', 11111111, 'John', 'Smith', '1234'),\n"
+        					+ "( 4353536377, 'joerey@gmail.com', 22222222, 'Joe', 'Rey', '1234'),\n"
+        					+ "( 6456478874, 'jameswhite@gmail.com', 33333333, 'James', 'White' , '1234'),\n"
+        					+ "( 1124435677, 'aaronrodgers@gmail.com', 44444444, 'Aaron', 'Rodgers' , '1234'),\n"
+        					+ "( 9898654463, 'johndoe@gmail.com', 55555555, 'John', 'Doe' , '1234'),\n"
+        					+ "( 8478976444, 'barbakew@gmail.com', 66666666, 'Barb', 'Akew' , '1234'),\n"
+        					+ "( 4645735282, 'oliveyew@gmail.com', 77777777, 'Olive', 'Yew' , '1234'),\n"
+        					+ "( 0902848747, 'noahlyles@gmail.com', 88888888, 'Noah', 'Lyles' , '1234'),\n"
+        					+ "( 1235134356, 'victorabu@gmail.com', 99999999, 'Victor', 'Abu', '1234'),\n"
+        					+ "( 6546534262, 'Lukmanace@gmail.com', 10101010, 'Lukman', 'Ace', '1234'),\n"
+        					+ "( 2345234234, 'davidSmith@gmail.com', 2142552, 'David', 'Smith', 'ds1234'),\n"
+        					+ "( 1234566757, 'susie@gmail.com', '12341234', 'Susie ', 'Guzman', 'susie1234'),\n"
+        					+ "( 7777888899, 'root', 00000000, 'default', 'default','pass1234')")
 			    	};
         
         //for loop to put these in database

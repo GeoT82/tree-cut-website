@@ -1,4 +1,6 @@
 import java.math.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class quote 
 {
@@ -8,12 +10,16 @@ public class quote
 	    protected double price;
 	    protected int quoteID;
 	    protected int requestID;
+	    protected int billID;
 	    protected int clientID;
+	    protected Date date;
+	    
+	    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 	 
 	    //constructors
 	    public quote() {
 	    }
-	 
+	    
 	    public quote(double price, String time, String smithNote, int requestID, int clientID) 
 	    {
 	        setTime(time);
@@ -22,8 +28,18 @@ public class quote
 	        setRequestID(requestID);
 	        setClientID(clientID);
 	    }
+	 
+	    public quote(double price, String time, String smithNote, int requestID, int clientID, Date Date) 
+	    {
+	        setTime(time);
+	        setSmithNote(smithNote);
+	        setPrice(price);
+	        setRequestID(requestID);
+	        setClientID(clientID);
+	        setDate(date);
+	    }
 	    
-	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID, int clientID) 
+	    public quote(String time, String smithNote, String clientNote, double price, int quoteID, int requestID, int clientID, int billID, Date date) 
 	    {
 	    	setTime(time);
 	        setSmithNote(smithNote);
@@ -32,6 +48,8 @@ public class quote
 	        setQuoteID(quoteID);
 	        setRequestID(requestID);
 	        setClientID(clientID);
+	        setBillID(billID);
+	        setDate(date);
 	    }
 	 
 	    
@@ -75,6 +93,13 @@ public class quote
 	        this.requestID = requestID;
 	    }
 	    
+	    public int getBillID() {
+	        return billID;
+	    }
+	    public void setBillID(int billID) {
+	        this.billID = billID;
+	    }
+	    
 	    public int getClientID() {
 	        return clientID;
 	    }
@@ -88,6 +113,13 @@ public class quote
 	    }
 	    public void setPrice(double price) {
 	        this.price = price;
+	    }
+	    
+	    public String getDate() {
+	        return formatter.format(date);
+	    }
+	    public void setDate(Date date) {
+	        this.date = date; 
 	    }
 	   
 	}

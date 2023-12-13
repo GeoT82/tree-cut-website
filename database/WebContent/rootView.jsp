@@ -16,6 +16,10 @@
 		<input type = "submit" value = "Initialize the Database"/>
 	</form>
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
+	
+	<form action = "seeStats" align="center">
+			<input type = "submit" value = "See Customer Statistics"/>
+	</form>
 
 <h1>THIS IS ROOT VIEW</h1>
     <div align="center">

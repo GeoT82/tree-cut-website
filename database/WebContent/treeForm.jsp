@@ -9,14 +9,8 @@
 		<p> ${errorTwo } </p>
 		<h2>Enter Info For The First Tree</h2>
 		<p>You can add more trees later</p>
-		<form action="submitRequest">
+		<form action="submitTree">
 			<table border="1" cellpadding="5">
-				<tr>
-					<th>Note: </th>
-					<td align="center" colspan="3">
-						<input type="text" name="note" size="150" value="Pending" onfocus="this.value=''">
-					</td>
-				</tr>
 				<tr>
 					<th>Image 1:</th>
 					<td align="center" colspan="3">
@@ -64,7 +58,7 @@
 				</tr>
 				<tr>
 					<td align="center" colspan="5">
-						<input type="submit" value="Open A Request"/>
+						<input type="submit" value="Add Tree"/>
 					</td>
 				</tr>
 			</table>

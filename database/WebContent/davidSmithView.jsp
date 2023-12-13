@@ -21,9 +21,17 @@
 	
 		 
     <div align="center">
+    
+	    <form action = "pendRequest">
+			<input type = "submit" value = "See Pending Requests"/>
+		</form>
+		
+		<br>
+		<br>
+		<br>
         
 		<form action = "seeQuotes" align="center">
-		<input type = "submit" value = "See Your Quotes"/>
+			<input type = "submit" value = "See Customer Quotes"/>
 		</form>
 		
 		<br>
@@ -31,8 +39,10 @@
 		<br>
 		
 		<form action = "seeBills" align="center">
-		<input type = "submit" value = "See Your Bills"/>
+			<input type = "submit" value = "See Customer Bills"/>
 		</form>
+	
+		
 	</div>
 	</body>
 </html>

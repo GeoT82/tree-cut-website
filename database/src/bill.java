@@ -1,4 +1,6 @@
 import java.math.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class bill 
 {
@@ -8,6 +10,13 @@ public class bill
 		protected int quoteID;
 		protected int clientID;
 		protected double price;
+		
+		protected Date issueDate;
+		protected Date dueDate;
+		protected Date payDate;
+		boolean payStatus;
+	    
+	    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 	 
 	    //constructors
 	    public bill() {
@@ -23,7 +32,7 @@ public class bill
 	    }
 	 
 	    
-	    public bill(int billID, String smithNote, String clientNote, int quoteID, int clientID, double price) 
+	    public bill(int billID, String smithNote, String clientNote, int quoteID, int clientID, double price, Date issueDate, Date dueDate) 
 	    {
 	    	setSmithNote(smithNote);
 	    	setClientNote(clientNote);
@@ -31,10 +40,27 @@ public class bill
 	    	setQuoteID(quoteID);
 	    	setClientID(clientID);
 	    	setPrice(price);
+	    	setIssueDate(issueDate);
+	    	setDueDate(dueDate);
 	    }
 	    
 	    
-	    public bill(int quoteID, int userID, double price) 
+	    public bill(int billID, String smithNote, String clientNote, int quoteID, int clientID, double price, Date issueDate, Date dueDate, Date payDate, boolean payStatus) 
+	    {
+	    	setSmithNote(smithNote);
+	    	setClientNote(clientNote);
+	    	setBillID(billID);
+	    	setQuoteID(quoteID);
+	    	setClientID(clientID);
+	    	setPrice(price);
+	    	setIssueDate(issueDate);
+	    	setDueDate(dueDate);
+	    	setPayDate(payDate);
+	    	setPayStatus(payStatus);
+	    }
+	    
+	    
+	    public bill(int quoteID, int userID, double price, Date issueDate, Date dueDate) 
 	    {
 	    	setSmithNote("");
 	    	setClientNote("");
@@ -42,6 +68,9 @@ public class bill
 	    	setQuoteID(quoteID);
 	    	setClientID(userID);
 	    	setPrice(price);
+	    	setIssueDate(issueDate);
+	    	setDueDate(dueDate);
+	    	setPayStatus(false);
 	    	
 	    }
 	    
@@ -89,6 +118,42 @@ public class bill
 	    }
 	    public void setPrice(double price) {
 	        this.price = price;
+	    }
+	    
+	    public String getIssueDate() {
+	        return formatter.format(issueDate);
+	    }
+	    public void setIssueDate(Date issueDate) {
+	        this.issueDate = issueDate; 
+	    }
+	    
+	    public String getDueDate() {
+	        return formatter.format(dueDate);
+	    }
+	    public void setDueDate(Date dueDate) {
+	        this.dueDate = dueDate; 
+	    }
+	    
+	    
+	    public String getPayDate() {
+	    	if (payDate == null)
+	    		return "";
+	    	else
+	    		return formatter.format(payDate);
+	    }
+	    public void setPayDate(Date payDate) {
+	        this.payDate = payDate; 
+	    }
+	    
+	    public String getPayStatus() {
+	        if(payStatus == false) {
+	        	return "Unpaid";
+	        } else {
+	        	return "Paid";
+	        }
+	    }
+	    public void setPayStatus(boolean payStatus) {
+	        this.payStatus = payStatus;
 	    }
 	  
 	   

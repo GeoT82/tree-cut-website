@@ -20,6 +20,7 @@
             <caption><h2>List of Requests</h2></caption>
             <tr>
             	<th>ClientID</th>
+            	<th>Issue Date</th>
                 <th>time</th>
                 <th>Smith Note</th>
                 <th>Client Note</th>
@@ -33,6 +34,7 @@
             <c:forEach var="quotes" items="${listQuote}">
                 <tr style="text-align:center">
                 	<td><c:out value="${quotes.clientID}" /></td>
+                	<td><c:out value="${quotes.date}" /></td>
                     <td><c:out value="${quotes.time}" /></td>
                     <td><c:out value="${quotes.smithNote}" /></td>
                     <td><c:out value="${quotes.clientNote}" /></td>

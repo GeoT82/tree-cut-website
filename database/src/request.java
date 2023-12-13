@@ -1,13 +1,19 @@
 import java.math.*;
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
 
 public class request extends tree
 {
-		protected tree[] treeArr;
+		
 	 	protected String smithNote;
 	    protected String clientNote;
+	    protected int treeCount;
 	    protected int requestID;
 	    protected int quoteID;
 	    protected int clientID;
+	    protected Date date;
+	    
+	    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");  
 	 
 	    //constructors
 	    public request() {
@@ -22,13 +28,15 @@ public class request extends tree
 	        setRequestID( (int) (Math.random() * 100 + 1) );
 	    }
 	    
-	    public request(String smithNote, String clientNote, int requestID, int quoteID, int clientID) 
+	    public request(String smithNote, String clientNote, int requestID, int quoteID, int clientID, Date date, int treeCount)
 	    {
 	        setSmithNote(smithNote);
 	        setClientNote(clientNote);
 	        setRequestID(requestID);
 	        setQuoteID(quoteID);
 	        setClientID(clientID);
+	        setDate(date);
+	        setTreeCount(treeCount);
 	    }
 	 
 	    
@@ -48,6 +56,12 @@ public class request extends tree
 	        this.clientNote = clientNote;
 	    }
 	    
+	    public int getTreeCount(){
+	    	return treeCount;
+	    }
+	    public void setTreeCount(int treeCount){
+	    	this.treeCount = treeCount;
+	    }
 	    
 	    public int getRequestID() {
 	        return requestID;
@@ -69,6 +83,13 @@ public class request extends tree
 	    }
 	    public void setClientID(int clientID) {
 	        this.clientID = clientID;
+	    }
+	    
+	    public String getDate() {
+	        return formatter.format(date);
+	    }
+	    public void setDate(Date date) {
+	        this.date = date; 
 	    }
 	   
 	}

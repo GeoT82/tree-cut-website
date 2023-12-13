@@ -24,28 +24,34 @@
             <caption><h2>List of Quotes</h2></caption>
             <tr>
             	<th>ClientID</th>
+            	<th>Issue Date</th>
                 <th>time</th>
                 <th>Smith Note</th>
                 <th>Client Note</th>
                 <th>Price</th>
                	<th>Quote ID</th>
+               	<th>Bill ID</th>
                	<th>Request ID</th>
                	<th>Attach Note</th>
                	<th>Agree</th>
                	<th>Quit</th>
+               	<th>Print</th>
                	
             </tr>
             <c:forEach var="quotes" items="${listQuotes}">
                 <tr style="text-align:center">
                 	<td><c:out value="${quotes.clientID}" /></td>
+                	<td><c:out value="${quotes.date}" /></td>
                     <td><c:out value="${quotes.time}" /></td>
                     <td><c:out value="${quotes.smithNote}" /></td>
                     <td><c:out value="${quotes.clientNote}" /></td>
                     <td><c:out value="${quotes.price}" /></td>
                     <td><c:out value="${quotes.quoteID}" /></td>
+                   	<td><c:out value="${quotes.billID}" /></td>
                     <td>
                     	<a href="requestView?id=<c:out value='${quotes.requestID}' />"><c:out value='${quotes.requestID}' /></a>
                     </td>
+                    
                     <td>
                     	<a href="createQuoteNote?id=<c:out value='${quotes.quoteID}' />">Post Note</a>
                     </td>
@@ -54,6 +60,9 @@
                     </td>
                     <td>
                     	<a href="quoteQuit?id=<c:out value='${quotes.quoteID}' />">Quit</a>
+                    </td>
+                    <td>
+                    	<a href="quotePrint?id=<c:out value='${quotes.quoteID}' />">Print</a>
                     </td>
             </c:forEach>
         </table>

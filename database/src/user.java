@@ -23,12 +23,15 @@ public class user
 	    {
 	    	this(firstName,lastName,password,creditCard,phoneNumber);
 	    	this.email = email;
-	    	setClientID( (int) (Math.random() * 100 + 1) );
 	    }
 	    
 	    public user(String email,String firstName, String lastName, String password, String creditCard, String phoneNumber, int clientID) 
 	    {
-	    	this(firstName,lastName,password,creditCard,phoneNumber);
+	    	this.firstName = firstName;
+	    	this.lastName = lastName;
+	    	this.password = password;
+	        this.creditCard = creditCard;
+	        this.phoneNumber = phoneNumber;
 	    	this.email = email;
 	    	this.clientID = clientID;
 	    }

@@ -25,25 +25,37 @@
             <tr>
             	<th>ClientID</th>
                 <th>Bill ID</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
                 <th>Smith Note</th>
                 <th>Client Note</th>
                 <th>Price</th>
                	<th>Quote ID</th>
+               	<th>Pay Date</th>
+               	<th>Pay Status</th>
                	<th>Attach Note</th>
                	<th>Agree</th>
                	<th>Quit</th>
+               	<th>Print</th>
                	
             </tr>
             <c:forEach var="bills" items="${listBills}">
                 <tr style="text-align:center">
                 	<td><c:out value="${bills.clientID}" /></td>
                     <td><c:out value="${bills.billID}" /></td>
+                    <td><c:out value="${bills.issueDate}" /></td>
+                    <td><c:out value="${bills.dueDate}" /></td>
                     <td><c:out value="${bills.smithNote}" /></td>
                     <td><c:out value="${bills.clientNote}" /></td>
                     <td><c:out value="${bills.price}" /></td>
+                    
                     <td>
                     	<a href="quoteView?id=<c:out value='${bills.quoteID}' />"><c:out value='${bills.quoteID}' /></a>
                     </td>
+                    
+                    <td><c:out value="${bills.payDate}" /></td>
+                    <td><c:out value="${bills.payStatus}" /></td>
+                    
                     <td>
                     	<a href="createBillNote?id=<c:out value='${bills.billID}' />">Post Note</a>
                     </td>
@@ -52,6 +64,9 @@
                     </td>
                     <td>
                     	<a href="billQuit?id=<c:out value='${bills.billID}' />">Quit</a>
+                    </td>
+                    <td>
+                    	<a href="billPrint?id=<c:out value='${bills.billID}' />">Print</a>
                     </td>
             </c:forEach>
         </table>
