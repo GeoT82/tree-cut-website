@@ -163,29 +163,6 @@ public class requestDAO
     }
     
     
-    public List<request> getProspectiveClient() throws SQLException {
-    	System.out.println("GET PROSPECTIVE CLIENT RUNNING");
-        List<request> listRequest = new ArrayList<request>();        
-        String sql = "select clientID from Request where quoteID = 0";      
-        connect_func();      
-        statement = (Statement) connect.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-        System.out.println("LISTING");
-         
-        while (resultSet.next()) {
-            int clientID = resultSet.getInt("clientID");
-            
-
-             
-            request requests = new request("", "", 0, 0, clientID, null, 0);
-            listRequest.add(requests);
-        }        
-        resultSet.close();
-        disconnect();      
-        System.out.println("GET PROSPECTIVE CLIENT TERMINATED");
-        return listRequest;
-    }
-    
     
     
     public List<request> listAllRequests(int uID) throws SQLException {

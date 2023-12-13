@@ -316,7 +316,7 @@ public class userDAO
 					        		+ "  PRIMARY KEY (clientID)\n"
 					        		+ ");")
         					};
-        String[] TUPLES = {"alter table User auto_increment = 700;",
+        String[] TUPLES = {"alter table User auto_increment = 100;",
         			("INSERT INTO User (phoneNumber, email, creditCard, firstName, lastName, password)\n"
         					+ "VALUES \n"
         					+ "( 1234567890, 'johnsmith@gmail.com', 11111111, 'John', 'Smith', '1234'),\n"

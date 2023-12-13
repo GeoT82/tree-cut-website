@@ -145,7 +145,7 @@ public class billDAO
     public List<bill> getBadClients() throws SQLException {
     	System.out.println("GET BAD CLIENTS RUNNING");
         List<bill> listBill = new ArrayList<bill>();        
-        String sql = "select clientID from Bill where TIMESTAMPDIFF(hour, issueDate, current_timestamp) > TIMESTAMPDIFF(hour, issueDate, dueDate) and payStatus = false group by clientID;";      
+        String sql = "select distinct clientID from Bill where TIMESTAMPDIFF(hour, issueDate, current_timestamp) > TIMESTAMPDIFF(hour, issueDate, dueDate) and payStatus = false group by clientID;";      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -169,7 +169,7 @@ public class billDAO
     public List<bill> getGoodClients() throws SQLException {
     	System.out.println("GET GOOD CLIENTS RUNNING");
         List<bill> listBill = new ArrayList<bill>();        
-        String sql = "select clientID from Bill where TIMESTAMPDIFF(hour, issueDate, payDate) < 24 and payStatus = true group by clientID;";      
+        String sql = "select distinct clientID from Bill where TIMESTAMPDIFF(hour, issueDate, payDate) < 24 and payStatus = true group by clientID;";      
         connect_func();      
         statement = (Statement) connect.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -533,18 +533,18 @@ public class billDAO
         					};
         String[] TUPLES = {
         			"alter table Bill auto_increment = 10;",
-        			("INSERT INTO Bill(clientNote, smithNote, quoteID, clientID, issueDate, dueDate, payDate, payStatus)\n"
+        			("INSERT INTO Bill(clientNote, smithNote, quoteID, clientID, issueDate, dueDate, payDate, payStatus, price)\n"
         					+ "VALUES \n"
-        					+ "( default, 'Thank You', 21, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-07-25 08:24:40', true),\n"
-        					+ "( 'Paid', 'Thank You', 23, 108, '2022-09-24 10:24:40', '2022-10-24 10:24:40' , '2022-09-25 06:24:40', true),\n"
-        					+ "( 'Too expensive', 'Why', 24, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , default, false),\n"
-        					+ "( 'Why this date', 'Its the fastest', 25, 106, '2022-04-24 10:24:40', '2022-05-24 10:24:40' , '2022-08-11 10:24:40', true),\n"
-        					+ "( 'Can you show me what your charging', 'Sure', 26, 107, '2022-12-24 10:24:40', '2023-01-24 10:24:40' , default, false),\n"
-        					+ "( 'Alright', 'Sweet', 27, 108, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-08-01 10:24:40', true),\n"
-        					+ "( default, 'Thank You', 28, 109, '2022-02-24 10:24:40', '2022-03-24 10:24:40' , '2022-03-11 10:24:40', true),\n"
-        					+ "( default, 'Thank You', 29, 110, '2022-06-24 10:24:40', '2022-07-24 10:24:40' , '2022-08-11 10:24:40', true),\n"
-        					+ "( default, 'Thank You', 30, 100, '2022-10-24 10:24:40', '2022-11-24 10:24:40' , '2022-12-11 10:24:40', true),\n"
-        					+ "( default, 'Thank You', 31, 104, '2022-07-24 10:24:40', '2023-01-24 10:24:40' , '2023-12-11 10:24:40', true);"),
+        					+ "( default, 'Thank You', 21, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-07-25 08:24:40', true, 4500),\n"
+        					+ "( 'Paid', 'Thank You', 23, 108, '2022-09-24 10:24:40', '2022-10-24 10:24:40' , '2022-09-25 06:24:40', true, 2345),\n"
+        					+ "( 'Too expensive', 'Why', 24, 111, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , default, false, 12300),\n"
+        					+ "( 'Why this date', 'Its the fastest', 25, 106, '2022-04-24 10:24:40', '2022-05-24 10:24:40' , '2022-08-11 10:24:40', true, 2359),\n"
+        					+ "( 'Can you show me what your charging', 'Sure', 26, 107, '2022-12-24 10:24:40', '2023-01-24 10:24:40' , default, false, 3500),\n"
+        					+ "( 'Alright', 'Sweet', 27, 108, '2022-07-24 10:24:40', '2022-08-24 10:24:40' , '2022-08-01 10:24:40', true, 3590),\n"
+        					+ "( default, 'Thank You', 28, 109, '2022-02-24 10:24:40', '2022-03-24 10:24:40' , '2022-03-11 10:24:40', true, 2000),\n"
+        					+ "( default, 'Thank You', 29, 110, '2022-06-24 10:24:40', '2022-07-24 10:24:40' , '2022-08-11 10:24:40', true, 5000),\n"
+        					+ "( default, 'Thank You', 30, 100, '2022-10-24 10:24:40', '2022-11-24 10:24:40' , '2022-12-11 10:24:40', true, 6999),\n"
+        					+ "( default, 'Thank You', 31, 104, '2022-07-24 10:24:40', '2023-01-24 10:24:40' , '2023-12-11 10:24:40', true, 7500);"),
         			"SET FOREIGN_KEY_CHECKS = 1;"
 			    			};
         

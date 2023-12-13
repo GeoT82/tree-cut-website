@@ -620,7 +620,7 @@ public class ControlServlet extends HttpServlet {
 	    	List<request> bigClient = requestDAO.getBigClient();
 	    	List<quote> easyClient = quoteDAO.getEasyClient();
 	    	List<quote> oneTreeQuote = quoteDAO.getOneTreeQuotes();
-	    	List<request> prospectiveClients = requestDAO.getProspectiveClient();
+	    	List<quote> prospectiveClients = quoteDAO.getProspectiveClient();
 	    	List<tree> highestTree = treeDAO.getTallestTree();
 	    	List<bill> overdueBills = billDAO.getOverdueBills();
 	    	List<bill> badClients = billDAO.getBadClients();

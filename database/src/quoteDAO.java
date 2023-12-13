@@ -218,6 +218,28 @@ public class quoteDAO
         return listQuote;
     }
     
+    
+    public List<quote> getProspectiveClient() throws SQLException {
+    	System.out.println("GET PROSPECTIVE CLIENT RUNNING");
+        List<quote> listQuote= new ArrayList<quote>();        
+        String sql = "select distinct clientID from Quote where billID = 0";      
+        connect_func();      
+        statement = (Statement) connect.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        System.out.println("LISTING");
+         
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("clientID");
+            
+            quote quote = new quote("", "", "", 0, 0, 0, clientID, 0, null);
+            listQuote.add(quote);
+        }        
+        resultSet.close();
+        disconnect();      
+        System.out.println("GET PROSPECTIVE CLIENT TERMINATED");
+        return listQuote;
+    }
+    
     public int getQuoteID(int rID) throws SQLException {     
     	int quoteID = 0;
         String sql = "SELECT * FROM Quote where quote.requestID = " + rID;      
