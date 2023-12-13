@@ -688,7 +688,8 @@ public class ControlServlet extends HttpServlet {
 	    	System.out.println("CURRENT USER: " + currentUser);
 	    	
 	    	quote quote = quoteDAO.getQuote(qID);
-	    	user user = userDAO.getUser(currentUser);
+	    	int clientID = quoteDAO.getUserID(qID);
+	    	user user = userDAO.getUser(clientID);
 	    	
 	    	
 	    	request.setAttribute("quote", quote);

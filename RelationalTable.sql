@@ -28,6 +28,7 @@ VALUES
 ( 1234566757, 'susie@gmail.com', '12341234', 'Susie ', 'Guzman', 'susie1234'),
 ( 7777888899, 'root', 00000000, 'default', 'default','pass1234');
 
+
 SET FOREIGN_KEY_CHECKS = 0;
 Create TABLE if not exists Tree(
   treeID int not null auto_increment, 
@@ -78,15 +79,15 @@ INSERT INTO Request(clientNote, smithNote, clientID, quoteID, issueDate, treeCou
 VALUES 
 ( 'Added Tree', 'Ok', 100, 20, '2020-04-16 06:53:40', 0),
 ( 'Wait for One more tree', 'Alright', 102, 21, '2022-07-16 07:23:40', 0),
-( 'Looks Good!', 'Thanks', 102, 23, '2022-05-16 09:52:40', 2),
+( 'Looks Good!', 'Thanks', 102, 22, '2022-05-16 09:52:40', 2),
 ( 'What does distance mean!', 'From home', 103, 23, '2022-02-16 07:34:40', 0),
-( 'Who is this!', 'David', 108, 22, '2022-08-16 08:51:40', 1),
-( '3 big trees!', 'Wow', 101, 24, '2021-10-16 10:14:40', 1),
-( 'Tonight!', 'I cant', 104, 25, '2021-12-16 12:21:40', 1),
-( 'Cut only to the stump!', 'Sure thing', 105, 26, '2022-01-16 15:12:40', 1),
-( 'I think Im missing a tree!', 'Better find it!', 106, 27, '2022-04-16 13:51:40', 0),
-( 'How do I get a quote!', 'I will send one out', 106, 28, '2022-08-16 06:46:40', 2),
-( 'Tomorrow!', 'Yes', 108, 29, '2021-04-16 09:21:40', 0),
+( 'Who is this!', 'David', 108, 24, '2022-08-16 08:51:40', 1),
+( '3 big trees!', 'Wow', 101, 25, '2021-10-16 10:14:40', 1),
+( 'Tonight!', 'I cant', 104, 26, '2021-12-16 12:21:40', 1),
+( 'Cut only to the stump!', 'Sure thing', 105, 27, '2022-01-16 15:12:40', 1),
+( 'I think Im missing a tree!', 'Better find it!', 106, 28, '2022-04-16 13:51:40', 0),
+( 'How do I get a quote!', 'I will send one out', 106, 29, '2022-08-16 06:46:40', 2),
+( 'Tomorrow!', 'Yes', 108, 30, '2021-04-16 09:21:40', 0),
 ( 'Seems ok!', 'Good', 101, 21, '2020-05-16 10:12:40', 0);
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -115,10 +116,10 @@ VALUES
 ( 'Why so much!', 'Its a lot of trees', '4:00:00', 2000, 203, 103, '2022-03-16 06:46:40', 10),
 ( 'Roger!', 'Yay', '5:00:00', 5668, 204, 103, '2022-11-16 06:46:40', 11),
 ( 'NeverMind!', 'OK', '6:00:00', 7880, 205, 108, '2023-01-16 06:46:40', 12),
-( default, 'Here you go', '7:00:00', 2239, 205, 101, '2022-05-16 06:46:40', 13),
-( default, 'Just look over this', '8:00:00', 9449, 206, 104, '2022-09-16 06:46:40', 14),
-( default, 'I got you', '9:00:00', 4855, 207, 105, '2022-06-16 06:46:40', 15),
-( 'Nice!', 'Thanks', '10:00:00', 3455, 208, 106, '2022-12-16 06:46:40', default);
+( default, 'Here you go', '7:00:00', 2239, 206, 101, '2022-05-16 06:46:40', 13),
+( default, 'Just look over this', '8:00:00', 9449, 207, 104, '2022-09-16 06:46:40', 14),
+( default, 'I got you', '9:00:00', 4855, 208, 105, '2022-06-16 06:46:40', 15),
+( 'Nice!', 'Thanks', '10:00:00', 3455, 209, 106, '2022-12-16 06:46:40', default);
 SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;

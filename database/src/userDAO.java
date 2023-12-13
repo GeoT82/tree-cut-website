@@ -115,7 +115,7 @@ public class userDAO
     
     public void insert(user users) throws SQLException {
     	connect_func("root","pass1234");         
-		String sql = "insert into User(email, firstName, lastName, password, creditCard, phoneNumber, clientID) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into User(email, firstName, lastName, password, creditCard, phoneNumber) values (?, ?, ?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, users.getEmail());
 			preparedStatement.setString(2, users.getFirstName());
@@ -123,7 +123,6 @@ public class userDAO
 			preparedStatement.setString(4, users.getPassword());
 			preparedStatement.setString(5, users.getCreditCard());
 			preparedStatement.setString(6, users.getPhoneNumber());			
-			preparedStatement.setInt(7, users.getClientID());	
 
 		preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -174,6 +173,35 @@ public class userDAO
             String lastName = resultSet.getString("lastName");
             String password = resultSet.getString("password");
             String creditCard = resultSet.getString("creditCard");
+            String phoneNumber = resultSet.getString("phoneNumber"); 
+            int clientID = resultSet.getInt("clientID"); 
+            
+            user = new user(email, firstName, lastName, password, creditCard, phoneNumber, clientID);
+        }
+         
+        resultSet.close();
+        preparedStatement.close();
+         
+        return user;
+    }
+    
+    public user getUser(int uID) throws SQLException {
+    	user user = null;
+        String sql = "SELECT * FROM User WHERE clientID = ?";
+         
+        connect_func();
+         
+        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+        preparedStatement.setInt(1, uID);
+         
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        if (resultSet.next()) {
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            String password = resultSet.getString("password");
+            String creditCard = resultSet.getString("creditCard");
+            String email = resultSet.getString("email");
             String phoneNumber = resultSet.getString("phoneNumber"); 
             int clientID = resultSet.getInt("clientID"); 
             

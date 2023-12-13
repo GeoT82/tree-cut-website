@@ -38,7 +38,7 @@
             	<th>Client ID</th>
             	<th>Client Name</th>
                 <th>Quote ID</th>
-                <th>Estimated Cut Date</th>
+                <th>Estimated Cut Time</th>
                 <th>Issue Date</th>
                 <th>Price</th>
                	<th>Request ID</th>
